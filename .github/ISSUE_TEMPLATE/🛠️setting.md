@@ -1,7 +1,7 @@
 ---
-name: "\U0001F41B버그 이슈 템플릿"
-about: 발생한 오류를 해결합니다.
-title: "[bug]"
+name: "\U0001F6E0️Setting"
+about: Docker 및 기타 환경을 수정합니다,
+title: "[chore]"
 labels: ''
 assignees: ''
 
