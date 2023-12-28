@@ -9,7 +9,6 @@ COPY package*.json /app/
 
 # npm 패키지 설치
 RUN npm install
-RUN npm install -g nodemon
 
 # 나머지 프로젝트 파일들을 /app 디렉토리로 복사
 COPY . /app
@@ -26,4 +25,3 @@ CMD ["npm", "start"]
 #이미지를 기반으로 애플리케이션을 실행하는 컨테이너를 시작
 #docker run -p 8080:8000 test
 #왜 8080:8000인가
-#
