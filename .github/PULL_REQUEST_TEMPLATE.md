@@ -1,12 +1,3 @@
----
-name: "🌟 PR 템플릿"
-about: Suggest an idea for PR에 대한 템플릿입니다this project
-title: "[커밋 유형 지정]"
-labels: ''
-assignees: ''
-
----
-
 # Description
 설명을 작성하세요.
 
