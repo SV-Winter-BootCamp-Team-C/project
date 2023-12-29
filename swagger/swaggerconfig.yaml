@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  title: essaycraft API
+  description: essaycraft API 작성할 곳
+  version: 0.1.9
+
+servers:
+  - url: http://localhost:8000
+  
