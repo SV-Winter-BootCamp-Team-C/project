@@ -1,2 +1,4 @@
 node_modules
 .env
+pqdata
+.DS_Store
