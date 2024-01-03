@@ -1,7 +1,7 @@
 #Docker 컨테이너를 정의하고 관리하기 위해 구성 파일
 #여러 컨테이너와 한 곳에 정리 할 수 있게 해줌
 #파일 버전
-version: "3"
+version: '3'
 #services를 컨테이너를 정의
 services:
   db:
@@ -19,7 +19,6 @@ services:
     volumes:
       - ./:/var/lib/postgresql/data
 
-  
   backend:
     container_name: backend
     build:
@@ -28,10 +27,10 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
+      - NODE_ENV=development
     ports:
       - '8000:8000'
     depends_on:
       - db
-
-  
+    command: npm run dev # 컨테이너가 시작될 때 실행할 명령
 

@@ -7,8 +7,7 @@
   "extends": [
     "prettier", //충돌 일어나지 않게 해줌
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:react/recommended"
   ],
   "parserOptions": {
     "ecmaVersion": "latest",
