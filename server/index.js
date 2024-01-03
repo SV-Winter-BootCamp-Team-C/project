@@ -4,9 +4,7 @@ const port = process.env.NODE_DOCKER_PORT || 8000; // 원하는 포트로(3000,4
 const YAML = require('js-yaml');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
-const specs = YAML.load(
-  fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8')
-);
+const specs = YAML.load(fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'));
 require('dotenv').config();
 
 app.get('/', (req, res) => {
