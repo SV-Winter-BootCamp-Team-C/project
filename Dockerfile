@@ -16,5 +16,6 @@ COPY . /app
 
 EXPOSE 8000
 
-CMD ["npm", "start"]
+#CMD ["npm", "start"]
+CMD ["nodemon", "-L", "server/index.js"]
 
