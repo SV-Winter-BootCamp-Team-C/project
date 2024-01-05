@@ -25,10 +25,13 @@ module.exports = {
   },
   rules: {
     eqeqeq: ['error', 'always'], // === 사용
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/react-in-jsx-scope': 'off',
+    'no-console': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
