@@ -1,11 +1,25 @@
-const express = require('express'); // express설치해서 사용가능
-const app = express(); // app에 사용할 express함수 불러오기
-const port = process.env.NODE_DOCKER_PORT || 8000; // 원하는 포트로(3000,4000,5000)
+const express = require('express');
+const app = express();
+require('dotenv').config(); // 이 부분을 코드 맨 위로 옮기세요.
+
+const port = process.env.NODE_DOCKER_PORT || 8000;
 const YAML = require('js-yaml');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const specs = YAML.load(fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'));
-require('dotenv').config();
+const { pg, createTablesFromFile } = require('../models/database');
+
+const initializeDatabase = async () => {
+  try {
+    const client = await pg.connect();
+    await createTablesFromFile();
+    client.release();
+  } catch (err) {
+    console.error('데이터베이스 연동 실패 또는 테이블 생성 오류:', err);
+  }
+};
+
+initializeDatabase();
 
 app.get('/', (req, res) => {
   res.send('hello');
@@ -14,5 +28,5 @@ app.get('/', (req, res) => {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(port, () => {
-  console.log(`port 8000 start`);
+  console.log(`Server running on port ${port}`);
 });
