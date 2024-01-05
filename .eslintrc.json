@@ -15,5 +15,7 @@
   },
   "plugins": ["react", "prettier"],
   "ignorePatterns": ["node_modules/"],
-  "rules": {}
+  "rules": {
+
+  }
 }
