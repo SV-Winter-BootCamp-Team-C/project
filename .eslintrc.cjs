@@ -9,9 +9,9 @@ module.exports = {
     sourceType: 'module',
     tsconfigRootDir: __dirname,
   },
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '*.config.js'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'react-hooks'],
   extends: [
     'eslint:recommended',
     'airbnb',
@@ -25,10 +25,13 @@ module.exports = {
   },
   rules: {
     eqeqeq: ['error', 'always'], // === 사용
-    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/react-in-jsx-scope': 'off',
+    'no-console': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
