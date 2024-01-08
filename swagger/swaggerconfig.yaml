@@ -29,6 +29,9 @@ paths:
                 title:
                   type: string
                   description: 설문조사 제목
+                open:
+                  type: boolean
+                  description: 설문 공개 여부
                 font:
                   type: string
                   description: 폰트 설정
