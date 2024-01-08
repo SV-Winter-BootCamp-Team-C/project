@@ -51,6 +51,3 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
 };
 
 module.exports = { createSurveyWithQuestionsAndChoices };
-
-
-module.exports = { createSurveyWithQuestionsAndChoices };
