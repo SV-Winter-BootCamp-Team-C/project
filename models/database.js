@@ -24,4 +24,4 @@ const createTablesFromFile = async () => {
   }
 };
 
-module.exports = {pg,createTablesFromFile};
+module.exports = { pg, createTablesFromFile };

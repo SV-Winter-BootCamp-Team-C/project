@@ -1,12 +1,13 @@
 -- ENUM 타입 정의
 DROP TYPE IF EXISTS question_type CASCADE;
+DROP TABLE IF EXISTS "Question" CASCADE;
+
 CREATE TYPE question_type AS ENUM (
     'MULTIPLE_CHOICE',
     'SUBJECTIVE_QUESTION',
     'CHECKBOX',
     'DROPDOWN'
 );
-
 
 -- User 테이블 생성
 CREATE TABLE IF NOT EXISTS "User" (
@@ -74,7 +75,3 @@ CREATE TABLE IF NOT EXISTS "Answer" (
     FOREIGN KEY ("question_id") REFERENCES "Question"("id"),
     FOREIGN KEY ("user_id") REFERENCES "User"("id")
 );
-
-
-
-
