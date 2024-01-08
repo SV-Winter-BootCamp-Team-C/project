@@ -8,7 +8,7 @@ const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 const specs = YAML.load(fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'));
 const { pg, createTablesFromFile } = require('../models/database');
-const surveyRouters = require('../routers/serveyRouter');
+const surveyRouters = require('../routers/surveyRouter');
 app.use(express.json());
 
 const initializeDatabase = async () => {
