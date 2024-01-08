@@ -2,16 +2,16 @@ const { pg } = require('../models/database');
 
 const createSurveyWithQuestionsAndChoices = async (req, res) => {
   try {
-    const { user_id, title, font, color, button_style, main_image_url, deadline, questions } = req.body;
+    const { user_id, title, open, font, color, button_style, main_image_url, deadline, questions } = req.body;
 
     await pg.query('BEGIN');
 
     const defaultUrl = 'http://example.com/survey';
 
     const surveyResult = await pg.query(
-      'INSERT INTO "Survey" (user_id, title, url, font, color, button_style, main_image_url, deadline) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+      'INSERT INTO "Survey" (user_id, title, open, url, font, color, button_style, main_image_url, deadline) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
 
-      [user_id, title, defaultUrl, font, color, button_style, main_image_url, deadline],
+      [user_id, title,open, defaultUrl, font, color, button_style, main_image_url, deadline],
     );
 
     const surveyId = surveyResult.rows[0].id;
