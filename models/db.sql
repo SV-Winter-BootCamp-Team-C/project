@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "Survey" (
     "color" VARCHAR(50) NOT NULL,
     "button_style" VARCHAR(50) NOT NULL,
     "main_image_url" VARCHAR(500) NOT NULL,
-    "created_at" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP,
     "deleted_at" TIMESTAMP,
     "deadline" TIMESTAMP,
@@ -39,11 +39,11 @@ CREATE TABLE IF NOT EXISTS "Survey" (
 -- Question 테이블 생성
 CREATE TABLE IF NOT EXISTS "Question" (
     "id" SERIAL PRIMARY KEY,
-    "survey_id" INT NOT NULL,
+    "survey_id" INT NULL,
     "type" question_type NOT NULL,
     "content" VARCHAR(100) NOT NULL,
     "image_url" VARCHAR(500) NOT NULL,
-    "created_at" TIMESTAMP NOT NULL,
+    "created_at" TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP,
     "deleted_at" TIMESTAMP,
     FOREIGN KEY ("survey_id") REFERENCES "Survey"("id")
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS "Choice" (
     "id" SERIAL PRIMARY KEY,
     "question_id" INT NOT NULL,
     "option" VARCHAR(100) NOT NULL,
-    "count" INT NOT NULL,
-    "created_at" TIMESTAMP NOT NULL,
+    "count" INT NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP,
     "deleted_at" TIMESTAMP,
     FOREIGN KEY ("question_id") REFERENCES "Question"("id")

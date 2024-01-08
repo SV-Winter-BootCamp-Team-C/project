@@ -1,9 +1,96 @@
 openapi: 3.0.0
 info:
-  title: essaycraft API
-  description: essaycraft API 작성할 곳
+  title: For me
+  description: 설문지 폼 커스터마이징할 수 있게 해주는 api
   version: 0.1.9
 
 servers:
   - url: http://localhost:8000
-  
+
+tags:
+  - name: Backend endpoints
+
+paths:
+  /api/surveys:
+    post:
+      tags:
+        - Backend endpoints
+      summary: 질문 생성 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  description: 사용자 ID
+                title:
+                  type: string
+                  description: 설문조사 제목
+                font:
+                  type: string
+                  description: 폰트 설정
+                color:
+                  type: string
+                  description: 설문조사 색깔
+                botton_style:
+                  type: string
+                  description: 버튼 스타일
+                main_image_url:
+                  type: string
+                  description: 메인 이미지 url
+                deadline:
+                  type: date-time
+                  description: 설문조사 마감 기간
+                questions:
+                  type: array
+                  item:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: 질문 타입 (MULTIPLE_CHOICE, SUBJECTIVE_QUESTION, CHECKBOX, DROPDOWN)
+                        enum:
+                          - MULTIPLE_CHOICE
+                          - SUBJECTIVE_QUESTION
+                          - CHECKBOX
+                          - DROPDOWN
+                      content:
+                        type: string
+                        description: 질문 내용
+                      image_url:
+                        type: string
+                        description: 질문 관련 이미지 url
+                      choices:
+                        type: array
+                        item:
+                          type: object
+                          properties:
+                            type: string
+                            description: 선택지 내용
+      responses:
+        '201':
+          description: 설문조사 생성 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+                  surveyId:
+                    type: integer
+                    description: 생성된 설문조사의 ID
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string\
+                    description: 오류 메시지

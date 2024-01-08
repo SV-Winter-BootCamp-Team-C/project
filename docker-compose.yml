@@ -35,4 +35,3 @@ services:
     command: npm run dev # 컨테이너가 시작될 때 실행할 명령
     volumes:
       - ./:/app
-
