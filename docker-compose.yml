@@ -32,7 +32,6 @@ services:
       - '8000:8000'
     depends_on:
       - db
-    command: npm run dev # 컨테이너가 시작될 때 실행할 명령
+    command: ['nodemon', '-L', 'server/index.js'] # 컨테이너가 시작될 때 실행할 명령
     volumes:
       - ./:/app
-
