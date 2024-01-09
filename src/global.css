@@ -168,6 +168,7 @@ table {
 /* Custom Setting CSS */
 body {
   width: 100%;
+  min-width: 90rem;
 }
 button,
 input {
