@@ -134,6 +134,8 @@ paths:
 
   /api/surveys/{id}/join:
     get:
+      tags:
+        - GET
       summary: Get answered surveys of a user
       parameters:
         - in: path
