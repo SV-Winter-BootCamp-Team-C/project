@@ -95,7 +95,7 @@ paths:
                 type: object
                 properties:
                   message:
-                    type: string\
+                    type: string
                     description: 오류 메시지
 
   /api/{id}/forms:

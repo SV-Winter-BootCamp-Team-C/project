@@ -1,50 +1,51 @@
 module.exports = (sequelize, DataTypes) => {
-  const Question = sequelize.define(
-    'Question',
+  const Answer = sequelize.define(
+    'Answer',
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      survey_id: {
+      questionId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
-          model: 'Survey',
+          model: 'Question',
           key: 'id',
         },
       },
-      type: {
-        type: DataTypes.ENUM('MULTIPLE_CHOICE', 'SUBJECTIVE_QUESTION', 'CHECKBOX', 'DROPDOWN'),
+      userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'User',
+          key: 'id',
+        },
       },
-      content: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      image_url: {
+      subContent: {
         type: DataTypes.STRING(500),
-        allowNull: false,
       },
-      created_at: {
+      objContent: {
+        type: DataTypes.STRING(500),
+      },
+      createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
       },
-      updated_at: {
+      updatedAt: {
         type: DataTypes.DATE,
       },
-      deleted_at: {
+      deletedAt: {
         type: DataTypes.DATE,
       },
     },
     {
-      tableName: 'Question',
+      tableName: 'Answer',
       timestamps: true,
       paranoid: true,
     },
   );
 
-  return Question;
+  return Answer;
 };
