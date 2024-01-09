@@ -1,13 +1,12 @@
-// forAllUser.js
 const { pg } = require('../models/database');
 
 const getUserSurveys = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // 데이터베이스 쿼리 실행
+  
     const queryResult = await pg.query(
-      'SELECT id, title, main_image_url, created_at FROM "Survey" WHERE user_id = $1', // 수정된 부분
+      'SELECT id, title, main_image_url, created_at FROM "Survey" WHERE user_id = $1', 
       [userId],
     );
     const surveys = queryResult.rows;
