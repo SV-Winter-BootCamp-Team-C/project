@@ -9,6 +9,7 @@ const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
 const { sequelize } = require('../models');
+const createAndDownloadExcel = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
 app.use(express.json());
@@ -24,6 +25,8 @@ sequelize
     app.use('/api/surveys', surveyRouters);
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+    app.get('/downloadExcel', createAndDownloadExcel);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
