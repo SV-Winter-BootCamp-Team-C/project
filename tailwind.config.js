@@ -13,6 +13,9 @@ export default {
         lightGray: '#D9D9D9',
         white: '#FFFFFF',
       },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(157.12deg, #918dca -0.63%, #99a8db 43.47%, #a3c9f0 98.56%)',
+      },
     },
   },
   plugins: [],
