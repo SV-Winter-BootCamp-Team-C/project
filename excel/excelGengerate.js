@@ -26,4 +26,4 @@ const createAndDownloadExcel = async (req, res) => {
   }
 };
 
-module.exports = { createAndDownloadExcel };
+module.exports = createAndDownloadExcel;

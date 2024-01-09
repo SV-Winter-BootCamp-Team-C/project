@@ -18,9 +18,6 @@ sequelize
   .sync({ force: false })
   .then(() => {
     console.log('데이터베이스 테이블 생성 완료');
-    app.get('/', (req, res) => {
-      res.send('hello');
-    });
 
     app.use('/api/surveys', surveyRouters);
 
@@ -33,5 +30,5 @@ sequelize
     });
   })
   .catch((err) => {
-    console.error('데이터베이스 테이블 생성 실패:', err);
+    console.error('데이터베이스 테이블 생성 실패:', err.stack);
   });

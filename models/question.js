@@ -9,14 +9,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       surveyId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'Survey',
           key: 'id',
         },
       },
       type: {
-        type: DataTypes.ENUM('MULTIPLE_CHOICE', 'SUBJECTIVE_QUESTION', 'CHECKBOX', 'DROPDOWN'),
+        type: DataTypes.ENUM(
+          'MULTIPLE_CHOICE',
+          'SUBJECTIVE_QUESTION',
+          'CHECKBOX',
+          'DROPDOWN',
+        ),
         allowNull: false,
       },
       content: {

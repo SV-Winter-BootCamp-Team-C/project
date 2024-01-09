@@ -10,6 +10,7 @@ const getSurveyById = async (req, res) => {
       attributes: [
         'id',
         'title',
+        'description',
         'font',
         'color',
         'mainImageUrl',
@@ -41,6 +42,7 @@ const getSurveyById = async (req, res) => {
       survey_id: survey.id,
       user_name: survey.User.name,
       title: survey.title,
+      description: survey.description,
       font: survey.font,
       color: survey.color,
       main_image_url: survey.mainImageUrl,
@@ -48,6 +50,7 @@ const getSurveyById = async (req, res) => {
       deadline: survey.deadline,
       questions: survey.Questions.map((question) => ({
         question_id: question.id,
+        type: question.type,
         content: question.content,
         imageUrl: question.imageUrl,
         choices: question.Choices.map((choice) => ({
@@ -61,8 +64,7 @@ const getSurveyById = async (req, res) => {
     res.json(result);
   } catch (error) {
     // 오류 발생시 처리
-    console.error('Error in getting survey by id:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ message: '설문 생성 오류', error: error.message });
   }
 };
 
