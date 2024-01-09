@@ -14,7 +14,7 @@ paths:
   /api/surveys:
     post:
       tags:
-        - Backend endpoints
+        - POST
       summary: 질문 생성 API
       requestBody:
         required: true
@@ -97,3 +97,56 @@ paths:
                   message:
                     type: string\
                     description: 오류 메시지
+
+  /api/{id}/forms:
+    get:
+      tags:
+        - GET
+      summary: 폼 모아보기 API
+      description: 특정 사용자 ID에 속한 폼 템플릿을 모아서 보여주는 API입니다.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 사용자 ID
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 성공적으로 조회됨
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  surveys:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Survey'
+                  total_count:
+                    type: integer
+                    description: 총 설문 템플릿 수
+        '400':
+          description: 잘못된 요청
+        '500':
+          description: 서버 오류
+
+components:
+  schemas:
+    Survey:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: 설문 ID
+        title:
+          type: string
+          description: 설문 제목
+        main_image_url:
+          type: string
+          description: 메인 이미지 URL
+        created_at:
+          type: string
+          format: date-time
+          description: 생성된 날짜와 시간

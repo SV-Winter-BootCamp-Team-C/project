@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS "Survey" (
     "id" SERIAL PRIMARY KEY,
     "user_id" INT NOT NULL,
     "title" VARCHAR(50) NOT NULL,
+    "discription" VARCHAR(500) NULL,
     "open" BOOLEAN NOT NULL,
     "url" VARCHAR(500) NOT NULL,
     "font" VARCHAR(50) NOT NULL,
