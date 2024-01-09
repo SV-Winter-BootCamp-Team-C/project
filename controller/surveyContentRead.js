@@ -50,6 +50,7 @@ const getSurveyById = async (req, res) => {
       deadline: survey.deadline,
       questions: survey.Questions.map((question) => ({
         question_id: question.id,
+        type: question.type,
         content: question.content,
         imageUrl: question.imageUrl,
         choices: question.Choices.map((choice) => ({
