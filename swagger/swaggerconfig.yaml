@@ -132,6 +132,33 @@ paths:
         '500':
           description: 서버 오류
 
+  /api/surveys/{id}/join:
+    get:
+      summary: Get answered surveys of a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The user ID
+      responses:
+        '200':
+          description: A list of surveys answered by the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  surveys:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Survey'
+        '404':
+          description: No answered surveys found for this user
+        '500':
+          description: Internal server error
+
 components:
   schemas:
     Survey:
