@@ -10,6 +10,7 @@ const getSurveyById = async (req, res) => {
       attributes: [
         'id',
         'title',
+        'description',
         'font',
         'color',
         'mainImageUrl',
@@ -41,6 +42,7 @@ const getSurveyById = async (req, res) => {
       survey_id: survey.id,
       user_name: survey.User.name,
       title: survey.title,
+      description: survey.description,
       font: survey.font,
       color: survey.color,
       main_image_url: survey.mainImageUrl,
