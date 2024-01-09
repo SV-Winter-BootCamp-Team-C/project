@@ -98,7 +98,7 @@ paths:
                     type: string
                     description: 오류 메시지
 
-  /api/{id}/forms:
+  /api/surveys/{id}/forms:
     get:
       tags:
         - GET
