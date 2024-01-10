@@ -9,7 +9,7 @@ const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
 const { sequelize } = require('../models');
-const createAndDownloadExcel = require('../excel/excelGengerate');
+const {createAndDownloadExcel} = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
 app.use(express.json());
