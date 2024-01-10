@@ -45,11 +45,12 @@ const login = async (req, res) => {
         })
         if (user === null) {
             res.status(404).json({ message: "존재하지 않는 메일입니다."});
-        }
-        if (password === user.password) {
-            res.status(200).json({ id: user.id });
         } else {
-            res.status(401).json({ message: "비밀번호가 틀렸습니다."});
+            if (password === user.password) {
+                res.status(200).json({ id: user.id });
+            } else {
+                res.status(401).json({ message: "비밀번호가 틀렸습니다."});
+            }
         }
     } catch (error) {
         sendServerError(error, res);
