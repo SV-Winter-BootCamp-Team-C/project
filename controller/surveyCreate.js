@@ -18,6 +18,8 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
       questions,
     } = req.body;
 
+    console.log('요청 본문 수신:', req.body);
+
     // surveyUrl을 미리 정의
     const surveyUrl = `http://yourwebsite.com/survey/placeholder`;
 
@@ -38,7 +40,9 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     const surveyId = survey.id;
+    console.log(`surveyId: ${survey.id}`);
     const updatedSurveyUrl = `http://yourwebsite.com/survey/${surveyId}`;
+    console.log(`url: ${updatedSurveyUrl}`);
 
     await Survey.update(
       { url: updatedSurveyUrl },
@@ -49,6 +53,7 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     for (const question of questions) {
+      console.log(`questionType: ${question.type}`);
       if (
         ![
           'MULTIPLE_CHOICE',
@@ -70,15 +75,19 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
         { transaction: t },
       );
 
+      console.log(`questionId: ${newQuestion.id}`);
+
       if (question.choices && question.choices.length > 0) {
         for (const choice of question.choices) {
-          await Choice.create(
+          const newChoice = await Choice.create(
             {
               questionId: newQuestion.id,
               option: choice.option,
             },
             { transaction: t },
           );
+
+          console.log(`{choiceId: ${newChoice.id}, "${choice.option}"}`);
         }
       }
     }

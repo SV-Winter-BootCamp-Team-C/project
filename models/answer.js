@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(500),
       },
       objContent: {
-        type: DataTypes.STRING(500),
+        type: DataTypes.INTEGER,
       },
       createdAt: {
         type: DataTypes.DATE,
