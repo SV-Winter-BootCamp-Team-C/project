@@ -1,14 +1,11 @@
 openapi: 3.0.0
 info:
   title: For me
-  description: 설문지 폼 커스터마이징할 수 있게 해주는 api
+  description: 설문지 폼 커스터마이징할 수 있게 해주는 API
   version: 0.1.9
 
 servers:
   - url: http://localhost:8000
-
-tags:
-  - name: Backend endpoints
 
 paths:
   /api/surveys:
@@ -38,18 +35,19 @@ paths:
                 color:
                   type: string
                   description: 설문조사 색깔
-                botton_style:
+                button_style:
                   type: string
                   description: 버튼 스타일
                 main_image_url:
                   type: string
-                  description: 메인 이미지 url
+                  description: 메인 이미지 URL
                 deadline:
-                  type: date-time
+                  type: string
+                  format: date-time
                   description: 설문조사 마감 기간
                 questions:
                   type: array
-                  item:
+                  items:
                     type: object
                     properties:
                       type:
@@ -65,14 +63,15 @@ paths:
                         description: 질문 내용
                       image_url:
                         type: string
-                        description: 질문 관련 이미지 url
+                        description: 질문 관련 이미지 URL
                       choices:
                         type: array
-                        item:
+                        items:
                           type: object
                           properties:
-                            type: string
-                            description: 선택지 내용
+                            option:
+                              type: string
+                              description: 선택지 내용
       responses:
         '201':
           description: 설문조사 생성 성공
@@ -108,7 +107,7 @@ paths:
         - name: id
           in: path
           required: true
-          description: 사용자 ID
+          description: userId
           schema:
             type: integer
             format: int64
@@ -134,6 +133,8 @@ paths:
 
   /api/surveys/{id}/join:
     get:
+      tags:
+        - GET
       summary: Get answered surveys of a user
       tags:
         - GET
@@ -143,7 +144,7 @@ paths:
           required: true
           schema:
             type: integer
-          description: The user ID
+          description: userId
       responses:
         '200':
           description: A list of surveys answered by the user
@@ -172,7 +173,7 @@ paths:
           required: true
           schema:
             type: integer
-          description: 수정할 설문의 ID
+          description: serveyId
       requestBody:
         required: true
         content:
@@ -343,6 +344,114 @@ paths:
         500:
           description: Server error
 
+  /api/surveys/{id}/urls:
+    get:
+      tags:
+        - GET
+      summary: 설문조사의 URL을 반환합니다.
+      description: 특정 설문조사(survey)의 URL을 가져옵니다.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: serveyId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 성공적으로 URL을 가져왔을 때의 응답
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: 'www.asdasdasdasdasd.com/asddasd'
+        '404':
+          description: 설문조사를 찾을 수 없을 때의 응답
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '설문이 존재하지 않습니다.'
+        '500':
+          description: 서버 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'URL을 생성하는데 실패하였습니다'
+                    
+    delete:
+      summary: 설문 삭제 API
+      tags:
+        - DELETE
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 설문의 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: 사용자 ID
+      responses:
+        '200':
+          description: 설문 및 관련 데이터 삭제 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+        '403':
+          description: 설문 삭제 권한이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+        '404':
+          description: 삭제할 설문이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+        '500':
+          description: 설문 삭제 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+                    
 components:
   schemas:
     Survey:
