@@ -7,6 +7,7 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
     const {
       userId,
       title,
+      description,
       open,
       font,
       color,
@@ -50,6 +51,7 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
       await survey.update(
         {
           title,
+          description,
           open,
           font,
           color,
