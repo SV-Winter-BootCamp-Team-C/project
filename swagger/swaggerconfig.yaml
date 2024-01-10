@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: For me
-  description: 설문지 폼 커스터마이징할 수 있게 해주는 api
+  description: 설문지 폼 커스터마이징할 수 있게 해주는 API
   version: 0.1.9
 
 servers:
@@ -349,7 +349,70 @@ paths:
                   message:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
-
+                    
+    delete:
+      summary: 설문 삭제 API
+      tags:
+        - DELETE
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 설문의 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: 사용자 ID
+      responses:
+        '200':
+          description: 설문 및 관련 데이터 삭제 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+        '403':
+          description: 설문 삭제 권한이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+        '404':
+          description: 삭제할 설문이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+        '500':
+          description: 설문 삭제 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 오류 메시지
+                    
 components:
   schemas:
     Survey:
