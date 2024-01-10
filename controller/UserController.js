@@ -6,30 +6,34 @@ const { Console } = require('console');
 const signup = async (req, res) => {
     try {
         const email = req.body.email;
-        //toDo: 이메일 양식인지 체크하기
-        const name = req.body.name;
-        const password = req.body.password;
-        const user = await User.findOne({
-            where: {
-                email: email
-            },
-            attributes: ['id', 'email', 'password', 'name']
-        })
-        if (!(user === null)) {
-            res.status(400).json({ message: "회원가입에 실패하였습니다."});
+        if (isValidEmail(email) == false) {
+            res.status(400).json({ message: "이메일 양식이 틀립니다."});
+
+        } else {
+            const name = req.body.name;
+            const password = req.body.password;
+            const user = await User.findOne({
+                where: {
+                    email: email
+                },
+                attributes: ['id', 'email', 'password', 'name']
+            })
+            if (!(user === null)) {
+                res.status(400).json({ message: "회원가입에 실패하였습니다."});
+            } else {
+                User.create({
+                    name: name,
+                    email: email,
+                    password: password
+                }).then((user) => {
+                    console.log(user);
+                    res.status(201).json({ message: "회원가입 성공"});
+                })
+                .catch(error => {
+                    sendServerError(error, res);
+                });
+            }
         }
-        
-        User.create({
-            name: name,
-            email: email,
-            password: password
-        }).then((user) => {
-            console.log(user);
-            res.status(201).json({ message: "회원가입 성공"});
-        })
-        .catch(error => {
-            sendServerError(error, res);
-        });
     } catch (error) {
         sendServerError(error, res);
     }
@@ -103,12 +107,16 @@ const getMyInfo = async (req, res) => {
         },
         attributes: [ 'id', 'email', 'password', 'name' ]
     });
-    res.status(200).json({ name: user.name, email: user.email, password: user.password});
+    res.status(200).json({ name: user.name, email: user.email, passwordw: user.password});
 }
 function sendServerError(error, res) {
     console.error(error);
     res.status(500).send('Internal Server Error');
     return;
+}
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
 
 module.exports = { signup, login, logout, isEmailRepeated, modifyPassword, getMyInfo };
