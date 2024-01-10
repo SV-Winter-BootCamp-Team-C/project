@@ -31,7 +31,7 @@ function Navbar({ children }: NavbarProps) {
   };
 
   return (
-    <div className="relative flex justify-end w-[82rem] h-[56rem] m-16 shadow-lg rounded-[2.5rem] bg-neutral-100">
+    <div className="relative flex justify-end w-[82rem] h-[56rem] shadow-lg rounded-[2.5rem] bg-neutral-100">
       {/* Navbar */}
       <div className="flex flex-col justify-between w-60 py-[3.75rem]">
         <div>
