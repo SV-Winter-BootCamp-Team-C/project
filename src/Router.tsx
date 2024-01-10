@@ -1,5 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 interface RouterElement {
   id: number;
@@ -10,7 +12,8 @@ interface RouterElement {
 
 const routerData: RouterElement[] = [
   { id: 1, path: '/', element: <div>Home</div>, withAuth: false },
-  // { id: 2, path: '/login', element: <Login />, withAuth: false },
+  { id: 2, path: '/login', element: <Login />, withAuth: false },
+  { id: 3, path: '/signup', element: <Signup />, withAuth: false },
 ];
 
 const Router = createBrowserRouter(
