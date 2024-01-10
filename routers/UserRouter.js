@@ -4,7 +4,8 @@ const userController = require('../controller/UserController');
 
 router.post('/signup', userController.signup);
 router.post('/login', userController.login);
-router.get('/check-email', userController.isEmailRepeated);
+router.get('/:email/check-email', userController.isEmailRepeated);
+router.post('/logout', userController.logout);
 router.patch('/', userController.modifyPassword);
 
 module.exports = router;

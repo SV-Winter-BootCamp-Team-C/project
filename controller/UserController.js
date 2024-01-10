@@ -1,6 +1,7 @@
 const user = require('../models/user');
 
-const User = require('../models').User;
+const { User, Survey, Answer, Question, Choice } = require('../models');
+const { Console } = require('console');
 
 const signup = async (req, res) => {
     try {
@@ -56,10 +57,12 @@ const login = async (req, res) => {
         sendServerError(error, res);
     }
 }
+const logout = async (res) => {
+}
 //to Do: 없는 메일일 때 오류수정
 const isEmailRepeated = async (req, res) => {
     try {
-        const userEmail = req.body.email;
+        const userEmail = req.params.email;
         const user = await User.findOne({
             where: {
                 email: userEmail
@@ -69,7 +72,7 @@ const isEmailRepeated = async (req, res) => {
         if (user === null) {
             res.status(200).json({ email: userEmail, exists:false });
         } else {
-            res.status(200).json({ email: user.email, exists:true });
+            res.status(200).json({ email: userEmail, exists:true });
         }     
     } catch(error) {
         sendServerError(error, res);
@@ -77,7 +80,7 @@ const isEmailRepeated = async (req, res) => {
 }
 const modifyPassword = async (req, res) => {
     try {
-        const updatedPassword = req.body.password;
+        const updatedPassword = req.params.password;
         const condition = {
             where: {
                 id: req.body.id
