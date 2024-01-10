@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import Start from './pages/Start';
 
 interface RouterElement {
   id: number;
@@ -8,10 +9,7 @@ interface RouterElement {
   withAuth?: boolean; // 인증이 필요한 페이지 여부
 }
 
-const routerData: RouterElement[] = [
-  { id: 1, path: '/', element: <div>Home</div>, withAuth: false },
-  // { id: 2, path: '/login', element: <Login />, withAuth: false },
-];
+const routerData: RouterElement[] = [{ id: 1, path: '/', element: <Start />, withAuth: false }];
 
 const Router = createBrowserRouter(
   routerData.map((route) => {
