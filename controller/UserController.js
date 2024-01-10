@@ -95,10 +95,20 @@ const modifyPassword = async (req, res) => {
         sendServerError(error, res);    
     }
 }
+const getMyInfo = async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findOne({
+        where: {
+            id: userId
+        },
+        attributes: [ 'id', 'email', 'password', 'name' ]
+    });
+    res.status(200).json({ name: user.name, email: user.email, password: user.password});
+}
 function sendServerError(error, res) {
     console.error(error);
     res.status(500).send('Internal Server Error');
     return;
 }
 
-module.exports = { signup, login, logout, isEmailRepeated, modifyPassword };
+module.exports = { signup, login, logout, isEmailRepeated, modifyPassword, getMyInfo };
