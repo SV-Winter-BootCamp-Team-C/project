@@ -2,7 +2,12 @@ const { Survey, Answer, Question } = require('../models');
 
 const findAllSurveys = async (req, res) => {
   try {
+    // Request로부터 Parameter 값들 가져오기
     const userId = req.params.id;
+    const pageLimit = req.query.limit;
+    const pageOffset = (req.query.page - 1) * pageLimit;
+
+    // limit, offset으로 각 페이지마다 보여질 survey를 가져와 array로 만들기
     const surveys = await Survey.findAll({
       where: { open: true },
       attributes: [
@@ -13,6 +18,8 @@ const findAllSurveys = async (req, res) => {
         'updatedAt',
         'deadline',
       ],
+      limit: pageLimit,
+      offset: pageOffset,
     });
 
     if (!surveys.length) {
@@ -31,7 +38,9 @@ const findAllSurveys = async (req, res) => {
         ],
       });
 
-      const attend_count = await Answer.count({
+      const user_count = await Answer.count({
+        distinct: true,
+        col: 'userId',
         include: [
           {
             model: Question,
@@ -48,7 +57,7 @@ const findAllSurveys = async (req, res) => {
         updated_at: survey.updatedAt,
         deadline: survey.deadline,
         is_attended: !!answer,
-        attend_count: attend_count,
+        attend_count: user_count,
       });
     }
 

@@ -308,46 +308,79 @@ paths:
 
   /api/surveys/{id}/all:
     get:
-      summary: Retrieve a list of surveys for a specific user
+      summary: Retrieve a list of surveys
       tags:
         - GET
-      description: Retrieve a list of surveys for a specific user. The `is_attended` field shows if the user has attended the survey, and `attend_count` shows the number of participants for each survey.
+      description: Retrieve a list of surveys. The response includes a list of surveys and each survey includes its own details along with user's participation status and total user count.
       parameters:
-        - name: id
-          in: path
-          description: User ID
-          required: true
+        - in: path
+          name: id
           schema:
             type: integer
+          required: true
+          description: User ID
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The page number
       responses:
-        '200':
-          description: A list of surveys.
+        200:
+          description: A list of surveys
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Survey'
-        '404':
+        404:
           description: No surveys found
-        '500':
+        500:
           description: Server error
 
 components:
   schemas:
     Survey:
       type: object
+      required:
+        - survey_id
+        - title
+        - main_image_url
+        - created_at
+        - updated_at
+        - deadline
+        - is_attended
+        - attend_count
       properties:
-        id:
+        survey_id:
           type: integer
-          description: 설문 ID
+          description: The survey ID
         title:
           type: string
-          description: 설문 제목
+          description: The survey title
         main_image_url:
           type: string
-          description: 메인 이미지 URL
+          description: The URL of the survey's main image
         created_at:
           type: string
           format: date-time
-          description: 생성된 날짜와 시간
+          description: The date when the survey was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The date when the survey was last updated
+        deadline:
+          type: string
+          format: date-time
+          description: The deadline of the survey
+        is_attended:
+          type: boolean
+          description: Whether the user has attended the survey
+        attend_count:
+          type: integer
+          description: The total number of users who have attended the survey
