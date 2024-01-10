@@ -9,6 +9,7 @@ const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
 const { sequelize } = require('../models');
+const {createAndDownloadExcel} = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
 app.use(express.json());
@@ -17,18 +18,17 @@ sequelize
   .sync({ force: false })
   .then(() => {
     console.log('데이터베이스 테이블 생성 완료');
-    app.get('/', (req, res) => {
-      res.send('hello');
-    });
 
     app.use('/api/surveys', surveyRouters);
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+    app.get('/downloadExcel', createAndDownloadExcel);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   })
   .catch((err) => {
-    console.error('데이터베이스 테이블 생성 실패:', err);
+    console.error('데이터베이스 테이블 생성 실패:', err.stack);
   });
