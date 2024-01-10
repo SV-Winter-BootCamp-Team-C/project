@@ -1,4 +1,3 @@
-import Navbar from '@/components/common/Navbar';
 import SurveyCover from '@/components/survey/SurveyCover';
 import { Survey } from '@/types/survey';
 
@@ -32,20 +31,18 @@ const surveyData: SurveyData = {
 
 function Home() {
   return (
-    <div className="flex items-center justify-center p-16 bg-custom-gradient">
-      <Navbar>
-        <div className="grid grid-cols-1 p-9 gap-y-4 gap-x-6 md:grid-cols-2 lg:grid-cols-3">
-          {surveyData.surveys.map((item) => (
-            <SurveyCover
-              key={item.survey_id}
-              title={item.title}
-              mainImageUrl={item.main_image_url}
-              deadline={item.deadline}
-              attedCount={item.atted_count}
-            />
-          ))}
-        </div>
-      </Navbar>
+    <div>
+      <div className="grid grid-cols-3 lg:grid-cols-3 p-9 gap-y-4 gap-x-6">
+        {surveyData.surveys.map((item) => (
+          <SurveyCover
+            key={item.survey_id}
+            title={item.title}
+            mainImageUrl={item.main_image_url}
+            deadline={item.deadline}
+            attedCount={item.atted_count}
+          />
+        ))}
+      </div>
     </div>
   );
 }

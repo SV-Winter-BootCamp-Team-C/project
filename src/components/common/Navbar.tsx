@@ -4,7 +4,8 @@ import myresponses from '@/assets/navRes.svg';
 import analysis from '@/assets/navAnalysis.svg';
 import profile from '@/assets/profile.svg';
 import logout from '@/assets/logout.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -14,20 +15,30 @@ type NavItem = {
   id: string;
   icon: string;
   text: string;
+  path: string;
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'all', icon: all, text: 'All' },
-  { id: 'myforms', icon: myform, text: 'My Forms' },
-  { id: 'myresponses', icon: myresponses, text: 'My Responses' },
-  { id: 'analysis', icon: analysis, text: 'Analysis' },
+  { id: 'all', icon: all, text: 'All', path: '/all' },
+  { id: 'myforms', icon: myform, text: 'My Forms', path: '/myform' },
+  { id: 'myresponses', icon: myresponses, text: 'My Responses', path: '/myresponses' },
+  { id: 'analysis', icon: analysis, text: 'Analysis', path: '/analysis' },
 ];
 
 function Navbar({ children }: NavbarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState<string>('all');
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeNavItem = NAV_ITEMS.find((item) => item.path === currentPath)?.id || 'all';
+    setActiveItem(activeNavItem);
+  }, [location]);
 
   const handleClick = (item: string) => {
     setActiveItem(item);
+    navigate(NAV_ITEMS.find((navItem) => navItem.id === item)?.path || '/all');
   };
 
   return (
