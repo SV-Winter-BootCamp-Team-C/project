@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import Start from './pages/Start';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
@@ -12,7 +13,7 @@ interface RouterElement {
 }
 
 const routerData: RouterElement[] = [
-  { id: 1, path: '/', element: <div>Home</div>, withAuth: false },
+  { id: 1, path: '/', element: <Start />, withAuth: false },
   { id: 2, path: '/login', element: <Login />, withAuth: false },
   { id: 3, path: '/signup', element: <Signup />, withAuth: false },
   { id: 4, path: '/home', element: <Home />, withAuth: true },
