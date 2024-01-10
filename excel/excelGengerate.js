@@ -15,9 +15,9 @@ const createAndDownloadExcel = async (req, res) => {
   let worksheet = workbook.addWorksheet('Survey Answers');
 
   try {
+    // 설문조사의 모든 질문을 검색
     const questions = await Question.findAll({
       where: { surveyId: surveyId },
-      include: [{ model: Answer, required: false }],
     });
 
     if (!questions.length) {
@@ -26,25 +26,41 @@ const createAndDownloadExcel = async (req, res) => {
         .send('Survey not found or no questions associated with it.');
     }
 
-    for (const question of questions) {
-      const row = [question.id, question.content];
+    // 첫 번째 행(헤더)에 질문 내용 추가
+    const header = questions.map((q) => q.content);
+    worksheet.addRow(header);
 
-      for (const answer of question.Answers) {
+    // 답변 데이터를 담을 객체 초기화
+    let answerRows = {};
+
+    // 모든 답변을 검색
+    for (const question of questions) {
+      answerRows[question.id] = [];
+      const answers = await Answer.findAll({
+        where: { questionId: question.id },
+      });
+
+      for (const answer of answers) {
         if (answer.objContent) {
-          // objContent 필드를 사용하여 Choice 모델의 데이터를 조회
           const choice = await Choice.findByPk(answer.objContent);
-          if (choice) {
-            row.push(choice.content); // 객관식 답변
-          }
+          answerRows[question.id].push(choice ? choice.option : 'N/A');
         } else {
-          row.push(answer.subContent); // 서술식 답변
+          answerRows[question.id].push(answer.subContent || 'N/A');
         }
       }
+    }
 
+    // 답변 데이터를 엑셀에 추가
+    const questionIds = questions.map((q) => q.id);
+    const maxAnswers = Math.max(
+      ...Object.values(answerRows).map((arr) => arr.length),
+    );
+    for (let i = 0; i < maxAnswers; i++) {
+      let row = questionIds.map((id) => answerRows[id][i] || '');
       worksheet.addRow(row);
     }
 
-    const tempFilePath = `${dir}/survey_answers_${surveyId}.xlsx`;
+    const tempFilePath = `/path/to/excel/survey_answers_${surveyId}.xlsx`;
     await workbook.xlsx.writeFile(tempFilePath);
     res.download(tempFilePath, `survey_answers_${surveyId}.xlsx`);
   } catch (error) {
