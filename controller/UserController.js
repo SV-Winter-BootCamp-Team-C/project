@@ -56,8 +56,6 @@ const login = async (req, res) => {
         sendServerError(error, res);
     }
 }
-const logout = async (res) => {
-}
 //to Do: 없는 메일일 때 오류수정
 const isEmailRepeated = async (req, res) => {
     try {

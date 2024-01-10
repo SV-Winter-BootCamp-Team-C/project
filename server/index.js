@@ -22,6 +22,8 @@ sequelize
 
     app.use('/api/surveys', surveyRouters);
 
+    app.use('/api/users', userRouters);
+
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
     app.get('/downloadExcel', createAndDownloadExcel);
