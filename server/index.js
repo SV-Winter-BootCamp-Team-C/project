@@ -12,6 +12,7 @@ const { sequelize } = require('../models');
 const {createAndDownloadExcel} = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
+const userRouters = require('../routers/UserRouter');
 app.use(express.json());
 
 sequelize
