@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
 interface SurveyCoverProps {
+  id: number;
   title: string;
   mainImageUrl: string;
   deadline: string;
@@ -15,7 +16,7 @@ interface SurveyCoverProps {
   open?: boolean; // 공개 여부
 }
 
-function SurveyCover({ title, mainImageUrl, deadline, attedCount, open = false }: SurveyCoverProps) {
+function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = false }: SurveyCoverProps) {
   const location = useLocation();
   const imageUrl = mainImageUrl || survey;
   const { textLabel, textColor } = calculateRemainingDays(deadline);
@@ -47,7 +48,7 @@ function SurveyCover({ title, mainImageUrl, deadline, attedCount, open = false }
               <div className="w-1 h-1 border border-solid rounded border-darkGary" />
             </div>
           </div>
-          {isMenuOpen && <SurveyCoverMenu open={open} />}
+          {isMenuOpen && <SurveyCoverMenu surveyId={id} open={open} />}
         </div>
       </div>
     </div>

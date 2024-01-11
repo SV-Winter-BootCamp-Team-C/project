@@ -14,7 +14,6 @@ import star5 from '../assets/star5.svg';
 
 function Start() {
   return (
-    // background
     <div className=" flex relative items-center justify-center m-9 bg-white">
       {/* inner background */}
       <div className="relative w-[85.5rem] h-[59.5rem] rounded-[1.25rem] bg-[#F9F8FC]">

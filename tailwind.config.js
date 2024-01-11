@@ -17,6 +17,13 @@ export default {
         'custom-gradient': 'linear-gradient(157.12deg, #918dca -0.63%, #99a8db 43.47%, #a3c9f0 98.56%)',
         'custom-gradient-re': 'linear-gradient(157.12deg, #A3C9F0 -0.63%, #99a8db 43.47%, #918dca 98.56%)',
       },
+      fontFamily: {
+        pretendardFont: ['Pretendard-Regular', 'Pretendard-Regular'],
+        tMoney: ['TmoneyRoundWindExtraBold', 'TmoneyRoundWindExtraBold'],
+        npsFont: ['NPSfontBold', 'NPSfontBold'],
+        omyuFont: ['omyu_pretty', 'omyu_pretty'],
+        seolleimFont: ['seolleimcool-SemiBold', 'seolleimcool-SemiBold'],
+      },
     },
   },
   plugins: [],
