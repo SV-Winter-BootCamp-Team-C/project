@@ -25,8 +25,14 @@ const createAndDownloadExcel = async (req, res) => {
         .send('Survey not found or no questions associated with it.');
     }
 
-    const header = ['UserID', ...questions.map((q) => q.content)];
+    // 헤더에 '익명UserID' 대신 'UserID'를 사용
+    const header = ['익명ID', ...questions.map((q) => q.content)];
     worksheet.addRow(header);
+
+    worksheet.columns = [
+      { width: 10 }, // 1열의 너비를 10으로 설정
+      ...header.slice(1).map(() => ({ width: 45 })), // 나머지 열의 너비를 80으로 설정
+    ];
 
     let userData = {};
 
@@ -54,7 +60,8 @@ const createAndDownloadExcel = async (req, res) => {
     }
 
     Object.keys(userData).forEach((userId) => {
-      const userRow = [userId];
+      // 여기서 '익명'을 사용자 ID 앞에 추가합니다.
+      const userRow = [`익명${userId}`];
       questions.forEach((question) => {
         const answers = userData[userId][question.id] || [];
         userRow.push(answers.join(', '));
