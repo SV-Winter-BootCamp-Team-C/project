@@ -13,6 +13,8 @@ const getSurveyUrlController = require('../controller/getSurveyUrl');
 const surveyResultController = require('../controller/surveyResult');
 const getAnswerController = require('../controller/answerReadByuserId');
 const { sendSurveyEmailWithSurveyId } = require('../controller/urlShare');
+const surveyTitleSearchController = require('../controller/surveyTitleSearch');
+
 
 router.post('/', surveyController.createSurveyWithQuestionsAndChoices);
 router.put('/:id', surveyModifyController.ModifySurveyWithQuestionsAndChoices);
@@ -44,5 +46,11 @@ router.post('/:id/share', async (req, res) => {
     res.status(500).json({ message: error.message || '서버 오류 발생' });
   }
 });
+
+router.get(
+  '/:userId/search/:title',
+  surveyTitleSearchController.searchSurveyByTitle,
+);
+
 
 module.exports = router;
