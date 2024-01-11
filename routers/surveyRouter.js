@@ -12,6 +12,7 @@ const surveyAnswerController = require('../controller/answerSave');
 const getSurveyUrlController = require('../controller/getSurveyUrl');
 const surveyResultController = require('../controller/surveyResult');
 const getAnswerController = require('../controller/answerReadByuserId');
+const surveyTitleSearchController = require('../controller/surveyTitleSearch');
 
 router.get('/contents', getAnswerController.getAnswerByuserId);
 router.post('/', surveyController.createSurveyWithQuestionsAndChoices);
@@ -24,5 +25,9 @@ router.get('/:id/all', showAllSurveysController.showAllSurveys);
 router.delete('/:id', surveyDeleteController.deleteSurveyAndRelatedData);
 router.post('/:id', surveyAnswerController.createAnswer);
 router.get('/:id/urls', getSurveyUrlController.getUrl);
+router.get(
+  '/search/:title/:userId',
+  surveyTitleSearchController.searchSurveyByTitle,
+);
 
 module.exports = router;
