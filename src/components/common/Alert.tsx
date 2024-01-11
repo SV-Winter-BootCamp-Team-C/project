@@ -27,7 +27,7 @@ function Alert({ message, buttonText }: AlertProps) {
         <button
           type="submit"
           onClick={closeAlert}
-          className="w-[6.25rem] h-9 rounded-[0.625rem] bg-purple text-base text-white mt-8"
+          className="w-[6.25rem] h-9 rounded-[0.625rem] bg-purple text-base text-white mt-8 hover:bg-darkPurple transition duration-300 ease-in-out"
         >
           {buttonText}
         </button>

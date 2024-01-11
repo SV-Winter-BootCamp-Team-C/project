@@ -7,7 +7,7 @@ function Signup() {
   return (
     <div className="flex items-center justify-center h-screen bg-custom-gradient">
       <div className="relative flex items-start w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
-        <div className="flex justify-center items-center flex-col w-full">
+        <div className="flex flex-col items-center justify-center w-full">
           <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
         </div>
         <div className="absolute bottom-[4.75rem] left-[3.5rem]">
@@ -49,7 +49,7 @@ function Signup() {
             <div className="pt-[2.5rem]">
               <button
                 type="button"
-                className="w-[12.5rem] h-[3.125rem] text-[1.25rem] bg-purple text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] hover:bg-darkPurple shadow-lg"
+                className="w-[12.5rem] h-[3.125rem] text-[1.25rem] bg-purple text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] hover:bg-darkPurple shadow-lg transition duration-300 ease-in-out"
               >
                 회원가입
               </button>
