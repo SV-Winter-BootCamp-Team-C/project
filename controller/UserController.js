@@ -1,4 +1,4 @@
-const { User, Survey, Answer, Question, Choice } = require('../models');
+const { User } = require('../models');
 
 const signup = async (req, res) => {
   try {
@@ -35,6 +35,7 @@ const signup = async (req, res) => {
     sendServerError(error, res);
   }
 };
+
 const login = async (req, res) => {
   try {
     const email = req.body.email;
@@ -58,7 +59,7 @@ const login = async (req, res) => {
     sendServerError(error, res);
   }
 };
-const logout = async (res) => {};
+
 const isEmailRepeated = async (req, res) => {
   try {
     const userEmail = req.params.email;
@@ -79,25 +80,26 @@ const isEmailRepeated = async (req, res) => {
 };
 const modifyPassword = async (req, res) => {
   try {
-    const updatedPassword = req.params.password;
-    await User.update(
-      { password: updatedPassword },
-      {
-        where: {
-          id: req.body.id,
-        },
+    const { user_id, password } = req.body;
+
+    const user = await User.findOne({
+      where: {
+        id: user_id,
       },
-    )
-      .then(() => {
-        res.status(200).json({ message: '수정이 완료되었습니다.' });
-      })
-      .catch((error) => {
-        res.status(400).json({ message: '비밀번호 수정에 실패하였습니다.' });
-      });
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+
+    await user.update({ password });
+
+    return res.status(200).json({ message: '수정이 완료되었습니다.' });
   } catch (error) {
-    sendServerError(error, res);
+    return sendServerError(error, res);
   }
 };
+
 const getMyInfo = async (req, res) => {
   const userId = req.params.id;
   const user = await User.findOne({
@@ -108,13 +110,15 @@ const getMyInfo = async (req, res) => {
   });
   res
     .status(200)
-    .json({ name: user.name, email: user.email, passwordw: user.password });
+    .json({ name: user.name, email: user.email, password: user.password });
 };
+
 function sendServerError(error, res) {
   console.error(error);
   res.status(500).send('Internal Server Error');
   return;
 }
+
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);

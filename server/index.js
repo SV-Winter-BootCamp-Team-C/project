@@ -26,7 +26,7 @@ sequelize
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-    app.get('/downloadExcel', createAndDownloadExcel);
+    app.get('/downloadExcel/:surveyId', createAndDownloadExcel);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
