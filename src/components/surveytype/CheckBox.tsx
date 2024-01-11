@@ -5,16 +5,22 @@ import copyIcon from '@/assets/copy.svg';
 import deleteIcon from '@/assets/delete.svg';
 import imageaddIcon from '@/assets/imageadd.svg';
 import trashcanIcon from '@/assets/trashcan.svg';
-import dropIcon from '@/assets/drop.svg';
+import checkIcon from '@/assets/check.svg';
 
-function Dropdown() {
-  const [choices, setChoices] = useState([{ id: 1, value: '' }]); // 초기 상태에 1개의 빈 선택지를 설정
+interface Choice {
+  id: number;
+  value: string;
+  isChecked: boolean;
+}
+
+function CheckBox() {
+  const [choices, setChoices] = useState<Choice[]>([{ id: 1, value: '', isChecked: false }]); // 초기 상태에 1개의 빈 선택지를 설정
   const [image, setImage] = useState<string | null>(null); // 이미지 상태 초기화
 
   // 새 선택지를 추가하는 함수
   const addChoice = () => {
-    const newId = choices.length > 0 ? Math.max(...choices.map((c) => c.id)) + 1 : 1;
-    setChoices([...choices, { id: newId, value: '' }]);
+    const newId = choices.length + 1;
+    setChoices([...choices, { id: newId, value: '', isChecked: false }]);
   };
 
   // 선택지 삭제 함수
@@ -38,6 +44,11 @@ function Dropdown() {
     setImage(null); // 이미지 상태를 null로 설정하여 이미지를 삭제
   };
 
+  // 체크박스 상태 변경 함수
+  const toggleCheckbox = (id: number) => {
+    setChoices(choices.map((choice) => (choice.id === id ? { ...choice, isChecked: !choice.isChecked } : choice)));
+  };
+
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -48,7 +59,7 @@ function Dropdown() {
           <button type="button" className="focus:outline-none items-center">
             <img src={typeIcon} alt="Type" className="w-5 h-5" />
           </button>
-          <span className="ml-2 font-medium text-left text-darkGray">드롭다운</span>
+          <span className="ml-2 font-medium text-left text-darkGray">체크박스</span>
         </div>
         <div className="flex mr-4">
           <button type="button" className="focus:outline-none w-5 h-5 mr-2  items-center">
@@ -76,13 +87,13 @@ function Dropdown() {
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="dropdown-image-upload"
+            id="checkbox-image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             style={{ display: 'none' }}
           />
-          <label htmlFor="dropdown-image-upload" className="image-upload-label">
+          <label htmlFor="checkbox-image-upload" className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5" />
           </label>
@@ -106,22 +117,42 @@ function Dropdown() {
           <div className="flex justify-center items-center w-full" />
         </div>
       )}
-      <div className="relative flex items-center w-[20rem] h-[2rem] border bg-lightGray rounded-t-[0.625rem] border-solid border-lightGray ">
-        <span className="ml-2 font-medium text-left text-darkGray">드롭다운 선택지</span>
-        <div className="absolute flex justify-center items-center w-[1.25rem] h-[1.25rem] bg-ligthGray top-[0.375rem] right-[0.625rem]">
-          <img src={dropIcon} alt="Drop" className="w-[0.75rem] h-[0.5rem]" />
-        </div>
-      </div>
+
       <div className="flex flex-col items-center justify-center w-[50rem]">
         {choices.map((choice) => (
-          <div key={choice.id} className="flex justify-center items-center w-full">
-            <div className="relative flex w-[20rem] h-10 border border-solid border-gray ">
-              <div className="flex justify-center items-center w-full ml-2">
+          <div key={choice.id} className="flex justify-center items-center w-full mb-2">
+            <div className="relative flex w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
+              <label
+                htmlFor={`checkbox-${choice.id}`}
+                className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
+                  choice.isChecked ? 'bg-blue-500' : 'bg-white'
+                } border border-gray-300`}
+              >
+                <input
+                  type="checkbox"
+                  id={`checkbox-${choice.id}`}
+                  className="opacity-0 absolute"
+                  checked={choice.isChecked}
+                  onChange={() => toggleCheckbox(choice.id)}
+                  disabled // 체크박스 비활성화
+                />
+                {choice.isChecked && <img src={checkIcon} alt="Checked" className="w-4 h-4" />}
+              </label>
+
+              <button
+                type="button"
+                className="absolute top-[0.625rem] right-[0.625rem] focus:outline-none"
+                onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
+              >
+                <img src={deleteIcon} alt="Delete" className="w-full h-full" />
+              </button>
+
+              <div className="flex justify-center items-center w-full">
                 <input
                   type="text"
                   required
                   placeholder="텍스트를 입력해주세요."
-                  className="w-full h-full text-base text-start focus:outline-none"
+                  className="w-60 h-8 text-base text-center text-black rounded-md border border-dashed border-gray focus:outline-none focus:border-2 focus:border-black"
                   value={choice.value}
                   onChange={(e) => {
                     const newChoices = choices.map((item) =>
@@ -131,24 +162,15 @@ function Dropdown() {
                   }}
                 />
               </div>
-              <button
-                type="button"
-                className="absolute top-[0.625rem] right-[0.625rem] focus:outline-none"
-                onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
-              >
-                <img src={deleteIcon} alt="Delete" className="w-full h-full" />
-              </button>
             </div>
           </div>
         ))}
-        <div className="flex justify-center items-center w-[20rem] h-[3.5rem] mb-4 border border-solid border-gray rounded-b-[0.625rem] ">
-          <button type="button" onClick={addChoice} className="focus:outline-none">
-            <img src={addIcon} alt="Add" className="w-5 h-5 mb-2" />
-          </button>
-        </div>
+        <button type="button" onClick={addChoice} className="focus:outline-none">
+          <img src={addIcon} alt="Add" className="w-5 h-5 mb-2" />
+        </button>
       </div>
     </div>
   );
 }
 
-export default Dropdown;
+export default CheckBox;
