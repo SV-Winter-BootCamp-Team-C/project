@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Start from './pages/Start';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Createstyle from './pages/Createstyle';
 import MainLayout from './layout/MainLayout';
 import All from './pages/AllForm';
 import MyForm from './pages/MyForm';
@@ -22,8 +23,9 @@ const routerData: RouterElement[] = [
   { id: 2, path: '/login', element: <Login />, withAuth: false },
   { id: 3, path: '/signup', element: <Signup />, withAuth: false },
   { id: 4, path: '/all', element: <All />, withAuth: false, isNavbar: true },
-  { id: 5, path: '/myform', element: <MyForm />, withAuth: true, isNavbar: true },
-  { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: true, isNavbar: true },
+  { id: 5, path: '/myform', element: <MyForm />, withAuth: false, isNavbar: true },
+  { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: false, isNavbar: true },
+  { id: 7, path: '/createstyle', element: <Createstyle />, withAuth: false, isNavbar: true },
   { id: 8, path: '/result/:id', element: <ResultPage />, withAuth: true, isNavbar: true },
 ];
 
