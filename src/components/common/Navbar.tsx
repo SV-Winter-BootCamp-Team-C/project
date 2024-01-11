@@ -4,7 +4,8 @@ import myresponses from '@/assets/navRes.svg';
 import analysis from '@/assets/navAnalysis.svg';
 import profile from '@/assets/profile.svg';
 import logout from '@/assets/logout.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -14,24 +15,34 @@ type NavItem = {
   id: string;
   icon: string;
   text: string;
+  path: string;
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'all', icon: all, text: 'All' },
-  { id: 'myforms', icon: myform, text: 'My Forms' },
-  { id: 'myresponses', icon: myresponses, text: 'My Responses' },
-  { id: 'analysis', icon: analysis, text: 'Analysis' },
+  { id: 'all', icon: all, text: 'All', path: '/all' },
+  { id: 'myforms', icon: myform, text: 'My Forms', path: '/myform' },
+  { id: 'myresponses', icon: myresponses, text: 'My Responses', path: '/myresponses' },
+  { id: 'analysis', icon: analysis, text: 'Analysis', path: '/analysis' },
 ];
 
 function Navbar({ children }: NavbarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeItem, setActiveItem] = useState<string>('all');
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeNavItem = NAV_ITEMS.find((item) => item.path === currentPath)?.id || 'all';
+    setActiveItem(activeNavItem);
+  }, [location]);
 
   const handleClick = (item: string) => {
     setActiveItem(item);
+    navigate(NAV_ITEMS.find((navItem) => navItem.id === item)?.path || '/all');
   };
 
   return (
-    <div className="relative flex justify-end w-[82rem] h-[56rem] m-16 shadow-lg rounded-[2.5rem] bg-neutral-100">
+    <div className="relative flex justify-end w-[82rem] h-[56rem] shadow-lg rounded-[2.5rem] bg-neutral-100">
       {/* Navbar */}
       <div className="flex flex-col justify-between w-60 py-[3.75rem]">
         <div>
@@ -50,7 +61,7 @@ function Navbar({ children }: NavbarProps) {
                   onClick={() => handleClick(item.id)}
                 >
                   <img src={item.icon} alt={item.text} className="w-6 h-6" />
-                  <span className="text-base font-semibold text-center text-darkGary">{item.text}</span>
+                  <p className="text-base font-semibold leading-4 text-darkGary">{item.text}</p>
 
                   {activeItem === item.id && (
                     <div className="absolute left-0 w-2 h-[3rem] bg-darkPurple ">
@@ -67,11 +78,11 @@ function Navbar({ children }: NavbarProps) {
         <div className="pl-6">
           <div className="flex items-center gap-5 pb-9">
             <img src={profile} alt="profile" className="w-6 h-6" />
-            <p className="text-base font-semibold text-center text-darkGary">Profile</p>
+            <p className="text-base font-semibold leading-4 text-darkGary">Profile</p>
           </div>
           <div className="flex items-center gap-5">
             <img src={logout} alt="logout" className="w-6 h-6" />
-            <p className="font-semibold text-center ftext-base text-darkGary">Logout</p>
+            <p className="text-base font-semibold leading-4 text-darkGary">Logout</p>
           </div>
         </div>
       </div>
