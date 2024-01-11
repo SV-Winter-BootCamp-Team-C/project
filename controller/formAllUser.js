@@ -1,20 +1,60 @@
-const { Survey } = require('../models');
+const { Survey, Answer, Question } = require('../models');
 
 const getUserSurveys = async (req, res) => {
   try {
     const userId = req.params.id;
+    const pageNo = parseInt(req.query.pageNo) || 1;
+    const limit = parseInt(req.query.limit) || 9;
+    const offset = (pageNo - 1) * limit;
 
-    // Survey 모델을 이용하여 해당 사용자가 생성한 템플릿을 조회합니다.
     const surveys = await Survey.findAll({
       where: { userId: userId },
-      attributes: ['id', 'title', 'mainImageUrl', 'createdAt'],
+      attributes: [
+        'id',
+        'title',
+        'mainImageUrl',
+        'createdAt',
+        'deadline',
+        'open',
+      ],
+      offset: offset,
+      limit: limit,
     });
 
-    // 해당 사용자가 생성한 템플릿의 총 개수를 조회합니다.
+    // 각 설문조사에 대한 attended_count 계산
+    const modifiedSurveys = await Promise.all(
+      surveys.map(async (survey) => {
+        const attendedCount = await Answer.count({
+          distinct: true,
+          col: 'userId',
+          include: [
+            {
+              model: Question,
+              attributes: [],
+              where: { surveyId: survey.id },
+            },
+          ],
+        });
+
+        return {
+          survey_id: survey.id,
+          title: survey.title,
+          open: survey.open, // 여기에 open 상태를 결정하는 로직 추가
+          image_url: survey.mainImageUrl,
+          created_at: survey.createdAt,
+          deadline: survey.deadline, // 여기에 마감일 결정 로직 추가
+          attended_count: attendedCount,
+        };
+      }),
+    );
+
     const totalCount = await Survey.count({ where: { userId: userId } });
 
-    // 결과를 반환합니다.
-    res.json({ surveys, total_count: totalCount });
+    res.json({
+      surveys: modifiedSurveys,
+      total_count: totalCount,
+      page_count: Math.ceil(totalCount / limit),
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: '에러 발생', error: error.message });
