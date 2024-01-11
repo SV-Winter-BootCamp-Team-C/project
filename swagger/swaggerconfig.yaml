@@ -133,34 +133,47 @@ paths:
 
   /api/surveys/{id}/join:
     get:
+      summary: '내가 답변한 설문지'
       tags:
         - GET
-      summary: Get answered surveys of a user
-      tags:
-        - GET
+      operationId: 'showAnsweredSurveys'
       parameters:
-        - in: path
-          name: id
+        - name: 'id'
+          in: 'path'
+          description: 'ID of the user'
           required: true
           schema:
-            type: integer
-          description: userId
+            type: 'integer'
+        - name: 'page'
+          in: 'query'
+          description: 'Page number'
+          required: false
+          schema:
+            type: 'integer'
+        - name: 'limit'
+          in: 'query'
+          description: 'Number of answered surveys to return per page'
+          required: false
+          schema:
+            type: 'integer'
       responses:
         '200':
-          description: A list of surveys answered by the user
+          description: 'Successful operation'
           content:
             application/json:
               schema:
-                type: object
+                type: 'object'
                 properties:
                   surveys:
-                    type: array
+                    type: 'array'
                     items:
                       $ref: '#/components/schemas/Survey'
+                  totalPages:
+                    type: 'integer'
         '404':
-          description: No answered surveys found for this user
+          description: 'No answered surveys found for this user'
         '500':
-          description: Internal server error
+          description: 'Server error'
 
   /api/surveys/{id}:
     put:
@@ -309,40 +322,47 @@ paths:
 
   /api/surveys/{id}/all:
     get:
-      summary: Retrieve a list of surveys
+      summary: '전체 설문지 조회'
       tags:
         - GET
-      description: Retrieve a list of surveys. The response includes a list of surveys and each survey includes its own details along with user's participation status and total user count.
+      operationId: 'showAllSurveys'
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
+        - name: 'id'
+          in: 'path'
+          description: 'ID of the user'
           required: true
-          description: User ID
-        - in: query
-          name: limit
           schema:
-            type: integer
-          description: The numbers of items to return
-        - in: query
-          name: page
+            type: 'integer'
+        - name: 'page'
+          in: 'query'
+          description: 'Page number'
+          required: false
           schema:
-            type: integer
-          description: The page number
+            type: 'integer'
+        - name: 'limit'
+          in: 'query'
+          description: 'Number of surveys to return per page'
+          required: false
+          schema:
+            type: 'integer'
       responses:
-        200:
-          description: A list of surveys
+        '200':
+          description: 'Successful operation'
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Survey'
-        404:
-          description: No surveys found
-        500:
-          description: Server error
+                type: 'object'
+                properties:
+                  surveys:
+                    type: 'array'
+                    items:
+                      $ref: '#/components/schemas/Survey'
+                  totalPages:
+                    type: 'integer'
+        '404':
+          description: 'No surveys found'
+        '500':
+          description: 'Server error'
 
   /api/surveys/{id}/urls:
     get:
@@ -388,7 +408,7 @@ paths:
                   message:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
-                    
+
     delete:
       summary: 설문 삭제 API
       tags:
@@ -451,45 +471,90 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-                    
+
+  /api/surveys/{id}/results:
+    get:
+      summary: '설문지 결과 조회'
+      tags:
+        - GET
+      operationId: 'getSurveyResult'
+      parameters:
+        - name: 'id'
+          in: 'path'
+          description: 'ID of the survey to fetch'
+          required: true
+          schema:
+            type: 'integer'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveyResult'
+        '404':
+          description: 'Survey not found'
+        '500':
+          description: 'Server error'
+
 components:
   schemas:
-    Survey:
-      type: object
-      required:
-        - survey_id
-        - title
-        - main_image_url
-        - created_at
-        - updated_at
-        - deadline
-        - is_attended
-        - attend_count
+    SurveyResult:
+      type: 'object'
       properties:
-        survey_id:
-          type: integer
-          description: The survey ID
+        user_name:
+          type: 'string'
         title:
-          type: string
-          description: The survey title
-        main_image_url:
-          type: string
-          description: The URL of the survey's main image
+          type: 'string'
+        open:
+          type: 'boolean'
         created_at:
-          type: string
-          format: date-time
-          description: The date when the survey was created
+          type: 'string'
+          format: 'date-time'
         updated_at:
-          type: string
-          format: date-time
-          description: The date when the survey was last updated
+          type: 'string'
+          format: 'date-time'
         deadline:
-          type: string
-          format: date-time
-          description: The deadline of the survey
-        is_attended:
-          type: boolean
-          description: Whether the user has attended the survey
-        attend_count:
-          type: integer
-          description: The total number of users who have attended the survey
+          type: 'string'
+          format: 'date-time'
+        questions:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/Question'
+    Question:
+      type: 'object'
+      properties:
+        question_id:
+          type: 'integer'
+        type:
+          type: 'string'
+        content:
+          type: 'string'
+        image_url:
+          type: 'string'
+        choices:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/Choice'
+        answers:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/Answer'
+    Choice:
+      type: 'object'
+      properties:
+        choice_id:
+          type: 'integer'
+        option:
+          type: 'string'
+        count:
+          type: 'integer'
+    Answer:
+      type: 'object'
+      properties:
+        answer_id:
+          type: 'integer'
+        content:
+          type: 'string'
+        objContent:
+          type: 'string'
