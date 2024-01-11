@@ -15,7 +15,6 @@ const createAndDownloadExcel = async (req, res) => {
   let worksheet = workbook.addWorksheet('Survey Answers');
 
   try {
-    // 설문조사의 모든 질문을 검색
     const questions = await Question.findAll({
       where: { surveyId: surveyId },
     });
@@ -26,39 +25,42 @@ const createAndDownloadExcel = async (req, res) => {
         .send('Survey not found or no questions associated with it.');
     }
 
-    // 첫 번째 행(헤더)에 질문 내용 추가
-    const header = questions.map((q) => q.content);
+    const header = ['UserID', ...questions.map((q) => q.content)];
     worksheet.addRow(header);
 
-    // 답변 데이터를 담을 객체 초기화
-    let answerRows = {};
+    let userData = {};
 
-    // 모든 답변을 검색
     for (const question of questions) {
-      answerRows[question.id] = [];
       const answers = await Answer.findAll({
         where: { questionId: question.id },
       });
 
       for (const answer of answers) {
+        const userId = answer.userId;
+        if (!userData[userId]) {
+          userData[userId] = {};
+        }
+        if (!userData[userId][question.id]) {
+          userData[userId][question.id] = [];
+        }
+
         if (answer.objContent) {
           const choice = await Choice.findByPk(answer.objContent);
-          answerRows[question.id].push(choice ? choice.option : 'N/A');
+          userData[userId][question.id].push(choice ? choice.option : 'N/A');
         } else {
-          answerRows[question.id].push(answer.subContent || 'N/A');
+          userData[userId][question.id].push(answer.subContent || 'N/A');
         }
       }
     }
 
-    // 답변 데이터를 엑셀에 추가
-    const questionIds = questions.map((q) => q.id);
-    const maxAnswers = Math.max(
-      ...Object.values(answerRows).map((arr) => arr.length),
-    );
-    for (let i = 0; i < maxAnswers; i++) {
-      let row = questionIds.map((id) => answerRows[id][i] || '');
-      worksheet.addRow(row);
-    }
+    Object.keys(userData).forEach((userId) => {
+      const userRow = [userId];
+      questions.forEach((question) => {
+        const answers = userData[userId][question.id] || [];
+        userRow.push(answers.join(', '));
+      });
+      worksheet.addRow(userRow);
+    });
 
     const tempFilePath = `/path/to/excel/survey_answers_${surveyId}.xlsx`;
     await workbook.xlsx.writeFile(tempFilePath);
