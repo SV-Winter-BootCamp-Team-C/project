@@ -7,6 +7,7 @@ import MainLayout from './layout/MainLayout';
 import All from './pages/AllForm';
 import MyForm from './pages/MyForm';
 import MyResponse from './pages/MyResponse';
+import ResponseForm from './pages/ResponseForm';
 
 interface RouterElement {
   id: number;
@@ -23,6 +24,7 @@ const routerData: RouterElement[] = [
   { id: 4, path: '/all', element: <All />, withAuth: false, isNavbar: true },
   { id: 5, path: '/myform', element: <MyForm />, withAuth: false, isNavbar: true },
   { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: false, isNavbar: true },
+  { id: 9, path: '/responseform', element: <ResponseForm />, withAuth: false, isNavbar: true },
 ];
 
 const Router = createBrowserRouter(
