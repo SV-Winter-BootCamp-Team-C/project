@@ -94,7 +94,7 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-                    
+
   /api/surveys/{id}/join:
     get:
       summary: '내가 답변한 설문지'
@@ -499,7 +499,7 @@ paths:
                     type: integer
         '500':
           description: 서버 에러 발생
-          
+
   /api/users/signup:
     post:
       summary: '사용자 회원가입'
@@ -578,6 +578,80 @@ paths:
       responses:
         '200':
           description: '사용자 정보 반환'
+
+  /api/surveys/{userId}/content/{surveyId}:
+    get:
+      summary: Get a user's answers to a survey
+      tags:
+        - GET
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: The user ID
+        - in: path
+          name: surveyId
+          required: true
+          schema:
+            type: integer
+          description: The survey ID
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The number of items to return per page
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The page number
+      responses:
+        '200':
+          description: A user's answers to a survey
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  main_url:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  create_at:
+                    type: string
+                    format: date-time
+                  deadline:
+                    type: string
+                    format: date-time
+                  user_id:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        question_id:
+                          type: integer
+                        content:
+                          type: string
+                        image_url:
+                          type: string
+                        sub_content:
+                          type: string
+                        obj_content:
+                          type: array
+                          items:
+                            type: string
+        '404':
+          description: Survey not found
+        '500':
+          description: Failed to retrieve user's answers
 
 components:
   schemas:
@@ -670,7 +744,6 @@ components:
           description: '사용자의 답변 내용'
         objContent:
           type: 'string'
-
           description: '객체 형태의 답변 내용, 선택지 ID를 참조할 수 있음'
     User:
       type: 'object'
@@ -683,4 +756,3 @@ components:
           type: 'string'
         name:
           type: 'string'
-
