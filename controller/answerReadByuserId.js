@@ -2,27 +2,32 @@ const { Survey, Question, Answer } = require('../models');
 
 const getAnswerByuserId = async (req, res) => {
   try {
-    const userId = req.query.userId;
-    const surveyId = req.query.surveyId;
+    const { userId, surveyId } = req.params;
+    const pageLimit = req.query.limit;
+    const pageOffset = (req.query.page - 1) * pageLimit;
 
-    const survey = await Survey.findByPk(surveyId, {
-      include: [
-        {
-          model: Question,
-          include: [
-            {
-              model: Answer,
-              where: { userId: userId },
-              required: false,
-            },
-          ],
-        },
-      ],
-    });
-
+    const survey = await Survey.findByPk(surveyId);
     if (!survey) {
       return res.status(404).send('Survey not found');
     }
+
+    const totalQuestions = await Question.count({
+      where: { surveyId: surveyId },
+    });
+    const totalPages = Math.ceil(totalQuestions / pageLimit);
+
+    const questions = await Question.findAll({
+      where: { surveyId: surveyId },
+      limit: pageLimit,
+      offset: pageOffset,
+      include: [
+        {
+          model: Answer,
+          where: { userId: userId },
+          required: false,
+        },
+      ],
+    });
 
     const responseData = {
       mainUrl: survey.url,
@@ -30,8 +35,9 @@ const getAnswerByuserId = async (req, res) => {
       description: survey.description,
       createAt: survey.createdAt,
       deadline: survey.deadline,
-      userId: parseInt(userId),
-      questions: survey.Questions.map((question) => {
+      user_id: parseInt(userId),
+      totalPages: totalPages,
+      questions: questions.map((question) => {
         // 각 질문에 대한 모든 objContent 값을 배열로 반환
         const objContents = question.Answers.map(
           (answer) => answer.objContent,

@@ -26,7 +26,7 @@ router.delete('/:id', surveyDeleteController.deleteSurveyAndRelatedData);
 router.post('/:id', surveyAnswerController.createAnswer);
 router.get('/:id/urls', getSurveyUrlController.getUrl);
 router.get(
-  '/search/:title/:userId',
+  '/:userId/search/:title',
   surveyTitleSearchController.searchSurveyByTitle,
 );
 
