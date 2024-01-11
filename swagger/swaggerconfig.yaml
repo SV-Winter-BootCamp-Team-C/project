@@ -316,6 +316,7 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
+
   /api/surveys/{id}/all:
     get:
       summary: '전체 설문지 조회'
@@ -488,6 +489,85 @@ paths:
         '500':
           description: 'Server error'
 
+  /api/users/signup:
+    post:
+      summary: '사용자 회원가입'
+      tags:
+        - USER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: '회원가입 성공'
+        '400':
+          description: '회원가입 실패'
+  /api/users/login:
+    post:
+      summary: '사용자 로그인'
+      tags:
+        - USER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: '로그인 성공'
+        '401':
+          description: '비밀번호가 틀렸습니다.'
+        '404':
+          description: '존재하지 않는 메일입니다.'
+  /api/users/{email}/check-email:
+    get:
+      summary: '이메일 중복 확인'
+      tags:
+        - USER
+      parameters:
+        - name: 'email'
+          in: 'path'
+          required: true
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: '중복 확인 결과 반환'
+  /api/users/:
+    patch:
+      summary: '비밀번호 수정'
+      tags:
+        - USER
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: '수정이 완료되었습니다.'
+        '400':
+          description: '비밀번호 수정에 실패하였습니다.'
+  /api/users/{id}:
+    get:
+      summary: '사용자 정보 조회'
+      tags:
+        - USER
+      parameters:
+        - name: 'id'
+          in: 'path'
+          required: true
+          schema:
+            type: 'integer'
+      responses:
+        '200':
+          description: '사용자 정보 반환'
+
 components:
   schemas:
     Survey:
@@ -548,4 +628,15 @@ components:
         content:
           type: 'string'
         objContent:
+          type: 'string'
+    User:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+        email:
+          type: 'string'
+        password:
+          type: 'string'
+        name:
           type: 'string'
