@@ -12,6 +12,7 @@ const { sequelize } = require('../models');
 const {createAndDownloadExcel} = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
+const userRouters = require('../routers/UserRouter');
 app.use(express.json());
 
 sequelize
@@ -20,6 +21,8 @@ sequelize
     console.log('데이터베이스 테이블 생성 완료');
 
     app.use('/api/surveys', surveyRouters);
+
+    app.use('/api/users', userRouters);
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 

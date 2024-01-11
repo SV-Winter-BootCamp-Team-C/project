@@ -3,10 +3,8 @@ info:
   title: For me
   description: 설문지 폼 커스터마이징할 수 있게 해주는 API
   version: 0.1.9
-
 servers:
   - url: http://localhost:8000
-
 paths:
   /api/surveys:
     post:
@@ -96,7 +94,6 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-
   /api/surveys/{id}/forms:
     get:
       tags:
@@ -130,13 +127,14 @@ paths:
           description: 잘못된 요청
         '500':
           description: 서버 오류
-
+          
   /api/surveys/{id}/join:
     get:
       summary: '내가 답변한 설문지'
       tags:
         - GET
       operationId: 'showAnsweredSurveys'
+      summary: Get answered surveys of a user
       parameters:
         - name: 'id'
           in: 'path'
@@ -174,7 +172,8 @@ paths:
           description: 'No answered surveys found for this user'
         '500':
           description: 'Server error'
-
+          description: Internal server error
+          
   /api/surveys/{id}:
     put:
       summary: 설문 수정 API
@@ -319,7 +318,6 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-
   /api/surveys/{id}/all:
     get:
       summary: '전체 설문지 조회'
@@ -363,6 +361,13 @@ paths:
           description: 'No surveys found'
         '500':
           description: 'Server error'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Survey'
+        404:
+          description: No surveys found
+        500:
+          description: Server error
 
   /api/surveys/{id}/urls:
     get:
@@ -408,7 +413,6 @@ paths:
                   message:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
-
     delete:
       summary: 설문 삭제 API
       tags:
@@ -420,16 +424,6 @@ paths:
           schema:
             type: integer
           description: 삭제할 설문의 ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  description: 사용자 ID
       responses:
         '200':
           description: 설문 및 관련 데이터 삭제 완료
