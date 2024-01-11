@@ -6,7 +6,7 @@ import { Pagination } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
 interface SurvayFormProps {
-  pageCount: number; // 페이지 개수
+  totalPages: number; // 페이지 개수
   onClickAddButton?: () => void;
 }
 
@@ -40,7 +40,7 @@ const surveyData: SurveyData = {
   ],
 };
 
-function SurvdForm({ pageCount, onClickAddButton }: SurvayFormProps) {
+function SurvdForm({ totalPages, onClickAddButton }: SurvayFormProps) {
   const location = useLocation();
   return (
     <div className="flex flex-col items-center pt-6">
@@ -83,6 +83,7 @@ function SurvdForm({ pageCount, onClickAddButton }: SurvayFormProps) {
         {surveyData.surveys.map((item) => (
           <SurveyCover
             key={item.survey_id}
+            id={item.survey_id}
             title={item.title}
             mainImageUrl={item.main_image_url}
             deadline={item.deadline}
@@ -91,7 +92,7 @@ function SurvdForm({ pageCount, onClickAddButton }: SurvayFormProps) {
           />
         ))}
       </div>
-      <Pagination count={pageCount} className="absolute bottom-4" />
+      <Pagination count={totalPages} className="absolute bottom-4" />
     </div>
   );
 }

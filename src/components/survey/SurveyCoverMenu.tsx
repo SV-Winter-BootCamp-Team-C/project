@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import menuSee from '@/assets/menuSee.svg';
 import menuLink from '@/assets/menuLink.svg';
 import menuAnalysis from '@/assets/menuAnalysis.svg';
@@ -6,6 +6,7 @@ import menuEdit from '@/assets/menuEdit.svg';
 import menuDel from '@/assets/menuDel.svg';
 
 interface SurveyCoverMenuProps {
+  surveyId: number;
   open?: boolean;
 }
 
@@ -34,7 +35,8 @@ const ITEM_ICON: ItemIcon[] = [
   { item: '삭제', icon: menuDel },
 ];
 
-function SurveyCoverMenu({ open }: SurveyCoverMenuProps) {
+function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
+  const navigate = useNavigate();
   const location = useLocation();
   const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
 
@@ -49,10 +51,20 @@ function SurveyCoverMenu({ open }: SurveyCoverMenuProps) {
     return icon || '';
   };
 
+  const handleItemClick = (itemName: string, sId: number) => {
+    if (itemName === '분석') {
+      navigate(`/result/${sId}`);
+    }
+  };
+
   return (
     <div className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-10">
       {items.map((itemName, index) => (
-        <div key={index} className="w-full hover:bg-lightGray py-[0.625rem]">
+        <div
+          key={index}
+          className="w-full hover:bg-lightGray py-[0.625rem]"
+          onClick={() => handleItemClick(itemName, surveyId)}
+        >
           <div className="flex items-center h-6 gap-2 pl-4 cursor-pointer">
             <img src={getIcon(itemName)} alt={itemName} className="w-4 h-4" />
             <p className={`text-base leading-4 ${itemName === '삭제' ? 'text-[#D0021B]' : 'text-black'}`}>{itemName}</p>
