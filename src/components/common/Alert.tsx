@@ -3,7 +3,7 @@ import close from '@/assets/closebtn.svg';
 
 interface AlertProps {
   message: string;
-  buttonText: string | null;
+  buttonText: string;
 }
 
 function Alert({ message, buttonText }: AlertProps) {
