@@ -283,76 +283,6 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-    post:
-      tags:
-        - POST
-      summary: 설문 답변 저장 API
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: 설문 ID
-          schema:
-            type: integer
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: integer
-                  description: 사용자 ID
-                questions:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      questionId:
-                        type: integer
-                      content:
-                        type: string
-                      imageUrl:
-                        type: string
-                      objContent:
-                        type: array
-                        items:
-                          type: integer
-                      subContent:
-                        type: string
-                required:
-                  - userId
-                  - questions
-      responses:
-        '201':
-          description: 답변 저장 성공
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 성공 메시지
-                    example: '저장되었습니다.'
-                  surveyId:
-                    type: integer
-                    description: 생성된 설문조사의 ID
-        '408':
-          description: 요청 실패
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: '저장을 실패하였습니다.'
 
   /api/surveys/{id}/all:
     get:
@@ -722,6 +652,55 @@ paths:
           description: Survey not found
         '500':
           description: Failed to retrieve user's answers
+
+  /api/surveys/{userId}/search/{title}:
+    get:
+      summary: 설문조사를 제목으로 검색합니다.
+      tags:
+        - GET
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: 검색하는 사용자 ID
+        - in: path
+          name: title
+          schema:
+            type: string
+          required: true
+          description: 검색할 설문조사의 제목
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: 한 페이지에 표시할 설문조사의 수
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: 표시할 페이지 번호
+      responses:
+        200:
+          description: 검색 결과와 함께 성공 메시지를 반환합니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  surveys:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Survey'
+                  totalPages:
+                    type: integer
+        400:
+          description: 필요한 파라미터가 없을 때 반환합니다.
+        404:
+          description: 검색 결과가 없을 때 반환합니다.
+        500:
+          description: 서버 오류가 발생했을 때 반환합니다.
 
 components:
   schemas:
