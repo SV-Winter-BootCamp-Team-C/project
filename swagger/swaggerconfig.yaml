@@ -94,39 +94,55 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-  /api/surveys/{id}/forms:
-    get:
-      tags:
-        - GET
-      summary: 폼 모아보기 API
-      description: 특정 사용자 ID에 속한 폼 템플릿을 모아서 보여주는 API입니다.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: userId
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: 성공적으로 조회됨
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  surveys:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Survey'
-                  total_count:
-                    type: integer
-                    description: 총 설문 템플릿 수
-        '400':
-          description: 잘못된 요청
-        '500':
-          description: 서버 오류
+  get:
+    tags:
+      - GET
+    summary: 폼 모아보기 API
+    description: 특정 사용자 ID에 속한 폼 템플릿을 모아서 보여주는 API입니다.
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: 사용자 ID
+        schema:
+          type: integer
+          format: int64
+      - name: pageNo
+        in: query
+        required: false
+        description: 페이지 번호
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        description: 한 페이지 당 표시할 아이템의 수
+        schema:
+          type: integer
+          default: 9
+    responses:
+      '200':
+        description: 성공적으로 조회됨
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                surveys:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Survey'
+                total_count:
+                  type: integer
+                  description: 총 설문 템플릿 수
+                page_count:
+                  type: integer
+                  description: 총 페이지 수
+      '400':
+        description: 잘못된 요청
+      '500':
+        description: 서버 오류
 
   /api/surveys/{id}/join:
     get:
@@ -488,41 +504,104 @@ paths:
         '500':
           description: 'Server error'
 
+  /api/surveys/{id}/forms:
+    get:
+      summary: 사용자 설문조사 목록 가져오기
+      tags:
+        - GET
+      description: 특정 사용자에 대한 설문조사 목록을 페이징하여 가져옵니다.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 사용자 ID
+        - in: query
+          name: pageNo
+          schema:
+            type: integer
+            default: 1
+          description: 페이지 번호
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 9
+          description: 한 페이지당 항목 수
+      responses:
+        '200':
+          description: 성공적으로 설문조사 목록을 가져옴
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  surveys:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Survey'
+                  total_count:
+                    type: integer
+                  page_count:
+                    type: integer
+        '500':
+          description: 서버 에러 발생
+
 components:
   schemas:
     Survey:
       type: 'object'
+      required:
+        - userName
+        - title
+        - open
+        - createdAt
       properties:
-        user_name:
+        userName:
           type: 'string'
+          description: '사용자의 이름'
         title:
           type: 'string'
+          description: '설문조사의 제목'
         open:
           type: 'boolean'
-        created_at:
+          description: '설문조사의 공개 여부'
+        createdAt:
           type: 'string'
           format: 'date-time'
-        updated_at:
+          description: '생성된 날짜와 시간'
+        updatedAt:
           type: 'string'
           format: 'date-time'
+          description: '업데이트된 날짜와 시간'
         deadline:
           type: 'string'
           format: 'date-time'
+          description: '마감일'
         questions:
           type: 'array'
           items:
             $ref: '#/components/schemas/Question'
     Question:
       type: 'object'
+      required:
+        - questionId
+        - type
+        - content
       properties:
-        question_id:
+        questionId:
           type: 'integer'
+          description: '질문의 고유 식별자'
         type:
           type: 'string'
+          description: '질문의 유형 (예: 객관식, 주관식 등)'
         content:
           type: 'string'
-        image_url:
+          description: '질문 내용'
+        imageUrl:
           type: 'string'
+          description: '질문과 관련된 이미지 URL'
         choices:
           type: 'array'
           items:
@@ -533,19 +612,31 @@ components:
             $ref: '#/components/schemas/Answer'
     Choice:
       type: 'object'
+      required:
+        - choiceId
+        - option
       properties:
-        choice_id:
+        choiceId:
           type: 'integer'
+          description: '선택지의 고유 식별자'
         option:
           type: 'string'
+          description: '선택지 내용'
         count:
           type: 'integer'
+          description: '해당 선택지를 선택한 응답자 수'
     Answer:
       type: 'object'
+      required:
+        - answerId
+        - content
       properties:
-        answer_id:
+        answerId:
           type: 'integer'
+          description: '답변의 고유 식별자'
         content:
           type: 'string'
+          description: '사용자의 답변 내용'
         objContent:
           type: 'string'
+          description: '객체 형태의 답변 내용, 선택지 ID를 참조할 수 있음'
