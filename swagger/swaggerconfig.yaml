@@ -283,6 +283,76 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
+    post:
+      tags:
+        - POST
+      summary: 설문 답변 저장 API
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: 설문 ID
+          schema:
+            type: integer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: 사용자 ID
+                questions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      questionId:
+                        type: integer
+                      content:
+                        type: string
+                      imageUrl:
+                        type: string
+                      objContent:
+                        type: array
+                        items:
+                          type: integer
+                      subContent:
+                        type: string
+                required:
+                  - userId
+                  - questions
+      responses:
+        '201':
+          description: 답변 저장 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+                    example: '저장되었습니다.'
+                  surveyId:
+                    type: integer
+                    description: 생성된 설문조사의 ID
+        '408':
+          description: 요청 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '저장을 실패하였습니다.'
 
   /api/surveys/{id}/all:
     get:
