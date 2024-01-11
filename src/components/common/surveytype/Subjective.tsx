@@ -1,25 +1,12 @@
 import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
-import addIcon from '@/assets/add.svg';
 import copyIcon from '@/assets/copy.svg';
 import deleteIcon from '@/assets/delete.svg';
 import imageaddIcon from '@/assets/imageadd.svg';
 import trashcanIcon from '@/assets/trashcan.svg';
 
-function Multiplechoice() {
-  const [choices, setChoices] = useState([{ id: 1, value: '' }]); // 초기 상태에 1개의 빈 선택지를 설정
+function Subjective() {
   const [image, setImage] = useState<string | null>(null); // 이미지 상태 초기화
-
-  // 새 선택지를 추가하는 함수
-  const addChoice = () => {
-    const newId = choices.length > 0 ? Math.max(...choices.map((c) => c.id)) + 1 : 1;
-    setChoices([...choices, { id: newId, value: '' }]);
-  };
-
-  // 선택지 삭제 함수
-  const deleteChoice = (id: number) => {
-    setChoices(choices.filter((choice) => choice.id !== id)); // 삭제할 id를 제외한 선택지만 필터링
-  };
 
   // 이미지 업로드 핸들러
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +34,7 @@ function Multiplechoice() {
           <button type="button" className="focus:outline-none items-center">
             <img src={typeIcon} alt="Type" className="w-5 h-5" />
           </button>
-          <span className="ml-2 font-medium text-left text-darkGray">객관식</span>
+          <span className="ml-2 font-medium text-left text-darkGray">주관식</span>
         </div>
         <div className="flex mr-4">
           <button type="button" className="focus:outline-none w-5 h-5 mr-2  items-center">
@@ -75,13 +62,13 @@ function Multiplechoice() {
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="multiplechoice-image-upload"
+            id="subjective-image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             style={{ display: 'none' }}
           />
-          <label htmlFor="multiplechoice-image-upload" className="image-upload-label">
+          <label htmlFor="subjective-image-upload" className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5" />
           </label>
@@ -106,42 +93,15 @@ function Multiplechoice() {
         </div>
       )}
 
-      <div className="flex flex-col items-center justify-center w-[50rem]">
-        {choices.map((choice) => (
-          <div key={choice.id} className="flex justify-center items-center w-full mb-2">
-            <div className="relative flex w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
-              <button
-                type="button"
-                className="absolute top-[0.625rem] left-[0.625rem] focus:outline-none"
-                onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
-              >
-                <img src={deleteIcon} alt="Delete" className="w-full h-full" />
-              </button>
-
-              <div className="flex justify-center items-center w-full">
-                <input
-                  type="text"
-                  required
-                  placeholder="텍스트를 입력해주세요."
-                  className="w-60 h-8 text-base text-center text-black rounded-md border border-dashed border-gray focus:outline-none focus:border-2 focus:border-black"
-                  value={choice.value}
-                  onChange={(e) => {
-                    const newChoices = choices.map((item) =>
-                      item.id === choice.id ? { ...item, value: e.target.value } : item,
-                    );
-                    setChoices(newChoices);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-        <button type="button" onClick={addChoice} className="focus:outline-none">
-          <img src={addIcon} alt="Add" className="w-5 h-5 mb-2" />
-        </button>
+      <div className="flex  w-[50rem] mb-[1rem]">
+        <div className="flex justify-center items-center w-full">
+          <span className="w-[25rem] py-2 pl-2 text-base text-start text-darkGray rounded-lg border border-solid border-darkGray">
+            주관식 답변을 작성해주세요.
+          </span>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Multiplechoice;
+export default Subjective;
