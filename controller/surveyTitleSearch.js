@@ -30,10 +30,21 @@ async function checkSurveyParticipation(userId, surveyId) {
 const searchSurveyByTitle = async (req, res) => {
   try {
     const { userId, title } = req.params;
+    const pageLimit = req.query.limit;
+    const pageOffset = (req.query.page - 1) * pageLimit;
 
     if (!userId) {
       return res.status(400).json({ message: 'userId가 필요합니다.' });
     }
+
+    const totalSurveys = await Survey.count({
+      where: {
+        title: {
+          [Op.like]: `%${title}%`,
+        },
+      },
+    });
+    const totalPages = Math.ceil(totalSurveys / pageLimit);
 
     const surveys = await Survey.findAll({
       where: {
@@ -49,6 +60,8 @@ const searchSurveyByTitle = async (req, res) => {
         'updatedAt',
         'deadline',
       ],
+      limit: pageLimit,
+      offset: pageOffset,
     });
 
     if (surveys.length === 0) {
@@ -65,7 +78,9 @@ const searchSurveyByTitle = async (req, res) => {
       }),
     );
 
-    res.status(200).json({ surveys: surveysWithParticipation });
+    res
+      .status(200)
+      .json({ surveys: surveysWithParticipation, totalPages: totalPages });
   } catch (error) {
     res.status(500).json({ message: '설문 검색 오류', error: error.message });
   }

@@ -30,10 +30,10 @@ const getAnswerByuserId = async (req, res) => {
     });
 
     const responseData = {
-      mainUrl: survey.url,
+      main_url: survey.url,
       title: survey.title,
       description: survey.description,
-      createAt: survey.createdAt,
+      create_at: survey.createdAt,
       deadline: survey.deadline,
       user_id: parseInt(userId),
       totalPages: totalPages,
@@ -47,11 +47,13 @@ const getAnswerByuserId = async (req, res) => {
           question_id: question.id,
           content: question.content,
           image_url: question.imageUrl,
-          objContent: objContents.length > 0 ? objContents : null, // objContents 배열이 비어있지 않으면 반환
-          subContent: question.Answers.find((answer) => answer.subContent)
+          sub_content: question.Answers.find((answer) => answer.subContent)
             ?.subContent,
         };
 
+        if (objContents.length > 0) {
+          questionResponse.obj_content = objContents;
+        }
         return questionResponse;
       }),
     };
