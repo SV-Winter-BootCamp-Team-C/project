@@ -29,7 +29,7 @@ async function checkSurveyParticipation(userId, surveyId) {
 
 const searchSurveyByTitle = async (req, res) => {
   try {
-    const { title, userId } = req.params;
+    const { userId, title } = req.params;
 
     if (!userId) {
       return res.status(400).json({ message: 'userId가 필요합니다.' });
