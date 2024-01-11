@@ -12,6 +12,7 @@ const surveyAnswerController = require('../controller/answerSave');
 const getSurveyUrlController = require('../controller/getSurveyUrl');
 const surveyResultController = require('../controller/surveyResult');
 const getAnswerController = require('../controller/answerReadByuserId');
+const { sendSurveyEmailWithSurveyId } = require('../controller/urlShare');
 
 router.post('/', surveyController.createSurveyWithQuestionsAndChoices);
 router.put('/:id', surveyModifyController.ModifySurveyWithQuestionsAndChoices);
@@ -24,5 +25,24 @@ router.delete('/:id', surveyDeleteController.deleteSurveyAndRelatedData);
 router.post('/:id', surveyAnswerController.createAnswer);
 router.get('/:id/urls', getSurveyUrlController.getUrl);
 router.get('/:userId/content/:surveyId', getAnswerController.getAnswerByuserId);
+router.post('/:id/share', async (req, res) => {
+  console.log('Request body:', req.body);
+  const surveyId = req.params.id;
+  const { emails } = req.body;
+
+  if (!Array.isArray(emails)) {
+    return res
+      .status(400)
+      .json({ message: 'emails 필드가 배열 형식이 아닙니다' });
+  }
+
+  try {
+    const response = await sendSurveyEmailWithSurveyId(surveyId, emails);
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message || '서버 오류 발생' });
+  }
+});
 
 module.exports = router;
