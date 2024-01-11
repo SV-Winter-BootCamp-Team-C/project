@@ -7,6 +7,7 @@ import MainLayout from './layout/MainLayout';
 import All from './pages/AllForm';
 import MyForm from './pages/MyForm';
 import MyResponse from './pages/MyResponse';
+import ResultPage from './pages/ResultPage';
 
 interface RouterElement {
   id: number;
@@ -21,8 +22,9 @@ const routerData: RouterElement[] = [
   { id: 2, path: '/login', element: <Login />, withAuth: false },
   { id: 3, path: '/signup', element: <Signup />, withAuth: false },
   { id: 4, path: '/all', element: <All />, withAuth: false, isNavbar: true },
-  { id: 5, path: '/myform', element: <MyForm />, withAuth: false, isNavbar: true },
-  { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: false, isNavbar: true },
+  { id: 5, path: '/myform', element: <MyForm />, withAuth: true, isNavbar: true },
+  { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: true, isNavbar: true },
+  { id: 7, path: '/result/:id', element: <ResultPage />, withAuth: true, isNavbar: true },
 ];
 
 const Router = createBrowserRouter(
