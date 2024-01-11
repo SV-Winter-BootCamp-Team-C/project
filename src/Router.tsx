@@ -24,7 +24,7 @@ const routerData: RouterElement[] = [
   { id: 4, path: '/all', element: <All />, withAuth: false, isNavbar: true },
   { id: 5, path: '/myform', element: <MyForm />, withAuth: true, isNavbar: true },
   { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: true, isNavbar: true },
-  { id: 7, path: '/result/:id', element: <ResultPage />, withAuth: true, isNavbar: true },
+  { id: 8, path: '/result/:id', element: <ResultPage />, withAuth: true, isNavbar: true },
 ];
 
 const Router = createBrowserRouter(

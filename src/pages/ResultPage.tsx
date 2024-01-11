@@ -1,4 +1,6 @@
 import ResultTypeSwitch from '@/components/common/ResultTypeSwitch';
+import Question from '@/components/surveyResult/Question/Question';
+import Response from '@/components/surveyResult/Response/Response';
 import { useState } from 'react';
 
 function ResultPage() {
@@ -15,6 +17,8 @@ function ResultPage() {
       </div>
 
       <ResultTypeSwitch curretState={currentSwitch} onChange={handleToggle} />
+
+      <div className="pt-10">{currentSwitch === 'question' ? <Question /> : <Response />}</div>
     </div>
   );
 }
