@@ -4,6 +4,7 @@ import Start from './pages/Start';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
+import Createstyle from './pages/Createstyle';
 
 interface RouterElement {
   id: number;
@@ -17,6 +18,7 @@ const routerData: RouterElement[] = [
   { id: 2, path: '/login', element: <Login />, withAuth: false },
   { id: 3, path: '/signup', element: <Signup />, withAuth: false },
   { id: 4, path: '/home', element: <Home />, withAuth: true },
+  { id: 5, path: '/createstyle', element: <Createstyle />, withAuth: false },
 ];
 
 const Router = createBrowserRouter(

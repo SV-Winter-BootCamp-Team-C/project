@@ -1,5 +1,5 @@
-import close from '@/assets/closebtn.svg';
 import { useState } from 'react';
+import close from '@/assets/closebtn.svg';
 
 interface AlertProps {
   message: string;
