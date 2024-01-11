@@ -5,15 +5,22 @@ import copyIcon from '@/assets/copy.svg';
 import deleteIcon from '@/assets/delete.svg';
 import imageaddIcon from '@/assets/imageadd.svg';
 import trashcanIcon from '@/assets/trashcan.svg';
+import checkIcon from '@/assets/check.svg';
 
-function Multiplechoice() {
-  const [choices, setChoices] = useState([{ id: 1, value: '' }]); // 초기 상태에 1개의 빈 선택지를 설정
+interface Choice {
+  id: number;
+  value: string;
+  isChecked: boolean;
+}
+
+function Checkbox() {
+  const [choices, setChoices] = useState<Choice[]>([{ id: 1, value: '', isChecked: false }]); // 초기 상태에 1개의 빈 선택지를 설정
   const [image, setImage] = useState<string | null>(null); // 이미지 상태 초기화
 
   // 새 선택지를 추가하는 함수
   const addChoice = () => {
-    const newId = choices.length > 0 ? Math.max(...choices.map((c) => c.id)) + 1 : 1;
-    setChoices([...choices, { id: newId, value: '' }]);
+    const newId = choices.length + 1;
+    setChoices([...choices, { id: newId, value: '', isChecked: false }]);
   };
 
   // 선택지 삭제 함수
@@ -37,6 +44,11 @@ function Multiplechoice() {
     setImage(null); // 이미지 상태를 null로 설정하여 이미지를 삭제
   };
 
+  // 체크박스 상태 변경 함수
+  const toggleCheckbox = (id: number) => {
+    setChoices(choices.map((choice) => (choice.id === id ? { ...choice, isChecked: !choice.isChecked } : choice)));
+  };
+
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -47,7 +59,7 @@ function Multiplechoice() {
           <button type="button" className="focus:outline-none items-center">
             <img src={typeIcon} alt="Type" className="w-5 h-5" />
           </button>
-          <span className="ml-2 font-medium text-left text-darkGray">객관식</span>
+          <span className="ml-2 font-medium text-left text-darkGray">체크박스</span>
         </div>
         <div className="flex mr-4">
           <button type="button" className="focus:outline-none w-5 h-5 mr-2  items-center">
@@ -75,13 +87,13 @@ function Multiplechoice() {
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="multiplechoice-image-upload"
+            id="checkbox-image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             style={{ display: 'none' }}
           />
-          <label htmlFor="multiplechoice-image-upload" className="image-upload-label">
+          <label htmlFor="checkbox-image-upload" className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5" />
           </label>
@@ -110,9 +122,26 @@ function Multiplechoice() {
         {choices.map((choice) => (
           <div key={choice.id} className="flex justify-center items-center w-full mb-2">
             <div className="relative flex w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
+              <label
+                htmlFor={`checkbox-${choice.id}`}
+                className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
+                  choice.isChecked ? 'bg-blue-500' : 'bg-white'
+                } border border-gray-300`}
+              >
+                <input
+                  type="checkbox"
+                  id={`checkbox-${choice.id}`}
+                  className="opacity-0 absolute"
+                  checked={choice.isChecked}
+                  onChange={() => toggleCheckbox(choice.id)}
+                  disabled // 체크박스 비활성화
+                />
+                {choice.isChecked && <img src={checkIcon} alt="Checked" className="w-4 h-4" />}
+              </label>
+
               <button
                 type="button"
-                className="absolute top-[0.625rem] left-[0.625rem] focus:outline-none"
+                className="absolute top-[0.625rem] right-[0.625rem] focus:outline-none"
                 onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
               >
                 <img src={deleteIcon} alt="Delete" className="w-full h-full" />
@@ -144,4 +173,4 @@ function Multiplechoice() {
   );
 }
 
-export default Multiplechoice;
+export default Checkbox;

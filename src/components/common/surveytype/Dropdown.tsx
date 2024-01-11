@@ -5,8 +5,9 @@ import copyIcon from '@/assets/copy.svg';
 import deleteIcon from '@/assets/delete.svg';
 import imageaddIcon from '@/assets/imageadd.svg';
 import trashcanIcon from '@/assets/trashcan.svg';
+import dropIcon from '@/assets/drop.svg';
 
-function Multiplechoice() {
+function Dropdown() {
   const [choices, setChoices] = useState([{ id: 1, value: '' }]); // 초기 상태에 1개의 빈 선택지를 설정
   const [image, setImage] = useState<string | null>(null); // 이미지 상태 초기화
 
@@ -47,7 +48,7 @@ function Multiplechoice() {
           <button type="button" className="focus:outline-none items-center">
             <img src={typeIcon} alt="Type" className="w-5 h-5" />
           </button>
-          <span className="ml-2 font-medium text-left text-darkGray">객관식</span>
+          <span className="ml-2 font-medium text-left text-darkGray">드롭다운</span>
         </div>
         <div className="flex mr-4">
           <button type="button" className="focus:outline-none w-5 h-5 mr-2  items-center">
@@ -75,13 +76,13 @@ function Multiplechoice() {
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="multiplechoice-image-upload"
+            id="dropdown-image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             style={{ display: 'none' }}
           />
-          <label htmlFor="multiplechoice-image-upload" className="image-upload-label">
+          <label htmlFor="dropdown-image-upload" className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5" />
           </label>
@@ -105,25 +106,22 @@ function Multiplechoice() {
           <div className="flex justify-center items-center w-full" />
         </div>
       )}
-
+      <div className="relative flex items-center w-[20rem] h-[2rem] border bg-lightGray rounded-t-[0.625rem] border-solid border-lightGray ">
+        <span className="ml-2 font-medium text-left text-darkGray">드롭다운 선택지</span>
+        <div className="absolute flex justify-center items-center w-[1.25rem] h-[1.25rem] bg-ligthGray top-[0.375rem] right-[0.625rem]">
+          <img src={dropIcon} alt="Drop" className="w-[0.75rem] h-[0.5rem]" />
+        </div>
+      </div>
       <div className="flex flex-col items-center justify-center w-[50rem]">
         {choices.map((choice) => (
-          <div key={choice.id} className="flex justify-center items-center w-full mb-2">
-            <div className="relative flex w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
-              <button
-                type="button"
-                className="absolute top-[0.625rem] left-[0.625rem] focus:outline-none"
-                onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
-              >
-                <img src={deleteIcon} alt="Delete" className="w-full h-full" />
-              </button>
-
-              <div className="flex justify-center items-center w-full">
+          <div key={choice.id} className="flex justify-center items-center w-full">
+            <div className="relative flex w-[20rem] h-10 border border-solid border-gray ">
+              <div className="flex justify-center items-center w-full ml-2">
                 <input
                   type="text"
                   required
                   placeholder="텍스트를 입력해주세요."
-                  className="w-60 h-8 text-base text-center text-black rounded-md border border-dashed border-gray focus:outline-none focus:border-2 focus:border-black"
+                  className="w-full h-full text-base text-start focus:outline-none"
                   value={choice.value}
                   onChange={(e) => {
                     const newChoices = choices.map((item) =>
@@ -133,15 +131,24 @@ function Multiplechoice() {
                   }}
                 />
               </div>
+              <button
+                type="button"
+                className="absolute top-[0.625rem] right-[0.625rem] focus:outline-none"
+                onClick={() => deleteChoice(choice.id)} // 삭제 버튼 클릭 시 deleteChoice 함수 호출
+              >
+                <img src={deleteIcon} alt="Delete" className="w-full h-full" />
+              </button>
             </div>
           </div>
         ))}
-        <button type="button" onClick={addChoice} className="focus:outline-none">
-          <img src={addIcon} alt="Add" className="w-5 h-5 mb-2" />
-        </button>
+        <div className="flex justify-center items-center w-[20rem] h-[3.5rem] mb-4 border border-solid border-gray rounded-b-[0.625rem] ">
+          <button type="button" onClick={addChoice} className="focus:outline-none">
+            <img src={addIcon} alt="Add" className="w-5 h-5 mb-2" />
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Multiplechoice;
+export default Dropdown;
