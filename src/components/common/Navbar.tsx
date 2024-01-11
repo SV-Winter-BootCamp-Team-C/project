@@ -1,7 +1,6 @@
 import all from '@/assets/navAll.svg';
 import myform from '@/assets/navForm.svg';
 import myresponses from '@/assets/navRes.svg';
-import analysis from '@/assets/navAnalysis.svg';
 import profile from '@/assets/profile.svg';
 import logout from '@/assets/logout.svg';
 import { useEffect, useState } from 'react';
@@ -22,7 +21,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'all', icon: all, text: 'All', path: '/all' },
   { id: 'myforms', icon: myform, text: 'My Forms', path: '/myform' },
   { id: 'myresponses', icon: myresponses, text: 'My Responses', path: '/myresponses' },
-  { id: 'analysis', icon: analysis, text: 'Analysis', path: '/analysis' },
 ];
 
 function Navbar({ children }: NavbarProps) {
@@ -56,8 +54,7 @@ function Navbar({ children }: NavbarProps) {
               return (
                 <div
                   key={item.id}
-                  className={`flex items-center cursor-pointer gap-5
-                ${activeItem === item.id ? 'bg-purple-600 text-white' : 'text-darkGray'}`}
+                  className="flex items-center gap-5 cursor-pointer text-darkGray"
                   onClick={() => handleClick(item.id)}
                 >
                   <img src={item.icon} alt={item.text} className="w-6 h-6" />
@@ -78,11 +75,11 @@ function Navbar({ children }: NavbarProps) {
         <div className="pl-6">
           <div className="flex items-center gap-5 pb-9">
             <img src={profile} alt="profile" className="w-6 h-6" />
-            <p className="text-base font-semibold leading-4 text-darkGary">Profile</p>
+            <p className="text-base font-semibold leading-4 text-darkGray">Profile</p>
           </div>
           <div className="flex items-center gap-5">
             <img src={logout} alt="logout" className="w-6 h-6" />
-            <p className="text-base font-semibold leading-4 text-darkGary">Logout</p>
+            <p className="text-base font-semibold leading-4 text-darkGray">Logout</p>
           </div>
         </div>
       </div>

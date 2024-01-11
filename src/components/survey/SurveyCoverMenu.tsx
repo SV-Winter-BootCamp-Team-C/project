@@ -50,7 +50,7 @@ function SurveyCoverMenu({ open }: SurveyCoverMenuProps) {
   };
 
   return (
-    <div className="absolute top-full left-1/2 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-10">
+    <div className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-10">
       {items.map((itemName, index) => (
         <div key={index} className="w-full hover:bg-lightGray py-[0.625rem]">
           <div className="flex items-center h-6 gap-2 pl-4 cursor-pointer">

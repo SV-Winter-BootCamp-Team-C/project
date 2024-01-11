@@ -27,7 +27,7 @@ function SurveyCover({ title, mainImageUrl, deadline, attedCount, open = false }
 
   return (
     <div className="relative">
-      <div className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGary">
+      <div className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGray">
         <img src={imageUrl} alt="survey" className="object-cover w-full h-full" />
       </div>
 

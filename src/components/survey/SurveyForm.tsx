@@ -44,7 +44,7 @@ function SurvdForm({ pageCount, onClickAddButton }: SurvayFormProps) {
   const location = useLocation();
   return (
     <div className="flex flex-col items-center pt-6">
-      <div className="flex justify-between w-[25rem] h-12 px-7 py-3 rounded-[1.875rem] border-2 border-gray border-solid gap-7">
+      <div className="flex justify-between w-[25rem] h-12 px-7 py-3 rounded-[1.875rem] border-2 border-darkGray border-solid gap-7">
         <input
           name="search"
           type="text"
@@ -76,7 +76,9 @@ function SurvdForm({ pageCount, onClickAddButton }: SurvayFormProps) {
           {location.pathname !== '/myresponses' && <AddButton text="추가" onClick={onClickAddButton as () => void} />}
         </div>
       </div>
-      <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGary" />
+      {/* 구분선 */}
+      <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
+
       <div className="grid grid-cols-3 py-8 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">
         {surveyData.surveys.map((item) => (
           <SurveyCover
