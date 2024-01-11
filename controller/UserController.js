@@ -1,7 +1,6 @@
-const user = require('../models/user');
+
 
 const { User, Survey, Answer, Question, Choice } = require('../models');
-const { Console } = require('console');
 
 const signup = async (req, res) => {
     try {
@@ -63,7 +62,6 @@ const login = async (req, res) => {
 }
 const logout = async (res) => {
 }
-//to Do: 없는 메일일 때 오류수정
 const isEmailRepeated = async (req, res) => {
     try {
         const userEmail = req.params.email;
@@ -85,12 +83,14 @@ const isEmailRepeated = async (req, res) => {
 const modifyPassword = async (req, res) => {
     try {
         const updatedPassword = req.params.password;
-        const condition = {
-            where: {
+        await User.update(
+            { password: updatedPassword },
+            {
+                where: {
                 id: req.body.id
+                }
             }
-        };
-        await User.update(updatedPassword, condition).then (() => {
+        ).then (() => {
             res.status(200).json({ message: "수정이 완료되었습니다."});
         }).catch (error => {
             res.status(400).json({ message: "비밀번호 수정에 실패하였습니다."});       
@@ -119,4 +119,4 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-module.exports = { signup, login, logout, isEmailRepeated, modifyPassword, getMyInfo };
+module.exports = { signup, login, isEmailRepeated, modifyPassword, getMyInfo };
