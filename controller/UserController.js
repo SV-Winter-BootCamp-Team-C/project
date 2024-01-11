@@ -78,7 +78,6 @@ const isEmailRepeated = async (req, res) => {
     sendServerError(error, res);
   }
 };
-
 const modifyPassword = async (req, res) => {
   try {
     const { user_id, password } = req.body;
