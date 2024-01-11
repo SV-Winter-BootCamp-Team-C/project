@@ -488,6 +488,39 @@ paths:
         '500':
           description: 'Server error'
 
+  /api/surveys/{title}/{userId}:
+    get:
+      summary: '설문 제목으로 검색'
+      tags:
+        - GET
+      operationId: 'searchSurveyByTitle'
+      parameters:
+        - name: 'title'
+          in: 'query'
+          description: '설문 제목으로 검색'
+          required: true
+          schema:
+            type: 'string'
+        - name: 'userId'
+          in: 'query'
+          description: '사용자 ID'
+          required: true
+          schema:
+            type: 'string'
+      responses:
+        '200':
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurveysWithParticipation'
+        '400':
+          description: 'Bad request'
+        '404':
+          description: 'No surveys found'
+        '500':
+          description: 'Server error'
+
 components:
   schemas:
     Survey:
@@ -549,3 +582,34 @@ components:
           type: 'string'
         objContent:
           type: 'string'
+    SurveysWithParticipation:
+      type: 'object'
+      properties:
+        surveys:
+          type: 'array'
+          items:
+            $ref: '#/components/schemas/SurveyWithParticipation'
+        total_count:
+          type: 'integer'
+          description: '총 설문 템플릿 수'
+
+    SurveyWithParticipation:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+        title:
+          type: 'string'
+        mainImageUrl:
+          type: 'string'
+        createdAt:
+          type: 'string'
+          format: 'date-time'
+        updatedAt:
+          type: 'string'
+          format: 'date-time'
+        deadline:
+          type: 'string'
+          format: 'date-time'
+        isAttend:
+          type: 'boolean'
