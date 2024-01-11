@@ -22,10 +22,8 @@ const createAnswer = async (req, res) => {
       }
 
       // 질문 타입에 따라 답변 저장
-
       if (
-        (questionData.type === 'MULTIPLE_CHOICE' ||
-          questionData.type === 'CHECKBOX') &&
+        questionData.type === 'CHECKBOX' &&
         Array.isArray(question.objContent)
       ) {
         // objContent의 각 요소에 대한 별도의 Answer 레코드 생성
@@ -38,24 +36,52 @@ const createAnswer = async (req, res) => {
               .send(`Choice with ID ${objContentItem} not found`);
           }
           if (option.questionId != question.questionId) {
-            return res.status(400).send(`질문에 해당 선택지가 없습니다.}`);
+            return res.status(400).send(`질문에 해당 선택지가 없습니다.`);
           }
 
-          await Answer.create({
+          // 중복 확인
+          const existingAnswer = await Answer.findOne({
+            where: {
+              questionId: question.questionId,
+              userId: userId,
+              objContent: objContentItem,
+            },
+            transaction: t,
+          });
+
+          if (!existingAnswer) {
+            await Answer.create({
+              questionId: question.questionId,
+              userId: userId,
+              objContent: objContentItem,
+              subContent: null,
+            });
+          }
+        }
+      } else {
+        // SUBJECTIVE_QUESTION || MULTIPLE_CHOICE || DROPDOWN
+        // 중복 확인
+        const existingAnswer = await Answer.findOne({
+          where: {
             questionId: question.questionId,
             userId: userId,
-            objContent: objContentItem,
-            subContent: null,
-          });
-        }
-      } else if (questionData.type === 'SUBJECTIVE_QUESTION') {
-        // SUBJECTIVE_QUESTION의 경우 한 개의 Answer 레코드 생성
-        await Answer.create({
-          questionId: question.questionId,
-          userId: userId,
-          subContent: question.subContent,
-          objContent: null,
+            subContent: question.subContent || null,
+            objContent: question.objContent || null,
+          },
+          transaction: t,
         });
+
+        if (!existingAnswer) {
+          await Answer.create(
+            {
+              questionId: question.questionId,
+              userId: userId,
+              subContent: question.subContent || null,
+              objContent: question.objContent || null,
+            },
+            { transaction: t },
+          );
+        }
       }
 
       console.log(`questionId : ${question.questionId}`);
