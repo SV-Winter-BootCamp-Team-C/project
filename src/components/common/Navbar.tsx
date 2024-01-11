@@ -61,7 +61,7 @@ function Navbar({ children }: NavbarProps) {
                   onClick={() => handleClick(item.id)}
                 >
                   <img src={item.icon} alt={item.text} className="w-6 h-6" />
-                  <span className="text-base font-semibold text-center text-darkGary">{item.text}</span>
+                  <p className="text-base font-semibold leading-4 text-darkGary">{item.text}</p>
 
                   {activeItem === item.id && (
                     <div className="absolute left-0 w-2 h-[3rem] bg-darkPurple ">
@@ -78,11 +78,11 @@ function Navbar({ children }: NavbarProps) {
         <div className="pl-6">
           <div className="flex items-center gap-5 pb-9">
             <img src={profile} alt="profile" className="w-6 h-6" />
-            <p className="text-base font-semibold text-center text-darkGary">Profile</p>
+            <p className="text-base font-semibold leading-4 text-darkGary">Profile</p>
           </div>
           <div className="flex items-center gap-5">
             <img src={logout} alt="logout" className="w-6 h-6" />
-            <p className="font-semibold text-center ftext-base text-darkGary">Logout</p>
+            <p className="text-base font-semibold leading-4 text-darkGary">Logout</p>
           </div>
         </div>
       </div>

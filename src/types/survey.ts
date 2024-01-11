@@ -6,4 +6,5 @@ export type Survey = {
   updated_at: string;
   deadline: string;
   atted_count: number;
+  open?: boolean;
 };

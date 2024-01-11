@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 interface AlertProps {
   message: string;
-  buttonText: string | null;
+  buttonText: string;
 }
 
 function Alert({ message, buttonText }: AlertProps) {
