@@ -1,11 +1,17 @@
 const { Survey, Answer, Question } = require('../models');
 
-const findAllSurveys = async (req, res) => {
+const showAllSurveys = async (req, res) => {
   try {
     // Request로부터 Parameter 값들 가져오기
     const userId = req.params.id;
     const pageLimit = req.query.limit;
     const pageOffset = (req.query.page - 1) * pageLimit;
+
+    const totalSurveys = await Survey.count({
+      where: { open: true },
+    });
+
+    const totalPages = Math.ceil(totalSurveys / pageLimit);
 
     // limit, offset으로 각 페이지마다 보여질 survey를 가져와 array로 만들기
     const surveys = await Survey.findAll({
@@ -13,6 +19,7 @@ const findAllSurveys = async (req, res) => {
       attributes: [
         'id',
         'title',
+        'open',
         'mainImageUrl',
         'createdAt',
         'updatedAt',
@@ -52,6 +59,7 @@ const findAllSurveys = async (req, res) => {
       result.push({
         survey_id: survey.id,
         title: survey.title,
+        open: survey.open,
         main_image_url: survey.mainImageUrl,
         created_at: survey.createdAt,
         updated_at: survey.updatedAt,
@@ -61,10 +69,10 @@ const findAllSurveys = async (req, res) => {
       });
     }
 
-    res.json({ surveys: result });
+    res.json({ surveys: result, totalPages: totalPages });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { findAllSurveys };
+module.exports = { showAllSurveys };
