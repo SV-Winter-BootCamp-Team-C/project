@@ -1,8 +1,17 @@
 const { Survey, Answer, Question } = require('../models');
 
-const findAnsweredSurvey = async (req, res) => {
+const surveyAnswered = async (req, res) => {
   try {
     const userId = req.params.id;
+
+    const totalSurveys = await Survey.count({
+      where: { open: true },
+    });
+
+    const pageLimit = req.query.limit;
+    const pageOffset = (req.query.page - 1) * pageLimit;
+
+    const totalPages = Math.ceil(totalSurveys / pageLimit);
 
     // 해당 사용자가 답변한 설문조사를 찾습니다.
     const answers = await Answer.findAll({
@@ -16,6 +25,7 @@ const findAnsweredSurvey = async (req, res) => {
               attributes: [
                 'id',
                 'title',
+                'open',
                 'mainImageUrl',
                 'createdAt',
                 'updatedAt',
@@ -25,6 +35,8 @@ const findAnsweredSurvey = async (req, res) => {
           ],
         },
       ],
+      limit: pageLimit,
+      offset: pageOffset,
     });
 
     if (!answers.length) {
@@ -34,11 +46,14 @@ const findAnsweredSurvey = async (req, res) => {
     }
 
     // 조회된 설문조사를 반환합니다.
-    res.json({ surveys: answers.map((answer) => answer.Question.Survey) });
+    res.json({
+      surveys: answers.map((answer) => answer.Question.Survey),
+      totalPages: totalPages,
+    });
   } catch (error) {
     // 에러가 발생한 경우 에러 메시지를 반환합니다.
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { findAnsweredSurvey };
+module.exports = { surveyAnswered };
