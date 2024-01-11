@@ -579,6 +579,53 @@ paths:
         '200':
           description: '사용자 정보 반환'
 
+
+  /api/surveys/{id}/share:
+    post:
+      summary: 설문조사 공유 API
+      tags:
+        - POST
+      description: 특정 설문조사의 링크를 이메일로 공유합니다.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 설문조사 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: 공유할 이메일 주소 목록
+                  
+      responses:
+        '200':
+          description: 이메일을 성공적으로 보냄
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '이메일 발송 요청 완료'
+        '400':
+          description: 요청 데이터 오류
+        '404':
+          description: 설문조사를 찾을 수 없음
+        '500':
+          description: 서버 오류
+          
+
   /api/surveys/{userId}/content/{surveyId}:
     get:
       summary: Get a user's answers to a survey
@@ -701,6 +748,7 @@ paths:
           description: 검색 결과가 없을 때 반환합니다.
         500:
           description: 서버 오류가 발생했을 때 반환합니다.
+
 
 components:
   schemas:
