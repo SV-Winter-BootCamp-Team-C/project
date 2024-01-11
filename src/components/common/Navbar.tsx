@@ -1,7 +1,6 @@
 import all from '@/assets/navAll.svg';
 import myform from '@/assets/navForm.svg';
 import myresponses from '@/assets/navRes.svg';
-import analysis from '@/assets/navAnalysis.svg';
 import profile from '@/assets/profile.svg';
 import logout from '@/assets/logout.svg';
 import { useEffect, useState } from 'react';
@@ -22,7 +21,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'all', icon: all, text: 'All', path: '/all' },
   { id: 'myforms', icon: myform, text: 'My Forms', path: '/myform' },
   { id: 'myresponses', icon: myresponses, text: 'My Responses', path: '/myresponses' },
-  { id: 'analysis', icon: analysis, text: 'Analysis', path: '/analysis' },
 ];
 
 function Navbar({ children }: NavbarProps) {
