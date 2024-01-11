@@ -94,7 +94,7 @@ paths:
                   message:
                     type: string
                     description: 오류 메시지
-                    
+
   /api/surveys/{id}/join:
     get:
       summary: '내가 답변한 설문지'
@@ -499,7 +499,7 @@ paths:
                     type: integer
         '500':
           description: 서버 에러 발생
-          
+
   /api/users/signup:
     post:
       summary: '사용자 회원가입'
@@ -578,6 +578,98 @@ paths:
       responses:
         '200':
           description: '사용자 정보 반환'
+
+/api/surveys/{id}:
+  post:
+    tags:
+      - POST
+    summary: 설문 답변 저장 API
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: 설문 ID
+        schema:
+          type: integer
+    consumes:
+      - application/json
+    produces:
+      - application/json
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: integer
+                description: 사용자 ID
+              questions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    questionId:
+                      type: integer
+                    content:
+                      type: string
+                    imageUrl:
+                      type: string
+                    objContent:
+                      type: array
+                      items:
+                        type: integer
+                    subContent:
+                      type: string
+              required:
+                - userId
+                - questions
+    responses:
+      '201':
+        description: 답변 저장 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: 성공 메시지
+                surveyId:
+                  type: integer
+                  description: 생성된 설문조사의 ID
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '잘못된 요청입니다.'
+      '408':
+        description: 요청 실패
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: '저장을 실패하였습니다.'
+
+      '500':
+        description: 서버 오류
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: 오류 메시지
 
 components:
   schemas:

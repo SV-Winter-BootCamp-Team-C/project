@@ -7,7 +7,6 @@ const createAnswer = async (req, res) => {
 
   try {
     const { userId, questions } = req.body;
-    console.log(`userId : ${userId}`);
 
     for (const question of questions) {
       // 질문의 타입을 확인
@@ -18,13 +17,17 @@ const createAnswer = async (req, res) => {
           .send(`Question with ID ${question.questionId} not found`);
       }
       if (questionData.surveyId != surveyId) {
-        return res.status(400).send(`설문에 해당 질문이 없습니다.}`);
+        return res.status(400).send(`설문에 해당 질문이 없습니다.`);
       }
 
       // 질문 타입에 따라 답변 저장
+
+      // 객관식
       if (
-        questionData.type === 'CHECKBOX' &&
-        Array.isArray(question.objContent)
+        (questionData.type === 'CHECKBOX' &&
+          Array.isArray(question.objContent)) ||
+        questionData.type == 'DROPDOWN' ||
+        questionData.type == 'MULTIPLE_CHOICE'
       ) {
         // objContent의 각 요소에 대한 별도의 Answer 레코드 생성
         for (const objContentItem of question.objContent) {
@@ -39,7 +42,7 @@ const createAnswer = async (req, res) => {
             return res.status(400).send(`질문에 해당 선택지가 없습니다.`);
           }
 
-          // 중복 확인
+          // 같은 레코드 있는지 확인
           const existingAnswer = await Answer.findOne({
             where: {
               questionId: question.questionId,
@@ -48,82 +51,82 @@ const createAnswer = async (req, res) => {
             },
             transaction: t,
           });
+          // 체크박스의 경우 중복 허용
+          if (!existingAnswer && questionData.type === 'CHECKBOX') {
+            await Answer.create(
+              {
+                questionId: question.questionId,
+                userId: userId,
+                objContent: objContentItem,
+                subContent: null,
+              },
+              { transaction: t },
+            );
 
-          if (!existingAnswer) {
-            await Answer.create({
-              questionId: question.questionId,
-              userId: userId,
-              objContent: objContentItem,
-              subContent: null,
+            // Choice의 count 증가
+            await Choice.increment('count', {
+              by: 1,
+              where: { id: objContentItem },
+              transaction: t,
+            });
+          }
+          // 체크박스 아닌 객관식은 답변 하나만 들어감
+          // MULTIPLE_CHOICE || DROPDOWN
+          if (
+            questionData.type !== 'CHECKBOX' &&
+            question.objContent.length > 1
+          ) {
+            return res.status(400).send(`하나만 선택해주세요.`);
+          }
+          if (
+            !existingAnswer &&
+            questionData.type != 'CHECKBOX' &&
+            question.objContent.length === 1
+          ) {
+            await Answer.create(
+              {
+                questionId: question.questionId,
+                userId: userId,
+                objContent: question.objContent[0], // 첫 번째 선택지만 사용
+                subContent: null,
+              },
+              { transaction: t },
+            );
+
+            await Choice.increment('count', {
+              by: 1,
+              where: { id: question.objContent },
+              transaction: t,
             });
           }
         }
       } else {
-        // SUBJECTIVE_QUESTION || MULTIPLE_CHOICE || DROPDOWN
-        // 중복 확인
+        // SUBJECTIVE_QUESTION
         const existingAnswer = await Answer.findOne({
           where: {
             questionId: question.questionId,
             userId: userId,
             subContent: question.subContent || null,
-            objContent: question.objContent || null,
+            objContent: null,
           },
           transaction: t,
         });
 
         if (!existingAnswer) {
-          await Answer.create(
-            {
-              questionId: question.questionId,
-              userId: userId,
-              subContent: question.subContent || null,
-              objContent: question.objContent || null,
-            },
-            { transaction: t },
-          );
+          await Answer.create({
+            questionId: question.questionId,
+            userId: userId,
+            subContent: question.subContent || null,
+            objContent: null,
+          });
         }
       }
-
       console.log(`questionId : ${question.questionId}`);
+      console.log(`question type :  ${questionData.type}`);
       console.log(`question content : ${question.content} `);
       console.log(`question objContent : ${question.objContent}`);
       console.log(`question subContent : ${question.subContent}`);
     }
-
-    // Answer 테이블을 userId로 조회
-    // 객관식 선택지의 경우 count 올라감
-    // 주어진 userId로 Answer 테이블 조회
-    const answers = await Answer.findAll({
-      where: { userId: userId },
-      include: [
-        {
-          model: Question,
-          required: true,
-        },
-      ],
-    });
-
-    for (const answer of answers) {
-      if (answer.Question.type !== 'SUBJECTIVE_QUESTION') {
-        // 동일한 선택지에 대한 이전 답변이 있는지 확인
-        const previousAnswer = await Answer.findOne({
-          where: {
-            userId: userId,
-            questionId: answer.questionId,
-            objContent: answer.objContent,
-          },
-        });
-
-        // 이전 답변이 없는 경우에만 count 증가
-        if (!previousAnswer) {
-          await Choice.increment('count', {
-            by: 1,
-            where: { id: answer.objContent },
-          });
-        }
-      }
-    }
-
     await t.commit();
     res.status(201).json({ message: '저장되었습니다.' });
   } catch (error) {

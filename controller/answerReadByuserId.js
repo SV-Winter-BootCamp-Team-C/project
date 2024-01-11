@@ -2,7 +2,8 @@ const { Survey, Question, Answer } = require('../models');
 
 const getAnswerByuserId = async (req, res) => {
   try {
-    const { userId, surveyId } = req.params;
+    const userId = req.query.userId;
+    const surveyId = req.query.surveyId;
 
     const survey = await Survey.findByPk(surveyId, {
       include: [
@@ -24,12 +25,12 @@ const getAnswerByuserId = async (req, res) => {
     }
 
     const responseData = {
-      main_url: survey.url,
+      mainUrl: survey.url,
       title: survey.title,
       description: survey.description,
-      create_at: survey.createdAt,
+      createAt: survey.createdAt,
       deadline: survey.deadline,
-      user_id: parseInt(userId),
+      userId: parseInt(userId),
       questions: survey.Questions.map((question) => {
         // 각 질문에 대한 모든 objContent 값을 배열로 반환
         const objContents = question.Answers.map(
@@ -40,13 +41,11 @@ const getAnswerByuserId = async (req, res) => {
           question_id: question.id,
           content: question.content,
           image_url: question.imageUrl,
-          sub_content: question.Answers.find((answer) => answer.subContent)
+          objContent: objContents.length > 0 ? objContents : null, // objContents 배열이 비어있지 않으면 반환
+          subContent: question.Answers.find((answer) => answer.subContent)
             ?.subContent,
         };
 
-        if (objContents.length > 0) {
-          questionResponse.obj_content = objContents;
-        }
         return questionResponse;
       }),
     };
