@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryCache, QueryClient } from '@tanstack/react-query';
 import axios, { AxiosRequestConfig } from 'axios';
 
 type AnyOBJ = {
@@ -6,10 +6,17 @@ type AnyOBJ = {
 };
 
 export const getClient = new QueryClient({
+  // 전역 에러 핸들링
+  queryCache: new QueryCache({
+    onError: (error: Error) => {
+      alert(error.message);
+    },
+  }),
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24시간
       staleTime: 1000 * 60, // 1분
+      throwOnError: true,
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
