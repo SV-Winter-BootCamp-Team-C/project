@@ -22,7 +22,7 @@ function Response() {
       >
         저장하기
       </button>
-      <div className="max-w-[52.5rem] max-h-[41rem]">
+      <div className="max-w-[52.5rem] max-h-[41rem] pt-4">
         <DataGrid
           rows={rows}
           columns={columns}
