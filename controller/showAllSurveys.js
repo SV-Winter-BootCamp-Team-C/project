@@ -60,12 +60,12 @@ const showAllSurveys = async (req, res) => {
         surveyId: survey.id,
         title: survey.title,
         open: survey.open,
-        main_image_url: survey.mainImageUrl,
-        created_at: survey.createdAt,
-        updated_at: survey.updatedAt,
+        mainImageUrl: survey.mainImageUrl,
+        createdAt: survey.createdAt,
+        updatedAt: survey.updatedAt,
         deadline: survey.deadline,
         isAttended: !!answer,
-        attend_count: user_count,
+        attendCount: user_count,
       });
     }
 
