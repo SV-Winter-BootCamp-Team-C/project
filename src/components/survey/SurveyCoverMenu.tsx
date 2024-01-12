@@ -62,7 +62,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
       {items.map((itemName, index) => (
         <div
           key={index}
-          className="w-full hover:bg-lightGray py-[0.625rem]"
+          className="w-full hover:bg-lightGray py-[0.625rem] trasiton duration-300 ease-in-out"
           onClick={() => handleItemClick(itemName, surveyId)}
         >
           <div className="flex items-center h-6 gap-2 pl-4 cursor-pointer">
