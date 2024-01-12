@@ -41,22 +41,22 @@ function StaticCheckBox({ question }: StaticCheckBoxProps) {
             <div
               className="relative flex justify-center items-center w-[25rem] h-10 bg-lightGray rounded-[1.25rem] "
               style={{
-                border: question.objContent.includes(choice.choices_id) ? '0.125rem solid' : 'none',
+                border: (question.objContent ?? []).includes(choice.choices_id) ? '0.125rem solid' : 'none',
               }}
             >
               <label
                 htmlFor={`checkbox-${choice.choices_id}`}
                 className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
-                  question.objContent.includes(choice.choices_id) ? 'bg-blue-500' : 'bg-white'
+                  (question.objContent ?? []).includes(choice.choices_id) ? 'bg-blue-500' : 'bg-white'
                 } border border-gray-300`}
               >
                 <input
                   type="checkbox"
                   id={`checkbox-${choice.choices_id}`}
                   className="opacity-0 absolute"
-                  checked={question.objContent.includes(choice.choices_id)}
+                  checked={(question.objContent ?? []).includes(choice.choices_id)}
                 />
-                {question.objContent.includes(choice.choices_id) && (
+                {(question.objContent ?? []).includes(choice.choices_id) && (
                   <img src={checkIcon} alt="Checked" className="w-4 h-4" />
                 )}
               </label>

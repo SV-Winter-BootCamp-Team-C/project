@@ -40,7 +40,7 @@ function StiticMultipleChoice({ question }: StiticMultipleChoiceProps) {
             type="button"
             key={choice.choices_id}
             className={`w-[25rem] h-[2.5rem] choice-item p-2 rounded-[1.25rem] ${
-              question.objContent.includes(choice.choices_id) ? 'bg-gray border-2 border-solid' : 'bg-lightGray'
+              (question.objContent ?? []).includes(choice.choices_id) ? 'bg-gray border-2 border-solid' : 'bg-lightGray'
             }`}
           >
             {choice.option}

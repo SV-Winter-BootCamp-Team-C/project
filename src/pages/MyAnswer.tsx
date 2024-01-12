@@ -37,13 +37,12 @@ const testData: TestData = {
       content: '가장 좋아하는 계절은?',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '봄', count: 0 },
-        { choices_id: 2, option: '여름', count: 0 },
-        { choices_id: 3, option: '가을', count: 0 },
-        { choices_id: 4, option: '겨울', count: 0 },
+        { choices_id: 1, option: '봄' },
+        { choices_id: 2, option: '여름' },
+        { choices_id: 3, option: '가을' },
+        { choices_id: 4, option: '겨울' },
       ],
       objContent: [1],
-      subContent: '',
     },
 
     {
@@ -51,7 +50,6 @@ const testData: TestData = {
       type: 'SUBJECTIVE_QUESTION',
       content: '당신에게 여행이란 무엇인가요?',
       image_url: 'https://i.pinimg.com/564x/89/df/e4/89dfe4af08bbb2d64aef7988170cba94.jpg',
-      objContent: [],
       subContent: '여행은 좋은 것이다.',
     },
     {
@@ -60,12 +58,11 @@ const testData: TestData = {
       content: '좋아하는 과일을 선택하세요.',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '바나나', count: 0 },
-        { choices_id: 2, option: '사과', count: 0 },
-        { choices_id: 3, option: '배', count: 0 },
+        { choices_id: 1, option: '바나나' },
+        { choices_id: 2, option: '사과' },
+        { choices_id: 3, option: '배' },
       ],
       objContent: [1, 3],
-      subContent: '',
     },
     {
       question_id: 4,
@@ -73,12 +70,11 @@ const testData: TestData = {
       content: '옵션을 선택해주세요.',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '옵션1', count: 0 },
-        { choices_id: 2, option: '옵션2', count: 0 },
-        { choices_id: 3, option: '옵션3', count: 0 },
+        { choices_id: 1, option: '옵션1' },
+        { choices_id: 2, option: '옵션2' },
+        { choices_id: 3, option: '옵션3' },
       ],
       objContent: [3],
-      subContent: '',
     },
   ],
 };

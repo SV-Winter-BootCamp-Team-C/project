@@ -36,10 +36,10 @@ const testData: TestData = {
       content: '가장 좋아하는 계절은?',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '봄', count: 0 },
-        { choices_id: 2, option: '여름', count: 0 },
-        { choices_id: 3, option: '가을', count: 0 },
-        { choices_id: 4, option: '겨울', count: 0 },
+        { choices_id: 1, option: '봄' },
+        { choices_id: 2, option: '여름' },
+        { choices_id: 3, option: '가을' },
+        { choices_id: 4, option: '겨울' },
       ],
     },
     {
@@ -54,9 +54,9 @@ const testData: TestData = {
       content: '좋아하는 과일을 선택하세요.',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '바나나', count: 0 },
-        { choices_id: 2, option: '사과', count: 0 },
-        { choices_id: 3, option: '배', count: 0 },
+        { choices_id: 1, option: '바나나' },
+        { choices_id: 2, option: '사과' },
+        { choices_id: 3, option: '배' },
       ],
     },
     {
@@ -65,9 +65,9 @@ const testData: TestData = {
       content: '옵션을 선택해주세요.',
       image_url: '',
       choices: [
-        { choices_id: 1, option: '옵션1', count: 0 },
-        { choices_id: 2, option: '옵션2', count: 0 },
-        { choices_id: 3, option: '옵션3', count: 0 },
+        { choices_id: 1, option: '옵션1' },
+        { choices_id: 2, option: '옵션2' },
+        { choices_id: 3, option: '옵션3' },
       ],
     },
   ],
