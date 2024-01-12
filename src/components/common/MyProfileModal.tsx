@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import profile from '@/assets/profile.svg';
 import close from '@/assets/closebtn.svg';
 import pencil from '@/assets/pencil.svg';
@@ -12,15 +11,15 @@ function MyProfileModal({ isVisible, onClose }: MyProfileModalProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed z-10 inset-0 flex items-center justify-center bg-black bg-opacity-20">
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-20">
       <div className="relative w-[25rem] h-80  flex flex-col items-center justify-center bg-white shadow-md rounded-[1.25rem]">
         <div className="absolute right-2 top-2">
           <div className="flex items-center justify-center w-6 h-6 cursor-pointer" onClick={onClose}>
             <img src={close} alt="close" className="w-2 h-2" />
           </div>
         </div>
-        <div className="flex items-center pt-9 pb-4">
-          <img src={profile} alt="profile" className=" w-10 h-10" />
+        <div className="flex items-center pb-4 pt-9">
+          <img src={profile} alt="profile" className="w-10 h-10 " />
         </div>
         <div className="flex flex-col">
           <div className="flex flex-col pb-4">
@@ -36,7 +35,7 @@ function MyProfileModal({ isVisible, onClose }: MyProfileModalProps) {
             <img src={pencil} alt="pencil" className=" w-4 h-[0.875rem]" />
           </div>
 
-          <div className="flex justify-center items-center pb-9">
+          <div className="flex items-center justify-center pb-9">
             <button
               type="submit"
               onClick={onClose}
