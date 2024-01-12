@@ -57,14 +57,14 @@ const showAllSurveys = async (req, res) => {
       });
 
       result.push({
-        survey_id: survey.id,
+        surveyId: survey.id,
         title: survey.title,
         open: survey.open,
         main_image_url: survey.mainImageUrl,
         created_at: survey.createdAt,
         updated_at: survey.updatedAt,
         deadline: survey.deadline,
-        is_attended: !!answer,
+        isAttended: !!answer,
         attend_count: user_count,
       });
     }
