@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useNavbarStore } from '@/store/NavbarStore';
 import all from '@/assets/navAll.svg';
 import myform from '@/assets/navForm.svg';
 import myresponses from '@/assets/navRes.svg';
@@ -25,19 +26,12 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 function Navbar({ children }: NavbarProps) {
+  const { activeItem, handleItem } = useNavbarStore();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [activeItem, setActiveItem] = useState<string>('all');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  useEffect(() => {
-    const currentPath = location.pathname;
-    const activeNavItem = NAV_ITEMS.find((item) => item.path === currentPath)?.id || 'all';
-    setActiveItem(activeNavItem);
-  }, [location]);
-
   const handleClick = (item: string) => {
-    setActiveItem(item);
+    handleItem(item);
     navigate(NAV_ITEMS.find((navItem) => navItem.id === item)?.path || '/all');
   };
 
