@@ -1,18 +1,11 @@
-import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData'; // questionData.ts에서 타입 가져오기
+import { ExtendedQuestionData } from '@/types/questionData';
 
-interface ResponseMultipleChoiceProps {
-  question: QuestionData; // 수정된 QuestionData 타입 사용
+interface StiticMultipleChoiceProps {
+  question: ExtendedQuestionData;
 }
 
-function ResponseMultipleChoice({ question }: ResponseMultipleChoiceProps) {
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-
-  const handleOptionSelect = (choiceId: number) => {
-    setSelectedOption(choiceId);
-  };
-
+function StiticMultipleChoice({ question }: StiticMultipleChoiceProps) {
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -47,21 +40,15 @@ function ResponseMultipleChoice({ question }: ResponseMultipleChoiceProps) {
             type="button"
             key={choice.choices_id}
             className={`w-[25rem] h-[2.5rem] choice-item p-2 rounded-[1.25rem] ${
-              selectedOption === choice.choices_id ? 'bg-gray' : 'bg-lightGray'
-            } ${selectedOption === choice.choices_id ? 'selected' : ''}`}
-            onClick={() => handleOptionSelect(choice.choices_id)}
+              question.objContent.includes(choice.choices_id) ? 'bg-gray border-2 border-solid' : 'bg-lightGray'
+            }`}
           >
             {choice.option}
           </button>
         ))}
       </div>
-      {selectedOption !== null && (
-        <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choices_id === selectedOption)?.option}</p>
-        </div>
-      )}
     </div>
   );
 }
 
-export default ResponseMultipleChoice;
+export default StiticMultipleChoice;

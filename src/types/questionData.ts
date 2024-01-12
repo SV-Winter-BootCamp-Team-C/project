@@ -17,3 +17,8 @@ export type QuestionData = {
   choices?: Choice[];
   answers?: Answer[];
 };
+
+export type ExtendedQuestionData = QuestionData & {
+  objContent: number[];
+  subContent: string;
+};

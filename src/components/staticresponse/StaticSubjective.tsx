@@ -1,18 +1,11 @@
-import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
+import { ExtendedQuestionData } from '@/types/questionData';
 
-interface ResponseSubjectiveProps {
-  question: QuestionData;
+interface StaticSubjectiveProps {
+  question: ExtendedQuestionData;
 }
 
-function ResponseSubjective({ question }: ResponseSubjectiveProps) {
-  const [userResponse, setUserResponse] = useState<string>(''); // 주관식 응답을 저장할 상태
-
-  const handleUserResponseChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setUserResponse(e.target.value); // 입력 내용을 상태에 업데이트
-  };
-
+function StaticSubjective({ question }: StaticSubjectiveProps) {
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -42,16 +35,15 @@ function ResponseSubjective({ question }: ResponseSubjectiveProps) {
       )}
       <div className="w-[25rem] my-4">
         <textarea
-          value={userResponse}
-          onChange={handleUserResponseChange}
-          rows={4} // 원하는 행 수로 조절 가능
-          placeholder="여기에 주관식 답변을 입력하세요."
-          className="w-full  p-2 rounded-md border border-gray"
-          style={{ overflowY: 'auto', resize: 'vertical' }} // 세로 스크롤바를 표시하고, 세로 크기 조절을 허용
+          value={question.subContent}
+          readOnly // 읽기 전용으로 설정
+          rows={4}
+          className="w-full p-2 rounded-md border border-gray"
+          style={{ overflowY: 'auto', resize: 'vertical' }}
         />
       </div>
     </div>
   );
 }
 
-export default ResponseSubjective;
+export default StaticSubjective;
