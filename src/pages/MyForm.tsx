@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 function MyForm() {
   const navigate = useNavigate();
-  return <SurvdForm totalPages={2} onClickAddButton={() => navigate('/createstyle')} />;
+  return <SurvdForm totalPages={2} onClickAddButton={() => navigate('/create')} />;
 }
 
 export default MyForm;
