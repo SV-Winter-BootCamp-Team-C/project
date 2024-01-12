@@ -1,26 +1,12 @@
-import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
 import checkIcon from '@/assets/check.svg';
-import { QuestionData } from '@/types/questionData';
+import { ExtendedQuestionData } from '@/types/questionData';
 
-interface ResponseCheckBoxProps {
-  question: QuestionData;
+interface StaticCheckBoxProps {
+  question: ExtendedQuestionData;
 }
 
-function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
-  const [selectedOptions, setSelectedOptions] = useState<number[]>([]); // 선택된 옵션을 배열로 관리
-
-  const handleOptionSelect = (choiceId: number) => {
-    // 선택한 옵션이 이미 선택되었는지 확인
-    if (selectedOptions.includes(choiceId)) {
-      // 이미 선택되었으면 선택 해제
-      setSelectedOptions((prevSelectedOptions) => prevSelectedOptions.filter((id) => id !== choiceId));
-    } else {
-      // 선택되지 않았으면 선택 추가
-      setSelectedOptions((prevSelectedOptions) => [...prevSelectedOptions, choiceId]);
-    }
-  };
-
+function StaticCheckBox({ question }: StaticCheckBoxProps) {
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -52,21 +38,25 @@ function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
       <div className="mt-4">
         {question.choices?.map((choice) => (
           <div key={choice.choices_id} className="flex justify-center items-center w-full mb-2">
-            <div className="relative flex justify-center items-center w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
+            <div
+              className="relative flex justify-center items-center w-[25rem] h-10 bg-lightGray rounded-[1.25rem] "
+              style={{
+                border: (question.objContent ?? []).includes(choice.choices_id) ? '0.125rem solid' : 'none',
+              }}
+            >
               <label
                 htmlFor={`checkbox-${choice.choices_id}`}
                 className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
-                  selectedOptions.includes(choice.choices_id) ? 'bg-blue-500' : 'bg-white'
+                  (question.objContent ?? []).includes(choice.choices_id) ? 'bg-blue-500' : 'bg-white'
                 } border border-gray-300`}
               >
                 <input
                   type="checkbox"
                   id={`checkbox-${choice.choices_id}`}
                   className="opacity-0 absolute"
-                  checked={selectedOptions.includes(choice.choices_id)}
-                  onChange={() => handleOptionSelect(choice.choices_id)}
+                  checked={(question.objContent ?? []).includes(choice.choices_id)}
                 />
-                {selectedOptions.includes(choice.choices_id) && (
+                {(question.objContent ?? []).includes(choice.choices_id) && (
                   <img src={checkIcon} alt="Checked" className="w-4 h-4" />
                 )}
               </label>
@@ -75,23 +65,8 @@ function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
           </div>
         ))}
       </div>
-      {selectedOptions.length > 0 && (
-        <div className="flex justify-center mb-4">
-          <p>You selected:</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {selectedOptions.map((selectedChoiceId) => {
-              const selectedChoice = question.choices?.find((choice) => choice.choices_id === selectedChoiceId);
-              return (
-                <span key={selectedChoiceId} style={{ marginLeft: '0.25rem' }}>
-                  {selectedChoice?.option}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
-export default ResponseCheckBox;
+export default StaticCheckBox;

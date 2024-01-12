@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import ResponseMultipleChoice from '@/components/responsetype/ResponseMultipleChoice';
-import ResponseSubjective from '@/components/responsetype/ResponseSubjective';
-import ResponseCheckBox from '@/components/responsetype/ResponseCheckBox';
-import ResponseDropDown from '@/components/responsetype/ResponseDropDown';
+import StaticCheckBox from '@/components/staticresponse/StaticCheckBox';
+import StaticMultipleChoice from '@/components/staticresponse/StaticMultipleChoice';
 import { TextButton } from '@/components/common/Button';
-import { QuestionData } from '@/types/questionData';
+import StaticSubjective from '@/components/staticresponse/StaticSubjective';
+import StaticDropDown from '@/components/staticresponse/StaticDropDown';
+import { ExtendedQuestionData } from '@/types/questionData';
 
 type TestData = {
   survey_id: number;
@@ -17,8 +17,9 @@ type TestData = {
   main_image_url: string;
   created_at: string;
   deadline: string;
-  questions: QuestionData[]; // 여기서 QuestionData[] 타입을 사용
+  questions: ExtendedQuestionData[]; // 여기서 QuestionData[] 타입을 사용
 };
+
 const testData: TestData = {
   survey_id: 1,
   user_name: '소정',
@@ -41,12 +42,15 @@ const testData: TestData = {
         { choices_id: 3, option: '가을' },
         { choices_id: 4, option: '겨울' },
       ],
+      objContent: [1],
     },
+
     {
       question_id: 2,
       type: 'SUBJECTIVE_QUESTION',
       content: '당신에게 여행이란 무엇인가요?',
       image_url: 'https://i.pinimg.com/564x/89/df/e4/89dfe4af08bbb2d64aef7988170cba94.jpg',
+      subContent: '여행은 좋은 것이다.',
     },
     {
       question_id: 3,
@@ -58,6 +62,7 @@ const testData: TestData = {
         { choices_id: 2, option: '사과' },
         { choices_id: 3, option: '배' },
       ],
+      objContent: [1, 3],
     },
     {
       question_id: 4,
@@ -69,11 +74,12 @@ const testData: TestData = {
         { choices_id: 2, option: '옵션2' },
         { choices_id: 3, option: '옵션3' },
       ],
+      objContent: [3],
     },
   ],
 };
 
-function ResponseForm() {
+function MyAnswer() {
   const [surveyData] = useState(testData);
 
   return (
@@ -107,51 +113,38 @@ function ResponseForm() {
               </div>
             </div>
           </div>
-
           {surveyData.questions.map((question) => {
             switch (question.type) {
               case 'MULTIPLE_CHOICE':
                 return (
                   <div className="mb-6">
-                    <ResponseMultipleChoice
-                      key={question.question_id}
-                      question={question} // Question 객체 전체를 question prop으로 전달
-                    />
+                    <StaticMultipleChoice key={question.question_id} question={question} />
                   </div>
                 );
               case 'SUBJECTIVE_QUESTION':
                 return (
                   <div className="mb-6">
-                    <ResponseSubjective
-                      key={question.question_id}
-                      question={question} // Question 객체 전체를 question prop으로 전달
-                    />
+                    <StaticSubjective key={question.question_id} question={question} />
                   </div>
                 );
               case 'CHECKBOX':
                 return (
                   <div className="mb-6">
-                    <ResponseCheckBox
-                      key={question.question_id}
-                      question={question} // Question 객체 전체를 question prop으로 전달
-                    />
+                    <StaticCheckBox key={question.question_id} question={question} />
                   </div>
                 );
               case 'DROPDOWN':
                 return (
                   <div className="mb-6">
-                    <ResponseDropDown
-                      key={question.question_id}
-                      question={question} // Question 객체 전체를 question prop으로 전달
-                    />
+                    <StaticDropDown key={question.question_id} question={question} />
                   </div>
                 );
               default:
                 return null;
             }
           })}
+
           <div className="flex justify-center items-center gap-3 mt-3 mb-9">
-            <TextButton text="제출하기" onClick={() => {}} />
             <TextButton text="나가기" onClick={() => {}} />
           </div>
         </div>
@@ -160,4 +153,4 @@ function ResponseForm() {
   );
 }
 
-export default ResponseForm;
+export default MyAnswer;

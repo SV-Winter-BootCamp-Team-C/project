@@ -1,7 +1,7 @@
 export type Choice = {
   choices_id: number;
   option: string;
-  count: number;
+  count?: number;
 };
 
 export type Answer = {
@@ -16,4 +16,9 @@ export type QuestionData = {
   image_url: string;
   choices?: Choice[];
   answers?: Answer[];
+};
+
+export type ExtendedQuestionData = QuestionData & {
+  objContent?: number[];
+  subContent?: string;
 };

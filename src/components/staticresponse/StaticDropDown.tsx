@@ -1,18 +1,11 @@
-import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
+import { ExtendedQuestionData } from '@/types/questionData';
 
-interface ResponseDropDownProps {
-  question: QuestionData;
+interface StaticDropDownProps {
+  question: ExtendedQuestionData;
 }
 
-function ResponseDropDown({ question }: ResponseDropDownProps) {
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-
-  const handleOptionSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(Number(event.target.value));
-  };
-
+function StaticDropDown({ question }: StaticDropDownProps) {
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -43,10 +36,11 @@ function ResponseDropDown({ question }: ResponseDropDownProps) {
 
       <div className="my-4">
         <select
-          value={selectedOption ?? ''}
-          onChange={handleOptionSelect}
+          value={question.objContent && question.objContent.length > 0 ? question.objContent[0].toString() : ''}
+          onChange={() => {}}
           className="rounded-md border border-gray-300"
           style={{ width: '20rem', height: '2rem' }}
+          disabled // 드롭다운을 비활성화 (읽기 전용)
         >
           <option value="">선택...</option>
           {question.choices?.map((choice) => (
@@ -56,13 +50,8 @@ function ResponseDropDown({ question }: ResponseDropDownProps) {
           ))}
         </select>
       </div>
-      {selectedOption !== null && (
-        <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choices_id === selectedOption)?.option}</p>
-        </div>
-      )}
     </div>
   );
 }
 
-export default ResponseDropDown;
+export default StaticDropDown;
