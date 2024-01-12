@@ -95,6 +95,69 @@ paths:
                     type: string
                     description: 오류 메시지
 
+  /api/surveys/{userId}/answers/{surveyId}:
+    get:
+      summary: 설문 한 이후 사용자의 응답 확인
+      tags:
+        - GET
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the user.
+        - in: path
+          name: surveyId
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the survey.
+      responses:
+        '200':
+          description: A user's answers to a survey
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  main_url:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  create_at:
+                    type: string
+                    format: date-time
+                  deadline:
+                    type: string
+                    format: date-time
+                  user_id:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        question_id:
+                          type: integer
+                        content:
+                          type: string
+                        image_url:
+                          type: string
+                        sub_content:
+                          type: string
+                        obj_content:
+                          type: array
+                          items:
+                            type: string
+        '404':
+          description: Survey not found
+        '500':
+          description: Failed to retrieve user's answers
   /api/surveys/{id}/join:
     get:
       summary: '내가 답변한 설문지'
@@ -279,59 +342,6 @@ paths:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
 
-    delete:
-      summary: 설문 삭제 API
-      tags:
-        - DELETE
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-          description: 삭제할 설문의 ID
-      responses:
-        '200':
-          description: 설문 및 관련 데이터 삭제 완료
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 성공 메시지
-        '403':
-          description: 설문 삭제 권한이 없습니다.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 오류 메시지
-        '404':
-          description: 삭제할 설문이 없습니다.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 오류 메시지
-        '500':
-          description: 설문 삭제 오류
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: 오류 메시지
-
   /api/surveys/{id}/results:
     get:
       summary: '설문지 결과 조회'
@@ -400,80 +410,6 @@ paths:
                     type: integer
         '500':
           description: 서버 에러 발생
-
-  /api/surveys/{userId}/content/{surveyId}:
-    get:
-      summary: Get a user's answers to a survey
-      tags:
-        - GET
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: integer
-          description: The user ID
-        - in: path
-          name: surveyId
-          required: true
-          schema:
-            type: integer
-          description: The survey ID
-        - in: query
-          name: limit
-          schema:
-            type: integer
-          description: The number of items to return per page
-        - in: query
-          name: page
-          schema:
-            type: integer
-          description: The page number
-      responses:
-        '200':
-          description: A user's answers to a survey
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  main_url:
-                    type: string
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  create_at:
-                    type: string
-                    format: date-time
-                  deadline:
-                    type: string
-                    format: date-time
-                  user_id:
-                    type: integer
-                  totalPages:
-                    type: integer
-                  questions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        question_id:
-                          type: integer
-                        content:
-                          type: string
-                        image_url:
-                          type: string
-                        sub_content:
-                          type: string
-                        obj_content:
-                          type: array
-                          items:
-                            type: string
-        '404':
-          description: Survey not found
-        '500':
-          description: Failed to retrieve user's answers
 
   /api/surveys/{userId}/search/{title}:
     get:
@@ -699,10 +635,6 @@ paths:
                     properties:
                       questionId:
                         type: integer
-                      content:
-                        type: string
-                      imageUrl:
-                        type: string
                       objContent:
                         type: array
                         items:
@@ -776,6 +708,71 @@ paths:
                   message:
                     type: string
                     example: '서버 오류 발생'
+    delete:
+      summary: 설문 삭제 API
+      tags:
+        - DELETE
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 삭제할 설문의 ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  description: The unique ID of the user.
+                surveyId:
+                  type: integer
+                  description: The unique ID of the survey.
+      responses:
+        '200':
+          description: 설문 및 관련 데이터 삭제 완료
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 성공 메시지
+        '403':
+          description: 설문 삭제 권한이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: '설문 삭제 권한이 없습니다.'
+        '404':
+          description: 삭제할 설문이 없습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: '삭제할 설문이 없습니다.'
+        '500':
+          description: 설문 삭제 오류
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: '설문 삭제 오류'
   /api/users/signup:
     post:
       summary: '사용자 회원가입'
@@ -860,11 +857,15 @@ components:
     Survey:
       type: 'object'
       required:
+        - id
         - userName
         - title
         - open
         - createdAt
       properties:
+        id:
+          type: 'integer'
+          description: 설문조사 ID
         userName:
           type: 'string'
           description: '사용자의 이름'

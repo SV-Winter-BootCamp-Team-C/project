@@ -15,7 +15,7 @@ const getAnswerController = require('../controller/answerReadByuserId');
 const { sendSurveyEmailWithSurveyId } = require('../controller/urlShare');
 const surveyTitleSearchController = require('../controller/surveyTitleSearch');
 
-
+router.get('/:userId/answers/:surveyId', getAnswerController.getAnswerByuserId);
 router.post('/', surveyController.createSurveyWithQuestionsAndChoices);
 router.put('/:id', surveyModifyController.ModifySurveyWithQuestionsAndChoices);
 router.get('/:id/forms', surveyAllUserController.getUserSurveys);
@@ -26,7 +26,6 @@ router.get('/:id/all', showAllSurveysController.showAllSurveys);
 router.delete('/:id', surveyDeleteController.deleteSurveyAndRelatedData);
 router.post('/:id', surveyAnswerController.createAnswer);
 router.get('/:id/urls', getSurveyUrlController.getUrl);
-router.get('/:userId/content/:surveyId', getAnswerController.getAnswerByuserId);
 router.post('/:id/share', async (req, res) => {
   console.log('Request body:', req.body);
   const surveyId = req.params.id;
@@ -51,6 +50,5 @@ router.get(
   '/:userId/search/:title',
   surveyTitleSearchController.searchSurveyByTitle,
 );
-
 
 module.exports = router;
