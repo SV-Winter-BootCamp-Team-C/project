@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
+// import { useAuthStore } from '@/store/AuthStore';
 import fileImage from '../assets/file.png';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
 
 function Login() {
+  // 로그인 완료 후 setLoginStatus(true)로 로그인 여부 상태 변경
+  // const { setLoginStatus } = useAuthStore();
+
   return (
     <div className="flex items-center justify-center h-screen bg-custom-gradient">
       <div className="relative flex items-start w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
