@@ -3,14 +3,14 @@ import './App.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense } from 'react';
+import Loading from '@/components/common/Loading';
 import { getClient } from './queryClient';
 import Router from './Router';
 
 function App(): JSX.Element {
   return (
     <QueryClientProvider client={getClient}>
-      {/* TODO: 로딩중 컴포넌트 추가 */}
-      <Suspense fallback={<div>Loding</div>}>
+      <Suspense fallback={<Loading />}>
         <RouterProvider router={Router} />
       </Suspense>
       <ReactQueryDevtools />

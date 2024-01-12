@@ -6,7 +6,7 @@ interface MainLayoutProps {
 
 function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="flex items-center justify-center w-full h-full min-h-screen p-16 bg-custom-gradient">
+    <div className="flex items-center justify-center w-full h-screen p-16 bg-custom-gradient">
       <Navbar>{children}</Navbar>
     </div>
   );
