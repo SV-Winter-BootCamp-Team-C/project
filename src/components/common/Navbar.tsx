@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import all from '@/assets/navAll.svg';
 import myform from '@/assets/navForm.svg';
 import myresponses from '@/assets/navRes.svg';
 import profile from '@/assets/profile.svg';
 import logout from '@/assets/logout.svg';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import MyProfileModal from './MyProfileModal';
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ function Navbar({ children }: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeItem, setActiveItem] = useState<string>('all');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -37,6 +39,10 @@ function Navbar({ children }: NavbarProps) {
   const handleClick = (item: string) => {
     setActiveItem(item);
     navigate(NAV_ITEMS.find((navItem) => navItem.id === item)?.path || '/all');
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -73,10 +79,15 @@ function Navbar({ children }: NavbarProps) {
 
         {/* profile */}
         <div className="pl-6">
-          <div className="flex items-center gap-5 pb-9">
+          <button
+            type="button"
+            className="flex items-center gap-5 mb-9 focus:outline-none"
+            onClick={() => setIsModalVisible(true)}
+          >
             <img src={profile} alt="profile" className="w-6 h-6" />
             <p className="text-base font-semibold leading-4 text-darkGray">Profile</p>
-          </div>
+          </button>
+          {isModalVisible && <MyProfileModal isVisible={isModalVisible} onClose={handleCloseModal} />}
           <div className="flex items-center gap-5">
             <img src={logout} alt="logout" className="w-6 h-6" />
             <p className="text-base font-semibold leading-4 text-darkGray">Logout</p>
