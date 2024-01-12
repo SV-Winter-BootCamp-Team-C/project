@@ -1,3 +1,4 @@
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import typeIcon from '@/assets/type.svg';
 import { QuestionData } from '@/types/questionData';
 import t from '@/assets/t.svg';
@@ -40,18 +41,20 @@ function SubjectQuestion({ question, index }: SubjectQuestionProps) {
             />
           </div>
         )}
+        <Scrollbars style={{ minHeight: 205, marginBottom: 15 }}>
+          <div className="w-full px-12 pt-6 pb-3 max-h-50">
+            {question.answers?.map((answer) => (
+              <div>
+                <div key={answer.answer_id} className="flex items-center">
+                  <img src={t} alt="t" className="w-3 h-3" />
+                  <p className="pl-4 text-xs leading-3 text-black">{answer.content}</p>
+                </div>
 
-        <div className="w-full px-12 py-6 max-h-50">
-          {question.answers?.map((answer) => (
-            <div>
-              <div key={answer.answer_id} className="flex items-center">
-                <img src={t} alt="t" className="w-3 h-3" />
-                <p className="pl-4 text-xs leading-3 text-black">{answer.content}</p>
+                <div className="h-[0.5px] bg-darkGray my-2" />
               </div>
-              <div className="h-[0.5px] bg-darkGray my-2" />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Scrollbars>
       </div>
     </div>
   );
