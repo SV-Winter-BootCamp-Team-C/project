@@ -97,7 +97,7 @@ paths:
 
   /api/surveys/{userId}/answers/{surveyId}:
     get:
-      summary: 설문 한 이후 사용자의 응답 확인
+      summary: 내 응답
       tags:
         - GET
       parameters:
@@ -160,7 +160,7 @@ paths:
           description: Failed to retrieve user's answers
   /api/surveys/{id}/join:
     get:
-      summary: '내가 답변한 설문지'
+      summary: 내 응답 조회
       tags:
         - GET
       operationId: 'showAnsweredSurveys'
@@ -204,7 +204,7 @@ paths:
 
   /api/surveys/{id}/all:
     get:
-      summary: '전체 설문지 조회'
+      summary: 공개 설문 조회
       tags:
         - GET
       operationId: 'showAllSurveys'
@@ -254,7 +254,7 @@ paths:
 
   /api/surveys/{id}/share:
     post:
-      summary: 설문조사 공유 API
+      summary: 설문 url 공유
       tags:
         - POST
       description: 특정 설문조사의 링크를 이메일로 공유합니다.
@@ -301,7 +301,7 @@ paths:
     get:
       tags:
         - GET
-      summary: 설문조사의 URL을 반환합니다.
+      summary: 설문 url 받기
       description: 특정 설문조사(survey)의 URL을 가져옵니다.
       parameters:
         - in: path
@@ -344,7 +344,7 @@ paths:
 
   /api/surveys/{id}/results:
     get:
-      summary: '설문지 결과 조회'
+      summary: 설문지 응답 결과 분석폼(질문별)
       tags:
         - GET
       operationId: 'getSurveyResult'
@@ -369,7 +369,7 @@ paths:
 
   /api/surveys/{id}/forms:
     get:
-      summary: 사용자 설문조사 목록 가져오기
+      summary: 폼 모아보기
       tags:
         - GET
       description: 특정 사용자에 대한 설문조사 목록을 페이징하여 가져옵니다.
@@ -413,7 +413,7 @@ paths:
 
   /api/surveys/{userId}/search/{title}:
     get:
-      summary: 설문조사를 제목으로 검색합니다.
+      summary: 제목 검색 기능
       tags:
         - GET
       parameters:
@@ -461,7 +461,7 @@ paths:
           description: 서버 오류가 발생했을 때 반환합니다.
   /api/surveys/{id}:
     put:
-      summary: 설문 수정 API
+      summary: 설문지 수정
       tags:
         - PUT
       parameters:
@@ -606,7 +606,7 @@ paths:
     post:
       tags:
         - POST
-      summary: 설문 답변 저장 API
+      summary: 응답 제출 버튼
       parameters:
         - in: path
           name: id
@@ -670,7 +670,7 @@ paths:
                     type: string
                     example: '저장을 실패하였습니다.'
     get:
-      summary: '특정 설문조사 상세 조회'
+      summary: 설문지 응답 폼
       tags:
         - GET
       description: 특정 설문조사의 상세 정보를 가져옵니다.
@@ -709,7 +709,7 @@ paths:
                     type: string
                     example: '서버 오류 발생'
     delete:
-      summary: 설문 삭제 API
+      summary: 설문지 삭제
       tags:
         - DELETE
       parameters:
@@ -775,7 +775,7 @@ paths:
                     description: '설문 삭제 오류'
   /api/users/signup:
     post:
-      summary: '사용자 회원가입'
+      summary: 회원가입
       tags:
         - USER
       requestBody:
@@ -791,7 +791,7 @@ paths:
           description: '회원가입 실패'
   /api/users/login:
     post:
-      summary: '사용자 로그인'
+      summary: 로그인
       tags:
         - USER
       requestBody:
@@ -809,7 +809,7 @@ paths:
           description: '존재하지 않는 메일입니다.'
   /api/users/{email}/check-email:
     get:
-      summary: '이메일 중복 확인'
+      summary: 이메일 중복 확인
       tags:
         - USER
       parameters:
@@ -823,7 +823,7 @@ paths:
           description: '중복 확인 결과 반환'
   /api/users/:
     patch:
-      summary: '비밀번호 수정'
+      summary: 비밀번호 수정
       tags:
         - USER
       requestBody:
