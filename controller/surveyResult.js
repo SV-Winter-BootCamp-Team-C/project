@@ -34,11 +34,12 @@ const surveyResult = async (req, res) => {
     }
 
     const response = {
-      user_name: survey.User.name,
+      surveyId: survey.id,
+      userName: survey.User.name,
       title: survey.title,
       open: survey.open,
-      created_at: survey.createdAt,
-      updated_at: survey.updatedAt,
+      createdAt: survey.createdAt,
+      updatedAt: survey.updatedAt,
       deadline: survey.deadline,
       questions: survey.Questions.map((question) => {
         if (question.type === 'CHECKBOX') {
@@ -46,21 +47,21 @@ const surveyResult = async (req, res) => {
             question_id: question.id,
             type: question.type,
             content: question.content,
-            image_url: question.imageUrl,
+            imageUrl: question.imageUrl,
             choices: question.Choices.map((choice) => ({
-              choice_id: choice.id,
+              choiceId: choice.id,
               option: choice.option,
               count: choice.count,
             })),
           };
         } else if (question.type === 'SUBJECTIVE_QUESTION') {
           return {
-            question_id: question.id,
+            questionId: question.id,
             type: question.type,
             content: question.content,
-            image_url: question.imageUrl,
+            imageUrl: question.imageUrl,
             answers: question.Answers.map((answer) => ({
-              answer_id: answer.id,
+              answerId: answer.id,
               content: answer.subContent,
             })),
           };
@@ -69,12 +70,12 @@ const surveyResult = async (req, res) => {
           question.type === 'DROPDOWN'
         ) {
           return {
-            question_id: question.id,
+            questionId: question.id,
             type: question.type,
             content: question.content,
-            image_url: question.imageUrl,
+            imageUrl: question.imageUrl,
             answers: question.Answers.map((answer) => ({
-              answer_id: answer.id,
+              answerId: answer.id,
               objContent: answer.objContent,
             })),
           };

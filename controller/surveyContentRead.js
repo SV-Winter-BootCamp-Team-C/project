@@ -14,6 +14,7 @@ const getSurveyById = async (req, res) => {
         'font',
         'color',
         'mainImageUrl',
+        'buttonStyle',
         'createdAt',
         'deadline',
       ],
@@ -39,25 +40,33 @@ const getSurveyById = async (req, res) => {
 
     // 최종 결과 구성
     const result = {
-      survey_id: survey.id,
-      user_name: survey.User.name,
+      surveyId: survey.id,
+      userName: survey.User.name,
       title: survey.title,
       description: survey.description,
       font: survey.font,
       color: survey.color,
-      main_image_url: survey.mainImageUrl,
-      created_at: survey.createdAt,
+      buttonStyle: survey.buttonStyle,
+      mainImageUrl: survey.mainImageUrl,
+      createdAt: survey.createdAt,
       deadline: survey.deadline,
-      questions: survey.Questions.map((question) => ({
-        question_id: question.id,
-        type: question.type,
-        content: question.content,
-        imageUrl: question.imageUrl,
-        choices: question.Choices.map((choice) => ({
-          choice_id: choice.id,
-          option: choice.option,
-        })),
-      })),
+      questions: survey.Questions.map((question) => {
+        // 질문에 대한 기본 구조
+        const questionResponse = {
+          questionId: question.id,
+          type: question.type,
+          content: question.content,
+          imageUrl: question.imageUrl,
+        };
+        // 질문의 유형이 'SUBJECTIVE_QUESTION'가 아닐 경우에만 choices 추가
+        if (question.type !== 'SUBJECTIVE_QUESTION') {
+          questionResponse.choices = question.Choices.map((choice) => ({
+            choiceId: choice.id,
+            option: choice.option,
+          }));
+        }
+        return questionResponse;
+      }),
     };
 
     // 조회된 데이터 반환

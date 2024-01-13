@@ -1,63 +1,77 @@
-const { Survey, Question, Answer } = require('../models');
+const { Survey, User, Question, Answer, Choice } = require('../models');
 
 const getAnswerByuserId = async (req, res) => {
   try {
     const { userId, surveyId } = req.params;
-    const pageLimit = req.query.limit;
-    const pageOffset = (req.query.page - 1) * pageLimit;
 
-    const survey = await Survey.findByPk(surveyId);
-    if (!survey) {
-      return res.status(404).send('Survey not found');
-    }
-
-    const totalQuestions = await Question.count({
-      where: { surveyId: surveyId },
-    });
-    const totalPages = Math.ceil(totalQuestions / pageLimit);
-
-    const questions = await Question.findAll({
-      where: { surveyId: surveyId },
-      limit: pageLimit,
-      offset: pageOffset,
+    const survey = await Survey.findByPk(surveyId, {
       include: [
         {
-          model: Answer,
-          where: { userId: userId },
-          required: false,
+          model: User,
+          attributes: ['name'],
+        },
+        {
+          model: Question,
+          attributes: ['id', 'type', 'content', 'imageUrl'],
+          include: [
+            {
+              model: Choice,
+              attributes: ['id', 'option'],
+            },
+            {
+              model: Answer,
+              where: { userId: userId },
+              required: false,
+            },
+          ],
         },
       ],
     });
 
+    if (!survey) {
+      return res.status(404).send('Survey not found');
+    }
+
     const responseData = {
-      main_url: survey.url,
+      surveyId: survey.id,
+      userName: survey.User.name,
       title: survey.title,
       description: survey.description,
-      create_at: survey.createdAt,
+      font: survey.font,
+      color: survey.color,
+      buttonStyle: survey.buttonStyle,
+      mainImageUrl: survey.mainImageUrl,
+      createAt: survey.createdAt,
       deadline: survey.deadline,
-      user_id: parseInt(userId),
-      totalPages: totalPages,
-      questions: questions.map((question) => {
-        // 각 질문에 대한 모든 objContent 값을 배열로 반환
-        const objContents = question.Answers.map(
-          (answer) => answer.objContent,
-        ).filter((content) => content != null); // null이 아닌 값만 포함
-        // obj_content 필드를 조건부로 반환
+      questions: survey.Questions.map((question) => {
         const questionResponse = {
-          question_id: question.id,
+          questionId: question.id,
+          type: question.type,
           content: question.content,
-          image_url: question.imageUrl,
-          sub_content: question.Answers.find((answer) => answer.subContent)
-            ?.subContent,
+          imageUrl: question.imageUrl,
         };
 
-        if (objContents.length > 0) {
-          questionResponse.obj_content = objContents;
+        // 'SUBJECTIVE_QUESTION'이 아닌 경우에만 choices와 objContent 추가
+        if (question.type !== 'SUBJECTIVE_QUESTION') {
+          questionResponse.choices = question.Choices.map((choice) => ({
+            choiceId: choice.id,
+            option: choice.option,
+          }));
+          questionResponse.objContent = question.Answers.map(
+            (answer) => answer.objContent,
+          ).filter((content) => content != null);
         }
+
+        // 'SUBJECTIVE_QUESTION'인 경우에만 subContent 추가
+        if (question.type === 'SUBJECTIVE_QUESTION') {
+          questionResponse.subContent = question.Answers.find(
+            (answer) => answer.subContent,
+          )?.subContent;
+        }
+
         return questionResponse;
       }),
     };
-
     res.json(responseData);
   } catch (err) {
     console.error(err);
