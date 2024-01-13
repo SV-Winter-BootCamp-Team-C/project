@@ -38,7 +38,7 @@ function MyProfileModal({ isVisible, onClose }: MyProfileModalProps) {
 
           <div className="flex justify-center items-center pb-9">
             <button
-              type="submit"
+              type="button"
               onClick={onClose}
               className="w-[6.25rem] h-9 rounded-[0.625rem] bg-purple text-base text-white hover:bg-darkPurple transition duration-300 ease-in-out"
             >
