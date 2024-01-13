@@ -9,11 +9,20 @@ const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
 const { sequelize } = require('../models');
-const {createAndDownloadExcel} = require('../excel/excelGengerate');
+const { createAndDownloadExcel } = require('../excel/excelGengerate');
 
 const surveyRouters = require('../routers/surveyRouter');
 const userRouters = require('../routers/UserRouter');
 app.use(express.json());
+
+const cors = require('cors');
+
+let corsOptions = {
+  origin: '*', // 출처 허용 옵션
+  credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
+};
+
+app.use(cors(corsOptions));
 
 sequelize
   .sync({ force: false })
