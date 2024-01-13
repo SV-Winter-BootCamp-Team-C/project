@@ -1,10 +1,16 @@
 export type Survey = {
-  survey_id: number;
+  surveyId: number;
   title: string;
   open?: boolean;
-  main_image_url: string;
-  created_at: string;
-  updated_at: string;
+  mainImageUrl: string;
+  createdAt: string;
+  updatedAt: string;
   deadline: string;
-  atted_count: number;
+  isAttended?: boolean;
+  attedCount: number;
+};
+
+export type SurveyCover = {
+  surveys: Survey[];
+  totalPages: number;
 };

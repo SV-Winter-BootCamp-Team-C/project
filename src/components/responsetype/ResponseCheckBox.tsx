@@ -33,17 +33,15 @@ function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">
-          Q{question.question_id}.
-        </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{question.questionId}.</span>
       </div>
 
       <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
 
-      {question.image_url && (
+      {question.imageUrl && (
         <img
-          src={question.image_url}
+          src={question.imageUrl}
           alt="Question"
           className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
         />
@@ -51,22 +49,22 @@ function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
 
       <div className="mt-4">
         {question.choices?.map((choice) => (
-          <div key={choice.choices_id} className="flex justify-center items-center w-full mb-2">
+          <div key={choice.choicesId} className="flex items-center justify-center w-full mb-2">
             <div className="relative flex justify-center items-center w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
               <label
-                htmlFor={`checkbox-${choice.choices_id}`}
+                htmlFor={`checkbox-${choice.choicesId}`}
                 className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
-                  selectedOptions.includes(choice.choices_id) ? 'bg-blue-500' : 'bg-white'
+                  selectedOptions.includes(choice.choicesId) ? 'bg-blue-500' : 'bg-white'
                 } border border-gray-300`}
               >
                 <input
                   type="checkbox"
-                  id={`checkbox-${choice.choices_id}`}
-                  className="opacity-0 absolute"
-                  checked={selectedOptions.includes(choice.choices_id)}
-                  onChange={() => handleOptionSelect(choice.choices_id)}
+                  id={`checkbox-${choice.choicesId}`}
+                  className="absolute opacity-0"
+                  checked={selectedOptions.includes(choice.choicesId)}
+                  onChange={() => handleOptionSelect(choice.choicesId)}
                 />
-                {selectedOptions.includes(choice.choices_id) && (
+                {selectedOptions.includes(choice.choicesId) && (
                   <img src={checkIcon} alt="Checked" className="w-4 h-4" />
                 )}
               </label>
@@ -80,7 +78,7 @@ function ResponseCheckBox({ question }: ResponseCheckBoxProps) {
           <p>You selected:</p>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {selectedOptions.map((selectedChoiceId) => {
-              const selectedChoice = question.choices?.find((choice) => choice.choices_id === selectedChoiceId);
+              const selectedChoice = question.choices?.find((choice) => choice.choicesId === selectedChoiceId);
               return (
                 <span key={selectedChoiceId} style={{ marginLeft: '0.25rem' }}>
                   {selectedChoice?.option}

@@ -18,23 +18,23 @@ interface SurveyData {
 const surveyData: SurveyData = {
   surveys: [
     {
-      survey_id: 1,
+      surveyId: 1,
       title: '나를 맞춰봐나를 맞춰봐나를 맞춰봐나를 맞춰봐나를 맞춰봐',
-      main_image_url: '',
-      created_at: '2022.02.22',
-      updated_at: '2022.02.22',
+      mainImageUrl: '',
+      createdAt: '2022.02.22',
+      updatedAt: '2022.02.22',
       deadline: '2024.01.11',
-      atted_count: 10,
+      attedCount: 10,
       open: false,
     },
     {
-      survey_id: 2,
+      surveyId: 2,
       title: '논문폼',
-      main_image_url: '', // 이미지 없을 경우
-      created_at: '2022.02.22',
-      updated_at: '2022.02.22',
+      mainImageUrl: '', // 이미지 없을 경우
+      createdAt: '2022.02.22',
+      updatedAt: '2022.02.22',
       deadline: '2024.02.23',
-      atted_count: 10,
+      attedCount: 10,
       open: true,
     },
   ],
@@ -82,12 +82,12 @@ function SurvdForm({ totalPages, onClickAddButton }: SurvayFormProps) {
       <div className="grid grid-cols-3 py-8 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">
         {surveyData.surveys.map((item) => (
           <SurveyCover
-            key={item.survey_id}
-            id={item.survey_id}
+            key={item.surveyId}
+            id={item.surveyId}
             title={item.title}
-            mainImageUrl={item.main_image_url}
+            mainImageUrl={item.mainImageUrl}
             deadline={item.deadline}
-            attedCount={item.atted_count}
+            attedCount={item.attedCount}
             open={item.open}
           />
         ))}

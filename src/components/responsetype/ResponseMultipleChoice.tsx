@@ -25,31 +25,29 @@ function ResponseMultipleChoice({ question }: ResponseMultipleChoiceProps) {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">
-          Q{question.question_id}.
-        </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{question.questionId}.</span>
       </div>
 
       <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
 
-      {question.image_url && (
+      {question.imageUrl && (
         <img
-          src={question.image_url}
+          src={question.imageUrl}
           alt="Question"
           className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
         />
       )}
 
-      <div className="choices-container flex flex-col mb-4 space-y-2 ">
+      <div className="flex flex-col mb-4 space-y-2 choices-container ">
         {question.choices?.map((choice) => (
           <button
             type="button"
-            key={choice.choices_id}
+            key={choice.choiceId}
             className={`w-[25rem] h-[2.5rem] choice-item p-2 rounded-[1.25rem] ${
-              selectedOption === choice.choices_id ? 'bg-gray' : 'bg-lightGray'
-            } ${selectedOption === choice.choices_id ? 'selected' : ''}`}
-            onClick={() => handleOptionSelect(choice.choices_id)}
+              selectedOption === choice.choiceId ? 'bg-gray' : 'bg-lightGray'
+            } ${selectedOption === choice.choiceId ? 'selected' : ''}`}
+            onClick={() => handleOptionSelect(choice.choiceId)}
           >
             {choice.option}
           </button>
@@ -57,7 +55,7 @@ function ResponseMultipleChoice({ question }: ResponseMultipleChoiceProps) {
       </div>
       {selectedOption !== null && (
         <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choices_id === selectedOption)?.option}</p>
+          <p>You selected: {question.choices?.find((choice) => choice.choiceId === selectedOption)?.option}</p>
         </div>
       )}
     </div>

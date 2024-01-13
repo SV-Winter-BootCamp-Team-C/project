@@ -25,17 +25,15 @@ function ResponseSubjective({ question }: ResponseSubjectiveProps) {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">
-          Q{question.question_id}.
-        </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{question.questionId}.</span>
       </div>
 
       <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
 
-      {question.image_url && (
+      {question.imageUrl && (
         <img
-          src={question.image_url}
+          src={question.imageUrl}
           alt="Question"
           className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
         />
@@ -46,7 +44,7 @@ function ResponseSubjective({ question }: ResponseSubjectiveProps) {
           onChange={handleUserResponseChange}
           rows={4} // 원하는 행 수로 조절 가능
           placeholder="여기에 주관식 답변을 입력하세요."
-          className="w-full  p-2 rounded-md border border-gray"
+          className="w-full p-2 border rounded-md border-gray"
           style={{ overflowY: 'auto', resize: 'vertical' }} // 세로 스크롤바를 표시하고, 세로 크기 조절을 허용
         />
       </div>

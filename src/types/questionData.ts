@@ -1,19 +1,19 @@
 export type Choice = {
-  choices_id: number;
+  choiceId: number;
   option: string;
   count?: number;
 };
 
 export type Answer = {
-  answer_id: number;
+  answerId: number;
   content: string;
 };
 
 export type QuestionData = {
-  question_id: number;
+  questionId: number;
   type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN';
   content: string;
-  image_url: string;
+  imageUrl: string;
   choices?: Choice[];
   answers?: Answer[];
 };
@@ -21,4 +21,20 @@ export type QuestionData = {
 export type ExtendedQuestionData = QuestionData & {
   objContent?: number[];
   subContent?: string;
+};
+
+type Questions = QuestionData[] | ExtendedQuestionData[];
+
+export type QuestionDataForm = {
+  surveyId: number;
+  userName?: string;
+  title: string;
+  description: string;
+  font: string;
+  color: string;
+  buttonStyle: 'angled' | 'smooth' | 'round'; // 각지게, 부드럽게, 동글게
+  mainImageUrl: string;
+  createdAt: string;
+  deadline: string;
+  questions: Questions;
 };

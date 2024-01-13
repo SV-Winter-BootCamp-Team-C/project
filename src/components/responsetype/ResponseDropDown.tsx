@@ -25,17 +25,15 @@ function ResponseDropDown({ question }: ResponseDropDownProps) {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">
-          Q{question.question_id}.
-        </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{question.questionId}.</span>
       </div>
 
       <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
 
-      {question.image_url && (
+      {question.imageUrl && (
         <img
-          src={question.image_url}
+          src={question.imageUrl}
           alt="Question"
           className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
         />
@@ -45,12 +43,12 @@ function ResponseDropDown({ question }: ResponseDropDownProps) {
         <select
           value={selectedOption ?? ''}
           onChange={handleOptionSelect}
-          className="rounded-md border border-gray-300"
+          className="border border-gray-300 rounded-md"
           style={{ width: '20rem', height: '2rem' }}
         >
           <option value="">선택...</option>
           {question.choices?.map((choice) => (
-            <option key={choice.choices_id} value={choice.choices_id}>
+            <option key={choice.choicesId} value={choice.choicesId}>
               {choice.option}
             </option>
           ))}
@@ -58,7 +56,7 @@ function ResponseDropDown({ question }: ResponseDropDownProps) {
       </div>
       {selectedOption !== null && (
         <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choices_id === selectedOption)?.option}</p>
+          <p>You selected: {question.choices?.find((choice) => choice.choicesId === selectedOption)?.option}</p>
         </div>
       )}
     </div>
