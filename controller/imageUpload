@@ -61,8 +61,8 @@ const uploadS3 = multer({
     }
   },
 }).fields([
-  { name: 'mainImage', maxCount: 1 },
-  { name: 'questionImages', maxCount: 10 },
+  { name: 'mainImageUrl', maxCount: 1 },
+  { name: 'imageUrl', maxCount: 10 }, // 클라이언트에서 최대 10개의 이미지를 배열 형태로 보낼 수 있다고 가정
 ]);
 
 module.exports = { uploadS3, uploadFileToS3 };

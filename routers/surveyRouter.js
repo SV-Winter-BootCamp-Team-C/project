@@ -66,18 +66,14 @@ router.post(
         );
       }
 
-      // 질문 이미지 URL 처리를 위한 프로미스 배열 준비
       const imageUploadPromises = surveyData.questions.map(
         async (question, index) => {
-          const fileField = `imageUrl${index + 1}`;
-          if (req.files[fileField] && req.files[fileField][0]) {
-            const file = req.files[fileField][0];
-            if (file) {
-              question.imageUrl = await uploadFileToS3(file);
-            }
+          // 클라이언트에서 'imageUrl[]'의 배열 형태로 이미지를 보냈다고 가정
+          if (req.files['imageUrl'] && req.files['imageUrl'][index]) {
+            const file = req.files['imageUrl'][index];
+            question.imageUrl = await uploadFileToS3(file);
           }
-          // Promise를 반드시 반환해야 합니다.
-          return Promise.resolve(); // 혹은 다른 값 반환 가능
+          return Promise.resolve();
         },
       );
 
