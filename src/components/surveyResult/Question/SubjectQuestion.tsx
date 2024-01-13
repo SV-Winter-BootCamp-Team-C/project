@@ -32,10 +32,10 @@ function SubjectQuestion({ question, index }: SubjectQuestionProps) {
           <p className="text-base text-black">{question.content}</p>
         </div>
 
-        {question.image_url && (
+        {question.imageUrl && (
           <div className="mt-4">
             <img
-              src={question.image_url}
+              src={question.imageUrl}
               alt="Preview"
               className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
             />
@@ -45,7 +45,7 @@ function SubjectQuestion({ question, index }: SubjectQuestionProps) {
           <div className="w-full px-12 pt-6 pb-3 max-h-50">
             {question.answers?.map((answer) => (
               <div>
-                <div key={answer.answer_id} className="flex items-center">
+                <div key={answer.answerId} className="flex items-center">
                   <img src={t} alt="t" className="w-3 h-3" />
                   <p className="pl-4 text-xs leading-3 text-black">{answer.content}</p>
                 </div>

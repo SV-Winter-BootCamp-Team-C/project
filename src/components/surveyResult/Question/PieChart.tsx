@@ -18,7 +18,7 @@ function PieChart({ question, index }: PieChartProps) {
     return QUESTION_TYPE[type as keyof typeof QUESTION_TYPE];
   };
 
-  const chartSeries = question.choices?.map((choice) => choice.count) ?? [];
+  const chartSeries = question.choices?.map((choice) => choice.count);
 
   const chartOptions = {
     chart: {
@@ -83,10 +83,10 @@ function PieChart({ question, index }: PieChartProps) {
           <p className="text-base text-black">{question.content}</p>
         </div>
 
-        {question.image_url && (
+        {question.imageUrl && (
           <div className="mt-4">
             <img
-              src={question.image_url}
+              src={question.imageUrl}
               alt="Preview"
               className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
             />
@@ -94,7 +94,7 @@ function PieChart({ question, index }: PieChartProps) {
         )}
 
         <div className="py-9">
-          <Chart options={chartOptions as any} series={chartSeries} type="donut" />
+          <Chart options={chartOptions as any} series={chartSeries as number[]} type="donut" />
         </div>
       </div>
     </div>

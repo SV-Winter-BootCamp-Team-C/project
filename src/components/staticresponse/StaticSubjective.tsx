@@ -18,17 +18,15 @@ function StaticSubjective({ question }: StaticSubjectiveProps) {
         </div>
       </div>
 
-      <div className="flex justify-center items-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">
-          Q{question.question_id}.
-        </span>
+      <div className="flex items-center justify-center w-full">
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{question.questionId}.</span>
       </div>
 
       <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
 
-      {question.image_url && (
+      {question.imageUrl && (
         <img
-          src={question.image_url}
+          src={question.imageUrl}
           alt="Question"
           className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
         />
@@ -38,7 +36,7 @@ function StaticSubjective({ question }: StaticSubjectiveProps) {
           value={question.subContent}
           readOnly // 읽기 전용으로 설정
           rows={4}
-          className="w-full p-2 rounded-md border border-gray"
+          className="w-full p-2 border rounded-md border-gray"
           style={{ overflowY: 'auto', resize: 'vertical' }}
         />
       </div>
