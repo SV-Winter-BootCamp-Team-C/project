@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const { uploadFileToS3 } = require('../controller/imageUpload');
 
 const surveyController = require('../controller/surveyCreate');
 const surveyModifyController = require('../controller/surveyModify');
@@ -15,8 +17,89 @@ const getAnswerController = require('../controller/answerReadByuserId');
 const { sendSurveyEmailWithSurveyId } = require('../controller/urlShare');
 const surveyTitleSearchController = require('../controller/surveyTitleSearch');
 
+// Multer 설정 및 초기화
+const storage = multer.memoryStorage(); // 파일을 메모리에 저장
+const uploadMiddleware = multer({
+  storage: storage,
+  // 파일만 허용하도록 설정
+  fileFilter: (req, file, cb) => {
+    if (file.fieldname === 'survey') {
+      cb(null, false); // JSON 데이터는 파일이 아닌 것으로 처리
+    } else {
+      cb(null, true); // 파일은 허용
+    }
+  },
+});
+
+router.post(
+  '/',
+  uploadMiddleware.fields([
+    { name: 'mainImageUrl', maxCount: 1 },
+    { name: 'imageUrl', maxCount: 2 },
+  ]),
+  async (req, res) => {
+    try {
+      console.log('Request received on / endpoint.');
+      console.log('req.body:', req.body);
+
+      if (!req.body.survey) {
+        return res.status(400).json({ message: 'No survey data provided' });
+      }
+
+      const parsedData = JSON.parse(req.body.survey);
+      console.log('Parsed survey data:', parsedData);
+
+      const surveyData = parsedData.survey;
+      console.log('Extracted survey data:', surveyData);
+
+      if (!Array.isArray(surveyData.questions)) {
+        console.log('No questions array in surveyData');
+        return res
+          .status(400)
+          .json({ message: 'Invalid survey data: No questions array' });
+      }
+
+      // 메인 이미지 URL 처리
+      if (req.files['mainImageUrl'] && req.files['mainImageUrl'][0]) {
+        surveyData.mainImageUrl = await uploadFileToS3(
+          req.files['mainImageUrl'][0],
+        );
+      }
+
+      // 질문 이미지 URL 처리를 위한 프로미스 배열 준비
+      const imageUploadPromises = surveyData.questions.map(
+        async (question, index) => {
+          const fileField = `imageUrl${index + 1}`;
+          if (req.files[fileField] && req.files[fileField][0]) {
+            const file = req.files[fileField][0];
+            if (file) {
+              question.imageUrl = await uploadFileToS3(file);
+            }
+          }
+          // Promise를 반드시 반환해야 합니다.
+          return Promise.resolve(); // 혹은 다른 값 반환 가능
+        },
+      );
+
+      // 모든 이미지 업로드가 완료되기를 기다립니다.
+      await Promise.all(imageUploadPromises);
+
+      // 설문 생성 로직 호출
+      await surveyController.createSurveyWithQuestionsAndChoices(
+        parsedData.survey, // 이 부분을 수정합니다.
+        res,
+      );
+    } catch (error) {
+      console.error('Error processing request:', error);
+      res.status(400).json({
+        message: 'Error processing survey data',
+        error: error.message,
+      });
+    }
+  },
+);
+
 router.get('/:userId/answers/:surveyId', getAnswerController.getAnswerByuserId);
-router.post('/', surveyController.createSurveyWithQuestionsAndChoices);
 router.put('/:id', surveyModifyController.ModifySurveyWithQuestionsAndChoices);
 router.get('/:id/forms', surveyAllUserController.getUserSurveys);
 router.get('/:id/join', surveyAnsweredController.surveyAnswered);

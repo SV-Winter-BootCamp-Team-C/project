@@ -1,6 +1,6 @@
+require('dotenv').config(); // 이 부분을 코드 맨 위로 옮기세요.
 const express = require('express');
 const app = express();
-require('dotenv').config(); // 이 부분을 코드 맨 위로 옮기세요.
 const port = process.env.NODE_DOCKER_PORT || 8000;
 const YAML = require('js-yaml');
 const fs = require('fs');
@@ -10,10 +10,8 @@ const specs = YAML.load(
 );
 const { sequelize } = require('../models');
 const { createAndDownloadExcel } = require('../excel/excelGengerate');
-
 const surveyRouters = require('../routers/surveyRouter');
 const userRouters = require('../routers/UserRouter');
-app.use(express.json());
 
 const cors = require('cors');
 
@@ -23,6 +21,9 @@ let corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 sequelize
   .sync({ force: false })

@@ -1,4 +1,3 @@
-// urlshare.js
 const nodemailer = require('nodemailer');
 const { Survey } = require('../models');
 
