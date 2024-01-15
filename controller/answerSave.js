@@ -132,7 +132,7 @@ const createAnswer = async (req, res) => {
   } catch (error) {
     await t.rollback();
     res
-      .status(408)
+      .status(500)
       .json({ message: '저장을 실패하였습니다. : ' + error.message });
   }
 };

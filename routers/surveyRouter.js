@@ -16,6 +16,7 @@ const surveyResultController = require('../controller/surveyResult');
 const getAnswerController = require('../controller/answerReadByuserId');
 const { sendSurveyEmailWithSurveyId } = require('../controller/urlShare');
 const surveyTitleSearchController = require('../controller/surveyTitleSearch');
+const getResultController = require('../controller/getResultsByRes');
 
 // Multer 설정 및 초기화
 const storage = multer.memoryStorage(); // 파일을 메모리에 저장
@@ -129,5 +130,5 @@ router.get(
   '/:userId/search/:title',
   surveyTitleSearchController.searchSurveyByTitle,
 );
-
+router.get('/:id/list', getResultController.getResultsByResponses);
 module.exports = router;

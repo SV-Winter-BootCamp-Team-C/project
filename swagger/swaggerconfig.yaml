@@ -318,6 +318,56 @@ paths:
                   message:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
+  /api/surveys/{id}/list:
+    get:
+      tags:
+        - GET
+      summary: 설문지 응답 결과 분석 폼(응답별)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Unique identifier of the survey
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A JSON object containing the survey results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    description: The title of the survey
+                  list:
+                    type: object
+                    properties:
+                      head:
+                        type: array
+                        items:
+                          type: string
+                        description: Array of survey questions
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            userId:
+                              type: integer
+                            createdAt:
+                              type: string
+                              format: date-time
+                            responses:
+                              type: array
+                              items:
+                                type: string
+                        description: Array of user responses
+        '400':
+          description: Survey not found
+        '500':
+          description: Internal Server Error
 
   /api/surveys/{id}/results:
     get:
@@ -434,6 +484,7 @@ paths:
           description: 검색 결과가 없을 때 반환합니다.
         500:
           description: 서버 오류가 발생했을 때 반환합니다.
+
   /api/surveys/{id}:
     put:
       summary: 설문지 수정
