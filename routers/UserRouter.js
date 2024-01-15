@@ -4,7 +4,7 @@ const userController = require('../controller/UserController');
 
 router.post('/signup', userController.signup);
 router.post('/login', userController.login);
-router.get('/:email/check-email', userController.isEmailRepeated);
+router.post('/:email/check-email', userController.isEmailRepeated);
 router.patch('/', userController.modifyPassword);
 router.get('/:id', userController.getMyInfo);
 
