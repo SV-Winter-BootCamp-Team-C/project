@@ -82,6 +82,8 @@ function Navbar({ children }: NavbarProps) {
             <p className="text-base font-semibold leading-4 text-darkGray">Profile</p>
           </button>
           {isModalVisible && <MyProfileModal isVisible={isModalVisible} onClose={handleCloseModal} />}
+
+          {/* logout */}
           <div className="flex items-center gap-5">
             <img src={logout} alt="logout" className="w-6 h-6" />
             <p className="text-base font-semibold leading-4 text-darkGray">Logout</p>

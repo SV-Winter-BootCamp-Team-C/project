@@ -3,7 +3,7 @@ import { LoginForm } from '@/types/auth';
 import { useAuthStore } from '@/store/AuthStore';
 import { useState } from 'react';
 import { ApiResponseError } from '@/types/apiResponseError';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Alert from '@/components/common/Alert';
 import { loginAPI } from '@/api/login';
 import { AxiosError } from 'axios';
@@ -16,6 +16,7 @@ function Login() {
   const { setUserId, setLoginStatus } = useAuthStore();
   const [loginInfo, setLoginInfo] = useState<LoginForm>({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const queryClient = useQueryClient();
 
   const {
     mutate: loginMutation,
@@ -26,6 +27,7 @@ function Login() {
     onSuccess: (data) => {
       setUserId(data.id);
       setLoginStatus(true);
+      queryClient.clear(); // 로그인 성공 후 쿼리 캐시 초기화
     },
     onError: (error: AxiosError) => {
       const err = error as AxiosError<ApiResponseError>;

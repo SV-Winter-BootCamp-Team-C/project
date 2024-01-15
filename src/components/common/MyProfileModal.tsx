@@ -1,6 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import profile from '@/assets/profile.svg';
 import close from '@/assets/closebtn.svg';
 import pencil from '@/assets/pencil.svg';
+import { getIdAPI } from '@/api/myprofile';
+import { useAuthStore } from '@/store/AuthStore';
 
 interface MyProfileModalProps {
   isVisible: boolean;
@@ -8,7 +11,20 @@ interface MyProfileModalProps {
 }
 
 function MyProfileModal({ isVisible, onClose }: MyProfileModalProps) {
-  if (!isVisible) return null;
+  const userId = useAuthStore((state) => state.userId);
+
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['userProfile'],
+    queryFn: () => (userId !== undefined ? getIdAPI(userId) : Promise.reject(new Error('No user ID'))),
+  });
+
+  if (!isVisible || isLoading || isError) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-20">
@@ -24,11 +40,11 @@ function MyProfileModal({ isVisible, onClose }: MyProfileModalProps) {
         <div className="flex flex-col">
           <div className="flex flex-col pb-4">
             <span className="h-4 text-[1rem]">이름</span>
-            <span className="text-[0.75rem] mt-1">김성욱</span>
+            <span className="text-[0.75rem] mt-1">{users?.name}</span>
           </div>
           <div className="flex flex-col pb-4">
             <span className="h-4 text-[1rem]">이메일</span>
-            <span className="text-[0.75rem] mt-1">test@gmail.com</span>
+            <span className="text-[0.75rem] mt-1">{users?.email}</span>
           </div>
           <div className="flex flex-row items-center pb-9">
             <span className="h-4 text-[1rem] pr-3">비밀번호</span>
