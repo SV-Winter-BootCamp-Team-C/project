@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import close from '@/assets/closebtn.svg';
+import alertSuccess from '@/assets/alertSuccess.svg';
+import alertError from '@/assets/alertError.svg';
 
 interface AlertProps {
+  type?: 'success' | 'error';
   message: string;
   buttonText: string;
+  buttonClick?: () => void;
 }
 
-function Alert({ message, buttonText }: AlertProps) {
+function Alert({ type, message, buttonText, buttonClick }: AlertProps) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
   const closeAlert = () => {
@@ -23,11 +27,16 @@ function Alert({ message, buttonText }: AlertProps) {
             <img src={close} alt="close" className="w-2 h-2" />
           </div>
         </div>
-        {message}
+        {type === 'success' ? (
+          <img src={alertSuccess} alt="success" className="w-8 h-8 mb-4" />
+        ) : (
+          <img src={alertError} alt="error" className="w-8 h-8 mb-4" />
+        )}
+        <p className="text-[0.875rem]">{message}</p>
         <button
           type="submit"
-          onClick={closeAlert}
-          className="w-[6.25rem] h-9 rounded-[0.625rem] bg-purple text-base text-white mt-8 hover:bg-darkPurple transition duration-300 ease-in-out"
+          onClick={buttonClick || closeAlert}
+          className="w-[6.25rem] h-9 rounded-[0.625rem] bg-purple text-base text-white mt-6 hover:bg-darkPurple transition duration-300 ease-in-out"
         >
           {buttonText}
         </button>
