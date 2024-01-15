@@ -8,71 +8,32 @@ servers:
 paths:
   /api/surveys:
     post:
+      summary: 설문 조사와 이미지를 업로드합니다.
       tags:
         - POST
-      summary: 질문 생성 API
+      description: 메인 이미지와 질문 이미지를 포함한 설문 데이터를 업로드합니다.
       requestBody:
-        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
-                user_id:
-                  type: integer
-                  description: 사용자 ID
-                title:
+                survey:
                   type: string
-                  description: 설문조사 제목
-                open:
-                  type: boolean
-                  description: 설문 공개 여부
-                font:
+                  description: JSON 형식의 설문 데이터 문자열.
+                mainImageUrl:
                   type: string
-                  description: 폰트 설정
-                color:
-                  type: string
-                  description: 설문조사 색깔
-                button_style:
-                  type: string
-                  description: 버튼 스타일
-                main_image_url:
-                  type: string
-                  description: 메인 이미지 URL
-                deadline:
-                  type: string
-                  format: date-time
-                  description: 설문조사 마감 기간
-                questions:
+                  format: binary
+                  description: 메인 이미지 파일.
+                imageUrl:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: 질문 타입 (MULTIPLE_CHOICE, SUBJECTIVE_QUESTION, CHECKBOX, DROPDOWN)
-                        enum:
-                          - MULTIPLE_CHOICE
-                          - SUBJECTIVE_QUESTION
-                          - CHECKBOX
-                          - DROPDOWN
-                      content:
-                        type: string
-                        description: 질문 내용
-                      image_url:
-                        type: string
-                        description: 질문 관련 이미지 URL
-                      choices:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            option:
-                              type: string
-                              description: 선택지 내용
+                    type: string
+                    format: binary
+                  description: 질문 이미지 파일 배열.
       responses:
         '201':
-          description: 설문조사 생성 성공
+          description: 설문 생성이 완료되었습니다.
           content:
             application/json:
               schema:
@@ -80,12 +41,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 성공 메시지
+                    example: 설문 생성 완료
                   surveyId:
                     type: integer
-                    description: 생성된 설문조사의 ID
-        '500':
-          description: 서버 오류
+                    example: 9
+        '400':
+          description: 요청이 올바르지 않아 설문 생성에 실패했습니다.
           content:
             application/json:
               schema:
@@ -93,7 +54,23 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 오류 메시지
+                    example: Invalid survey
+                  error:
+                    type: string
+                    example: No survey data provided
+        '500':
+          description: 서버 에러로 인해 설문 생성에 실패했습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 설문 생성 오류
+                  error:
+                    type: string
+                    example: Internal server error
 
   /api/surveys/{userId}/answers/{surveyId}:
     get:

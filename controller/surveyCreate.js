@@ -1,10 +1,12 @@
 const { sequelize } = require('../models');
 const { Survey, Question, Choice } = require('../models');
 
-const createSurveyWithQuestionsAndChoices = async (req, res) => {
+const createSurveyWithQuestionsAndChoices = async (surveyData, res) => {
   const t = await sequelize.transaction();
 
   try {
+    console.log('Received survey data:', surveyData);
+
     const {
       userId,
       title,
@@ -13,14 +15,14 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
       font,
       color,
       buttonStyle,
-      mainImageUrl,
       deadline,
       questions,
-    } = req.body;
+      mainImageUrl, // 메인 이미지 URL
+      //imageUrl, // 질문 이미지 URL 배열
+    } = surveyData;
 
-    console.log('요청 본문 수신:', req.body);
+    console.log('요청 본문 수신:', surveyData);
 
-    // surveyUrl을 미리 정의
     const surveyUrl = `http://yourwebsite.com/survey/placeholder`;
 
     const survey = await Survey.create(
@@ -40,9 +42,7 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     const surveyId = survey.id;
-    console.log(`surveyId: ${survey.id}`);
     const updatedSurveyUrl = `http://yourwebsite.com/survey/${surveyId}`;
-    console.log(`url: ${updatedSurveyUrl}`);
 
     await Survey.update(
       { url: updatedSurveyUrl },
@@ -53,7 +53,6 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     for (const question of questions) {
-      console.log(`questionType: ${question.type}`);
       if (
         ![
           'MULTIPLE_CHOICE',
@@ -65,12 +64,14 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
         throw new Error('Invalid question type');
       }
 
+      const questionImageUrl = question.imageUrl;
+
       const newQuestion = await Question.create(
         {
           surveyId,
           type: question.type,
           content: question.content,
-          imageUrl: question.imageUrl,
+          imageUrl: questionImageUrl, // 여기에서 사용
         },
         { transaction: t },
       );
@@ -79,15 +80,13 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
 
       if (question.choices && question.choices.length > 0) {
         for (const choice of question.choices) {
-          const newChoice = await Choice.create(
+          await Choice.create(
             {
               questionId: newQuestion.id,
               option: choice.option,
             },
             { transaction: t },
           );
-
-          console.log(`{choiceId: ${newChoice.id}, "${choice.option}"}`);
         }
       }
     }
