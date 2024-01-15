@@ -358,7 +358,7 @@ paths:
             type: integer
           description: 사용자 ID
         - in: query
-          name: pageNo
+          name: page
           schema:
             type: integer
             default: 1
@@ -381,9 +381,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Survey'
-                  total_count:
-                    type: integer
-                  page_count:
+                  totalPages:
                     type: integer
         '500':
           description: 서버 에러 발생
@@ -816,7 +814,7 @@ paths:
           description: '비밀번호 수정에 실패하였습니다.'
   /api/users/{id}:
     get:
-      summary: '사용자 정보 조회'
+      summary: 내 정보 조회하기
       tags:
         - USER
       parameters:
