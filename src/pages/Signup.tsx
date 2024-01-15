@@ -4,7 +4,7 @@ import Alert from '@/components/common/Alert';
 import { ApiResponseError } from '@/types/apiResponseError';
 import { SignupForm } from '@/types/auth';
 import { useNavigate } from 'react-router-dom';
-import { singupAPI } from '@/api/signup';
+import { checkEmailAPI, singupAPI } from '@/api/signup';
 import { AxiosError } from 'axios';
 import fileImage from '../assets/file.png';
 import usernameIcon from '../assets/username.svg';
@@ -14,26 +14,42 @@ import passwordIcon from '../assets/password.svg';
 function Signup() {
   const navigate = useNavigate();
   const [signupInfo, setSignupInfo] = useState<SignupForm>({ name: '', email: '', password: '' });
-  // const [isCheckedEamil, setIsCheckedEmail] = useState<boolean>(false); // 이메일 중복 확인 체크
+  const [isCheckedEamil, setIsCheckedEmail] = useState<boolean>(false);
+  const [isCheckEmailErrorMessage, setIsCheckEmailErrorMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // const {
-  //   data,
-  //   refetch: checkEmail,
-  //   isError: isCheckEmailError,
-  //   isSuccess: isCheckEmailSuccess,
-  // } = useQuery<CheckEmailResponse, AxiosError>({
-  //   queryKey: ['checkEmail', signupInfo.email],
-  //   queryFn: () => checkEmailAPI(signupInfo.email),
-  //   enabled: false,
-  // });
+  const { mutate: checkEmailMutation } = useMutation({
+    mutationFn: checkEmailAPI,
+    onSuccess: (data) => {
+      if (data.exists) {
+        setIsCheckEmailErrorMessage('이미 사용 중인 이메일입니다.');
+        setIsCheckedEmail(false);
+      } else {
+        setIsCheckEmailErrorMessage('');
+        setIsCheckedEmail(true);
+      }
+    },
+    onError: (error: AxiosError) => {
+      const err = error as AxiosError<ApiResponseError>;
+      setErrorMessage(err.response?.data?.message || '이메일 중복 확인을 실패했습니다.');
+    },
+  });
 
-  // const handleCheckEmailClick = () => {
-  //   if (!signupInfo.email) {
-  //     <Alert type="error" message="이메일을 입력해주세요." buttonText="확인" />;
-  //   }
-  //   checkEmail();
-  // };
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleCheckEmailClick = () => {
+    // 이메일 형식이 유효하지 않으면 오류 메시지를 설정하고 함수를 종료
+    if (!isValidEmail(signupInfo.email)) {
+      setIsCheckEmailErrorMessage('유효한 이메일 형식이 아닙니다.');
+      setIsCheckedEmail(false);
+      return;
+    }
+
+    checkEmailMutation(signupInfo.email);
+  };
 
   const {
     mutate: signupMutation,
@@ -49,11 +65,20 @@ function Signup() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupInfo({ ...signupInfo, [e.target.name]: e.target.value });
+
+    if (e.target.name === 'email') {
+      setIsCheckedEmail(false);
+      setIsCheckEmailErrorMessage('');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     signupMutation(signupInfo);
+  };
+
+  const isSignupButtonEnabled = () => {
+    return isCheckedEamil && signupInfo.name !== '' && signupInfo.password !== '';
   };
 
   return (
@@ -98,23 +123,20 @@ function Signup() {
                     className="w-full mx-[1.875rem] py-2 text-base text-black focus:outline-none"
                   />
                   <img src={emailIcon} alt="Email" className="w-[2.25rem] h-[2.25rem] inline-block mr-[1.875rem]" />
-                  {/* <button
+                  <button
                     type="button"
                     className={`absolute text-xs font-semibold border-2 bg-white rounded-[1.25rem] py-1 px-2 border-solid ${
                       isCheckedEamil ? 'border-green-400 text-green-400' : 'border-red-400 text-red-400'
-                    } cursor-pointer right-[20%] ${isCheckedEamil && 'hidden'}`}
+                    } cursor-pointer right-[20%]`}
                     onClick={handleCheckEmailClick}
+                    disabled={isCheckedEamil || signupInfo.email === ''}
                   >
                     중복확인
                   </button>
-                  {isCheckEmailError && (
-                    <Alert type="error" message="이메일 중복 확인에 실패했습니다." buttonText="확인" />
+                  {isCheckEmailErrorMessage && (
+                    <Alert type="error" message={isCheckEmailErrorMessage} buttonText="확인" />
                   )}
-                  {isCheckEmailSuccess || data?.exists === false ? (
-                    <Alert type="success" message="사용 가능한 이메일입니다." buttonText="사용하기" />
-                  ) : (
-                    <Alert type="error" message="이미 사용중인 이메일입니다." buttonText="확인" />
-                  )} */}
+                  {isCheckedEamil && <Alert type="success" message="사용 가능한 이메일입니다." buttonText="사용하기" />}
                 </div>
                 <div className="flex items-center w-[25rem] h-[3.75rem] rounded-[1.875rem] border-solid border-[0.00625rem] border-gray hover:border-[0.125rem] hover:border-darkGray">
                   <input
@@ -136,7 +158,9 @@ function Signup() {
               <div className="pt-[2.5rem]">
                 <button
                   type="submit"
-                  className="w-[12.5rem] h-[3.125rem] text-[1.25rem] bg-purple text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] hover:bg-darkPurple shadow-lg transition duration-300 ease-in-out"
+                  className={`w-[12.5rem] h-[3.125rem] text-[1.25rem] text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] shadow-lg transition duration-300 ease-in-out ${
+                    isSignupButtonEnabled() ? 'bg-purple hover:bg-darkPurple' : 'bg-gray cursor-not-allowed'
+                  }`}
                 >
                   회원가입
                 </button>
