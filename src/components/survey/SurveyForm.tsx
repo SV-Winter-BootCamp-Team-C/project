@@ -1,46 +1,18 @@
-import SurveyCover from '@/components/survey/SurveyCover';
-import { Survey } from '@/types/survey';
+import { SurveyCoverType } from '@/types/survey';
 import search from '@/assets/search.svg';
 import { AddButton } from '@/components/common/Button';
 import { Pagination } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import SurveyCover from './SurveyCover';
 
 interface SurvayFormProps {
-  totalPages: number; // 페이지 개수
+  surveyData: SurveyCoverType;
+  currentPage: number;
   onClickAddButton?: () => void;
+  onPageChange: (page: number) => void;
 }
 
-interface SurveyData {
-  surveys: Survey[];
-}
-
-// 테스트용 데이터
-const surveyData: SurveyData = {
-  surveys: [
-    {
-      surveyId: 1,
-      title: '나를 맞춰봐나를 맞춰봐나를 맞춰봐나를 맞춰봐나를 맞춰봐',
-      mainImageUrl: '',
-      createdAt: '2022.02.22',
-      updatedAt: '2022.02.22',
-      deadline: '2024.01.11',
-      attedCount: 10,
-      open: false,
-    },
-    {
-      surveyId: 2,
-      title: '논문폼',
-      mainImageUrl: '', // 이미지 없을 경우
-      createdAt: '2022.02.22',
-      updatedAt: '2022.02.22',
-      deadline: '2024.02.23',
-      attedCount: 10,
-      open: true,
-    },
-  ],
-};
-
-function SurvdForm({ totalPages, onClickAddButton }: SurvayFormProps) {
+function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }: SurvayFormProps) {
   const location = useLocation();
   return (
     <div className="flex flex-col items-center pt-6">
@@ -79,22 +51,39 @@ function SurvdForm({ totalPages, onClickAddButton }: SurvayFormProps) {
       {/* 구분선 */}
       <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
 
-      <div className="grid grid-cols-3 py-8 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">
-        {surveyData.surveys.map((item) => (
-          <SurveyCover
-            key={item.surveyId}
-            id={item.surveyId}
-            title={item.title}
-            mainImageUrl={item.mainImageUrl}
-            deadline={item.deadline}
-            attedCount={item.attedCount}
-            open={item.open}
-          />
-        ))}
-      </div>
-      <Pagination count={totalPages} className="absolute bottom-4" />
+      {surveyData?.surveys.length > 0 ? (
+        <div className="grid grid-cols-3 pt-6 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">
+          {surveyData.surveys.map((item) => (
+            <SurveyCover
+              key={item.surveyId}
+              surveyId={item.surveyId}
+              title={item.title}
+              open={item.open}
+              mainImageUrl={item.mainImageUrl}
+              createdAt={item.createdAt}
+              updatedAt={item.updatedAt}
+              deadline={item.deadline}
+              isAttended={item.isAttended}
+              attedCount={item.attedCount}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center py-8 ">
+          <p className="text-base text-gray">설문이 없습니다.</p>
+        </div>
+      )}
+
+      {surveyData.totalPages !== 0 && (
+        <Pagination
+          count={surveyData?.totalPages}
+          page={currentPage}
+          onChange={(_, page) => onPageChange(page)}
+          className="absolute bottom-4"
+        />
+      )}
     </div>
   );
 }
 
-export default SurvdForm;
+export default SurveyForm;

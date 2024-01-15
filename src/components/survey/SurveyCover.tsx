@@ -1,24 +1,25 @@
-import survey from '@/assets/surveyDefault.png';
 import participants from '@/assets/participants.svg';
 import { calculateRemainingDays } from '@/utils/calculateRemainingDays';
 import { useState } from 'react';
 import openIcon from '@/assets/open.svg';
 import privateIcon from '@/assets/private.svg';
 import { useLocation } from 'react-router-dom';
+import { Survey } from '@/types/survey';
+import noImage from '@/assets/noImage.png';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
-interface SurveyCoverProps {
-  id: number;
-  title: string;
-  mainImageUrl: string;
-  deadline: string;
-  attedCount: number;
-  open?: boolean; // 공개 여부
-}
-
-function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = false }: SurveyCoverProps) {
+function SurveyCover({
+  surveyId,
+  title,
+  open,
+  mainImageUrl,
+  // createdAt,
+  // updatedAt,
+  deadline,
+  // isAttended,
+  attedCount,
+}: Survey) {
   const location = useLocation();
-  const imageUrl = mainImageUrl || survey;
   const { textLabel, textColor } = calculateRemainingDays(deadline);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -29,7 +30,7 @@ function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = fal
   return (
     <div className="relative">
       <div className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGray">
-        <img src={imageUrl} alt="survey" className="object-cover w-full h-full" />
+        <img src={mainImageUrl || noImage} alt="survey" className="object-cover w-full h-full" />
       </div>
 
       <div className="flex items-center justify-between px-3 pt-[0.625rem]">
@@ -48,7 +49,7 @@ function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = fal
               <div className="w-1 h-1 border border-solid rounded border-darkGary" />
             </div>
           </div>
-          {isMenuOpen && <SurveyCoverMenu surveyId={id} open={open} />}
+          {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} />}
         </div>
       </div>
     </div>

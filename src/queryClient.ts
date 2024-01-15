@@ -8,15 +8,14 @@ type AnyOBJ = {
 export const getClient = new QueryClient({
   // 전역 에러 핸들링
   queryCache: new QueryCache({
-    onError: (error) => {
-      console.error(error);
+    onError: (error, query) => {
+      if (query.meta?.errorMessage) console.error(query.meta.errorMessage);
     },
   }),
   defaultOptions: {
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24시간
       staleTime: 1000 * 60, // 1분
-      throwOnError: true,
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,

@@ -1,9 +1,20 @@
-import SurvdForm from '@/components/survey/SurveyForm';
+import SurveyForm from '@/components/survey/SurveyForm';
 import { useNavigate } from 'react-router-dom';
+import usePaginationSurveyList from '@/hooks/usePaginationSurveyList';
 
-function Home() {
+function AllForm() {
   const navigate = useNavigate();
-  return <SurvdForm totalPages={2} onClickAddButton={() => navigate('/create')} />;
+
+  const { data, currentPage, handlePageChange } = usePaginationSurveyList('allForm');
+
+  return (
+    <SurveyForm
+      surveyData={data || { surveys: [], totalPages: 0 }}
+      currentPage={currentPage}
+      onClickAddButton={() => navigate('/create')}
+      onPageChange={handlePageChange}
+    />
+  );
 }
 
-export default Home;
+export default AllForm;

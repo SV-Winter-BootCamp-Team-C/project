@@ -10,7 +10,7 @@ export type Survey = {
   attedCount: number;
 };
 
-export type SurveyCover = {
+export type SurveyCoverType = {
   surveys: Survey[];
   totalPages: number;
 };
