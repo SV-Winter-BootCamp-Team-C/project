@@ -5,18 +5,20 @@ import { useState } from 'react';
 import openIcon from '@/assets/open.svg';
 import privateIcon from '@/assets/private.svg';
 import { useLocation } from 'react-router-dom';
+import { Survey } from '@/types/survey';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
-interface SurveyCoverProps {
-  id: number;
-  title: string;
-  mainImageUrl: string;
-  deadline: string;
-  attedCount: number;
-  open?: boolean; // 공개 여부
-}
-
-function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = false }: SurveyCoverProps) {
+function SurveyCover({
+  surveyId,
+  title,
+  open,
+  mainImageUrl,
+  // createdAt,
+  // updatedAt,
+  deadline,
+  // isAttended,
+  attedCount,
+}: Survey) {
   const location = useLocation();
   const imageUrl = mainImageUrl || survey;
   const { textLabel, textColor } = calculateRemainingDays(deadline);
@@ -48,7 +50,7 @@ function SurveyCover({ id, title, mainImageUrl, deadline, attedCount, open = fal
               <div className="w-1 h-1 border border-solid rounded border-darkGary" />
             </div>
           </div>
-          {isMenuOpen && <SurveyCoverMenu surveyId={id} open={open} />}
+          {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} />}
         </div>
       </div>
     </div>

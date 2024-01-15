@@ -1,7 +1,7 @@
-import SurvdForm from '@/components/survey/SurveyForm';
+import SurveyForm from '@/components/survey/SurveyForm';
 
 function MyResponse() {
-  return <SurvdForm totalPages={4} />;
+  return <SurveyForm totalPages={4} />;
 }
 
 export default MyResponse;
