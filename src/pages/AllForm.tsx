@@ -1,26 +1,11 @@
 import SurveyForm from '@/components/survey/SurveyForm';
 import { useNavigate } from 'react-router-dom';
-import { getAllSurveyAPI } from '@/api/getForm';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/store/AuthStore';
-import { SurveyCoverType } from '@/types/survey';
-import { AxiosError } from 'axios';
-import { useState } from 'react';
+import usePaginationSurveyList from '@/hooks/usePaginationSurveyList';
 
 function AllForm() {
-  const { userId } = useAuthStore();
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const { data } = useQuery<SurveyCoverType, AxiosError>({
-    queryKey: ['allForm', currentPage, userId],
-    queryFn: () => getAllSurveyAPI({ userId, currentPage }),
-    placeholderData: keepPreviousData,
-  });
+  const { data, currentPage, handlePageChange } = usePaginationSurveyList('allForm');
 
   return (
     <SurveyForm
