@@ -73,7 +73,7 @@ const getSurveyById = async (req, res) => {
     res.json(result);
   } catch (error) {
     // 오류 발생시 처리
-    res.status(500).json({ message: '설문 생성 오류', error: error.message });
+    res.status(500).json({ message: '설문 반환 오류', error: error.message });
   }
 };
 
