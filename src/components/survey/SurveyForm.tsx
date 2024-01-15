@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import SurveyCover from './SurveyCover';
 
 interface SurvayFormProps {
-  surveyData?: SurveyCoverType;
+  surveyData: SurveyCoverType;
   currentPage: number;
   onClickAddButton?: () => void;
   onPageChange: (page: number) => void;
@@ -51,7 +51,7 @@ function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }:
       {/* 구분선 */}
       <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
 
-      {surveyData?.surveys ? (
+      {surveyData?.surveys.length > 0 ? (
         <div className="grid grid-cols-3 pt-6 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">
           {surveyData.surveys.map((item) => (
             <SurveyCover
@@ -74,12 +74,14 @@ function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }:
         </div>
       )}
 
-      <Pagination
-        count={surveyData?.totalPages}
-        page={currentPage}
-        onChange={(_, page) => onPageChange(page)}
-        className="absolute bottom-4"
-      />
+      {surveyData.totalPages !== 0 && (
+        <Pagination
+          count={surveyData?.totalPages}
+          page={currentPage}
+          onChange={(_, page) => onPageChange(page)}
+          className="absolute bottom-4"
+        />
+      )}
     </div>
   );
 }

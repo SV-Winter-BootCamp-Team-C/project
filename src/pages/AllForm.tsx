@@ -24,7 +24,7 @@ function AllForm() {
 
   return (
     <SurveyForm
-      surveyData={data}
+      surveyData={data || { surveys: [], totalPages: 0 }}
       currentPage={currentPage}
       onClickAddButton={() => navigate('/create')}
       onPageChange={handlePageChange}

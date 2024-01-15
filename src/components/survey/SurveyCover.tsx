@@ -1,4 +1,3 @@
-import survey from '@/assets/surveyDefault.png';
 import participants from '@/assets/participants.svg';
 import { calculateRemainingDays } from '@/utils/calculateRemainingDays';
 import { useState } from 'react';
@@ -6,6 +5,7 @@ import openIcon from '@/assets/open.svg';
 import privateIcon from '@/assets/private.svg';
 import { useLocation } from 'react-router-dom';
 import { Survey } from '@/types/survey';
+import noImage from '@/assets/noImage.png';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
 function SurveyCover({
@@ -20,7 +20,6 @@ function SurveyCover({
   attedCount,
 }: Survey) {
   const location = useLocation();
-  const imageUrl = mainImageUrl || survey;
   const { textLabel, textColor } = calculateRemainingDays(deadline);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -31,7 +30,7 @@ function SurveyCover({
   return (
     <div className="relative">
       <div className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGray">
-        <img src={imageUrl} alt="survey" className="object-cover w-full h-full" />
+        <img src={mainImageUrl || noImage} alt="survey" className="object-cover w-full h-full" />
       </div>
 
       <div className="flex items-center justify-between px-3 pt-[0.625rem]">

@@ -24,3 +24,12 @@ export const getMySurveyAPI = async ({ userId, currentPage }: AllSurveyResponse)
   });
   return response;
 };
+
+export const getMyResponseAPI = async ({ userId, currentPage }: AllSurveyResponse) => {
+  const response = await restFetcher({
+    method: 'GET',
+    path: `/surveys/${userId}/join`,
+    params: { page: currentPage, limit: LIMIT },
+  });
+  return response;
+};
