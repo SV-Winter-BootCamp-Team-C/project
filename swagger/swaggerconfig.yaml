@@ -826,7 +826,44 @@ paths:
       responses:
         '200':
           description: '사용자 정보 반환'
-
+  /api/images/search/{query}:
+    get:
+      summary: 검색어에 따른 이미지 검색
+      description: Pexels에서 제공하는 이미지를 검색어에 따라 조회합니다.
+      parameters:
+        - in: path
+          name: query
+          required: true
+          schema:
+            type: string
+          description: 검색할 키워드
+        - in: query
+          name: perPage
+          schema:
+            type: string
+            default: '5'
+          description: 페이지 당 이미지 수 설정
+      responses:
+        '200':
+          description: 성공적으로 이미지를 조회함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  photos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 이미지 ID
+                        original:
+                          type: string
+                          description: 원본 이미지 URL
+        '500':
+          description: 서버 에러 발생
 components:
   schemas:
     Survey:
