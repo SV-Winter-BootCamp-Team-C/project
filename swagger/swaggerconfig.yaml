@@ -589,10 +589,6 @@ paths:
           description: 설문 ID
           schema:
             type: integer
-      consumes:
-        - application/json
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -616,9 +612,6 @@ paths:
                           type: integer
                       subContent:
                         type: string
-                required:
-                  - userId
-                  - questions
       responses:
         '201':
           description: 답변 저장 성공
