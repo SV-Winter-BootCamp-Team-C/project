@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 function AllForm() {
   const { userId } = useAuthStore();
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handlePageChange = (page: number) => {
@@ -21,7 +22,6 @@ function AllForm() {
     placeholderData: keepPreviousData,
   });
 
-  const navigate = useNavigate();
   return (
     <SurveyForm
       surveyData={data}

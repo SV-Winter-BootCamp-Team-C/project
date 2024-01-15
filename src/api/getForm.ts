@@ -15,3 +15,12 @@ export const getAllSurveyAPI = async ({ userId, currentPage }: AllSurveyResponse
   });
   return response;
 };
+
+export const getMySurveyAPI = async ({ userId, currentPage }: AllSurveyResponse) => {
+  const response = await restFetcher({
+    method: 'GET',
+    path: `/surveys/${userId}/forms`,
+    params: { page: currentPage, limit: LIMIT },
+  });
+  return response;
+};
