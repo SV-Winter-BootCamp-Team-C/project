@@ -39,7 +39,7 @@ sequelize
 
     app.get('/downloadExcel/:surveyId', createAndDownloadExcel);
 
-    app.get('/api/search/:query', getImageByAPI);
+    app.get('/api/images/search/:query', getImageByAPI);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
