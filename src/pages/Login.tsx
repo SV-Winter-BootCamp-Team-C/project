@@ -42,6 +42,10 @@ function Login() {
     loginMutation(loginInfo);
   };
 
+  const isLoginButtonEnabled = () => {
+    return loginInfo.email !== '' && loginInfo.password !== '';
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-custom-gradient">
       <div className="relative flex items-center w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
@@ -88,7 +92,9 @@ function Login() {
               <div className="pt-[2.5rem]">
                 <button
                   type="submit"
-                  className="w-[12.5rem] h-[3.125rem] text-[1.25rem] bg-purple text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] hover:bg-darkPurple shadow-lg transition duration-300 ease-in-out"
+                  className={`w-[12.5rem] h-[3.125rem] text-[1.25rem] text-white font-bold py-[0.9375rem] px-[3.75rem] rounded-[0.625rem] shadow-lg transition duration-300 ease-in-out ${
+                    isLoginButtonEnabled() ? 'bg-purple hover:bg-darkPurple' : 'bg-gray cursor-not-allowed'
+                  }`}
                 >
                   로그인
                 </button>

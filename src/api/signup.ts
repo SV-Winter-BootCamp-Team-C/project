@@ -17,7 +17,7 @@ export interface CheckEmailResponse {
 
 export const checkEmailAPI = async (email: string): Promise<CheckEmailResponse> => {
   const response = await restFetcher({
-    method: 'GET',
+    method: 'POST',
     path: `/users/${email}/check-email`,
   });
   return response;
