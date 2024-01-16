@@ -30,7 +30,7 @@ const showAllSurveys = async (req, res) => {
     });
 
     if (!surveys.length) {
-      return res.status(204).json({ message: 'No surveys found' });
+      return res.status(404).json({ message: '작성된 설문지가 없습니다.' });
     }
 
     const result = [];
@@ -71,7 +71,7 @@ const showAllSurveys = async (req, res) => {
 
     res.json({ surveys: result, totalPages: totalPages });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: '데이터를 불러오는데 실패했습니다.' });
   }
 };
 

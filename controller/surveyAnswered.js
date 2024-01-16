@@ -8,7 +8,7 @@ const surveyAnswered = async (req, res) => {
     const user = await User.findByPk(userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'not found' });
+      return res.status(404).json({ message: '유저를 찾을 수 없습니다.' });
     }
 
     const offset = (page - 1) * limit;
@@ -34,7 +34,7 @@ const surveyAnswered = async (req, res) => {
     if (!surveys || surveys.length === 0) {
       // 유저는 있지만 설문조사 게시글이 없는 경우
       return res.status(204).json({
-        message: 'This user did not write survey',
+        message: '작성한 설문지가 없습니다.',
       });
     }
 
@@ -58,7 +58,7 @@ const surveyAnswered = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      message: 'Something went wrong',
+      message: '에러 발생',
     });
   }
 };
