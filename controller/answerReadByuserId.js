@@ -77,11 +77,9 @@ const getAnswerByuserId = async (req, res) => {
     res.json(responseData);
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({
-        message: '사용자의 답변을 불러오는 것을 실패하였습니다.' + err.message,
-      });
+    res.status(500).json({
+      message: '사용자의 답변을 불러오는 것을 실패하였습니다.' + err.message,
+    });
   }
 };
 module.exports = { getAnswerByuserId };
