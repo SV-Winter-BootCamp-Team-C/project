@@ -318,6 +318,56 @@ paths:
                   message:
                     type: string
                     example: 'URL을 생성하는데 실패하였습니다'
+  /api/surveys/{id}/list:
+    get:
+      tags:
+        - GET
+      summary: 설문지 응답 결과 분석 폼(응답별)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Unique identifier of the survey
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A JSON object containing the survey results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    description: The title of the survey
+                  list:
+                    type: object
+                    properties:
+                      head:
+                        type: array
+                        items:
+                          type: string
+                        description: Array of survey questions
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            userId:
+                              type: integer
+                            createdAt:
+                              type: string
+                              format: date-time
+                            responses:
+                              type: array
+                              items:
+                                type: string
+                        description: Array of user responses
+        '400':
+          description: Survey not found
+        '500':
+          description: Internal Server Error
 
   /api/surveys/{id}/results:
     get:
@@ -358,7 +408,7 @@ paths:
             type: integer
           description: 사용자 ID
         - in: query
-          name: pageNo
+          name: page
           schema:
             type: integer
             default: 1
@@ -381,9 +431,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Survey'
-                  total_count:
-                    type: integer
-                  page_count:
+                  totalPages:
                     type: integer
         '500':
           description: 서버 에러 발생
@@ -436,6 +484,7 @@ paths:
           description: 검색 결과가 없을 때 반환합니다.
         500:
           description: 서버 오류가 발생했을 때 반환합니다.
+
   /api/surveys/{id}:
     put:
       summary: 설문지 수정
@@ -591,10 +640,6 @@ paths:
           description: 설문 ID
           schema:
             type: integer
-      consumes:
-        - application/json
-      produces:
-        - application/json
       requestBody:
         required: true
         content:
@@ -618,9 +663,6 @@ paths:
                           type: integer
                       subContent:
                         type: string
-                required:
-                  - userId
-                  - questions
       responses:
         '201':
           description: 답변 저장 성공
@@ -785,7 +827,7 @@ paths:
         '404':
           description: '존재하지 않는 메일입니다.'
   /api/users/{email}/check-email:
-    get:
+    post:
       summary: 이메일 중복 확인
       tags:
         - USER
@@ -816,7 +858,7 @@ paths:
           description: '비밀번호 수정에 실패하였습니다.'
   /api/users/{id}:
     get:
-      summary: '사용자 정보 조회'
+      summary: 내 정보 조회하기
       tags:
         - USER
       parameters:
@@ -828,7 +870,44 @@ paths:
       responses:
         '200':
           description: '사용자 정보 반환'
-
+  /api/images/search/{query}:
+    get:
+      summary: 검색어에 따른 이미지 검색
+      description: Pexels에서 제공하는 이미지를 검색어에 따라 조회합니다.
+      parameters:
+        - in: path
+          name: query
+          required: true
+          schema:
+            type: string
+          description: 검색할 키워드
+        - in: query
+          name: perPage
+          schema:
+            type: string
+            default: '5'
+          description: 페이지 당 이미지 수 설정
+      responses:
+        '200':
+          description: 성공적으로 이미지를 조회함
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  photos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: 이미지 ID
+                        original:
+                          type: string
+                          description: 원본 이미지 URL
+        '500':
+          description: 서버 에러 발생
 components:
   schemas:
     Survey:

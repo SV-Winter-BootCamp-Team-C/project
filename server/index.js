@@ -12,6 +12,7 @@ const { sequelize } = require('../models');
 const { createAndDownloadExcel } = require('../excel/excelGengerate');
 const surveyRouters = require('../routers/surveyRouter');
 const userRouters = require('../routers/UserRouter');
+const { getImageByAPI } = require('../controller/getImageBySearch');
 
 const cors = require('cors');
 
@@ -37,6 +38,8 @@ sequelize
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
     app.get('/downloadExcel/:surveyId', createAndDownloadExcel);
+
+    app.get('/api/images/search/:query', getImageByAPI);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);

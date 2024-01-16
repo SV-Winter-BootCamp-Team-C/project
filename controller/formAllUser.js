@@ -3,9 +3,8 @@ const { Survey, Answer, Question } = require('../models');
 const getUserSurveys = async (req, res) => {
   try {
     const userId = req.params.id;
-    const pageNo = parseInt(req.query.pageNo) || 1;
-    const limit = parseInt(req.query.limit) || 9;
-    const offset = (pageNo - 1) * limit;
+    const pageLimit = req.query.limit;
+    const pageOffset = (req.query.page - 1) * pageLimit;
 
     const surveys = await Survey.findAll({
       where: { userId: userId },
@@ -17,8 +16,8 @@ const getUserSurveys = async (req, res) => {
         'deadline',
         'open',
       ],
-      offset: offset,
-      limit: limit,
+      offset: pageOffset,
+      limit: pageLimit,
     });
 
     // 각 설문조사에 대한 attended_count 계산
@@ -52,8 +51,7 @@ const getUserSurveys = async (req, res) => {
 
     res.json({
       surveys: modifiedSurveys,
-      total_count: totalCount,
-      page_count: Math.ceil(totalCount / limit),
+      totalPages: Math.ceil(totalCount / pageLimit),
     });
   } catch (error) {
     console.error(error);
