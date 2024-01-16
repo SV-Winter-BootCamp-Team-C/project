@@ -44,7 +44,7 @@ const surveyResult = async (req, res) => {
       questions: survey.Questions.map((question) => {
         if (question.type === 'CHECKBOX') {
           return {
-            question_id: question.id,
+            questionId: question.id,
             type: question.type,
             content: question.content,
             imageUrl: question.imageUrl,
@@ -76,7 +76,7 @@ const surveyResult = async (req, res) => {
             imageUrl: question.imageUrl,
             answers: question.Answers.map((answer) => ({
               answerId: answer.id,
-              objContent: answer.objContent,
+              content: answer.objContent,
             })),
           };
         }
