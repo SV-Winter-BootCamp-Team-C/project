@@ -39,7 +39,7 @@ const getUserSurveys = async (req, res) => {
           surveyId: survey.id,
           title: survey.title,
           open: survey.open, // 여기에 open 상태를 결정하는 로직 추가
-          imageUrl: survey.mainImageUrl,
+          mainImageUrl: survey.mainImageUrl,
           createdAt: survey.createdAt,
           deadline: survey.deadline, // 여기에 마감일 결정 로직 추가
           attendedCount: attendedCount,
