@@ -108,12 +108,10 @@ router.put(
       console.log('req.body:', req.body);
 
       if (!req.body.survey) {
-        return res
-          .status(400)
-          .json({
-            message: '설문을 수정하는데 실패하였습니다.',
-            resultCode: 400,
-          });
+        return res.status(400).json({
+          message: '설문을 수정하는데 실패하였습니다.',
+          resultCode: 400,
+        });
       }
 
       const parsedData = JSON.parse(req.body.survey);
@@ -125,11 +123,15 @@ router.put(
       };
       console.log('Extracted survey data:', surveyData);
 
-      // 메인 이미지 URL 처리
+      // 클라이언트로부터 받은 파일 데이터를 처리
       if (req.files['mainImageUrl'] && req.files['mainImageUrl'][0]) {
-        surveyData.mainImageUrl = req.files['mainImageUrl'][0].location; // 이미지 URL을 가져옴
-      } else {
-        surveyData.mainImageUrl = ''; // 메인 이미지가 비어 있는 경우 빈 문자열("")로 설정
+        const mainImageFile = req.files['mainImageUrl'][0]; // 파일 객체 참조
+        console.log('메인 이미지 파일 업로드 중');
+        // 파일을 S3에 업로드하고 URL을 업데이트합니다.
+        const updatedMainImageUrl = await uploadFileToS3(mainImageFile);
+        console.log('메인 이미지 파일 업로드 완료: ', updatedMainImageUrl);
+        // 업로드된 이미지 URL을 surveyData에 할당합니다.
+        surveyData.mainImageUrl = updatedMainImageUrl;
       }
 
       // 개별 질문 이미지 처리
