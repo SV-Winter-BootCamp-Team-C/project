@@ -135,18 +135,16 @@ router.put(
       }
 
       // 개별 질문 이미지 처리
-      const imageUploadPromises = surveyData.questions.map(
-        async (question, index) => {
+      if (surveyData.questions) {
+        for (const [index, question] of surveyData.questions.entries()) {
           if (req.files['imageUrl'] && req.files['imageUrl'][index]) {
-            question.imageUrl = req.files['imageUrl'][index].location; // 이미지 URL을 가져옴
+            const file = req.files['imageUrl'][index];
+            question.imageUrl = await uploadFileToS3(file);
           } else {
-            question.imageUrl = ''; // 이미지가 비어 있는 경우 빈 문자열("")로 설정
+            question.imageUrl = ''; // 이미지 파일이 전혀 업로드되지 않은 경우
           }
-        },
-      );
-
-      // 모든 이미지 업로드가 완료되기를 기다립니다.
-      await Promise.all(imageUploadPromises);
+        }
+      }
 
       // 설문 수정 로직 호출
       await surveyModifyController.ModifySurveyWithQuestionsAndChoices(
@@ -156,8 +154,7 @@ router.put(
     } catch (error) {
       console.error('Error processing request:', error);
       res.status(400).json({
-        message: '설문을 수정하는데 실패하였습니다.',
-        resultCode: 400,
+        message: 'Error processing survey data',
         error: error.message,
       });
     }

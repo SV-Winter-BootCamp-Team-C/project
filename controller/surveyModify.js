@@ -1,10 +1,7 @@
+// surveyModify.js
 const { sequelize } = require('../models');
 const { Survey, Question, Choice, Answer } = require('../models');
-const {
-  uploadFileToS3,
-  //deleteFileFromS3,
-  updateFileOnS3,
-} = require('./imageUpload'); // 필요에 따라 경로를 조정하세요
+const { uploadFileToS3 } = require('./imageUpload'); // 필요에 따라 경로를 조정하세요
 
 const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
   try {
@@ -20,8 +17,7 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
       mainImageUrl,
       deadline,
       questions,
-      //mainImageFile, // 메인 이미지 파일
-      questionImageFiles, // 질문 이미지 파일 배열
+      //questionImageFiles, // 질문 이미지 파일 배열
     } = surveyData;
 
     // 설문 조사의 소유권과 권한을 확인
@@ -48,14 +44,12 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
       console.log('트랜잭션 시작');
 
       // 메인 이미지 업로드/업데이트 처리
-  let updatedMainImageUrl = mainImageUrl;
-  if (surveyData.mainImageFile) { // 클라이언트에서 mainImageFile로 파일을 받고 있다고 가정
-    console.log('메인 이미지 업로드 중');
-    // S3에 파일을 업로드하고 URL을 업데이트합니다.
-    updatedMainImageUrl = await uploadFileToS3(surveyData.mainImageFile);
-    console.log('메인 이미지 업로드 완료: ', updatedMainImageUrl);
-  }
-
+      let updatedMainImageUrl = mainImageUrl;
+      if (surveyData.mainImageFile) {
+        console.log('메인 이미지 업로드 중');
+        updatedMainImageUrl = await uploadFileToS3(surveyData.mainImageFile);
+        console.log('메인 이미지 업로드 완료: ', updatedMainImageUrl);
+      }
 
       // 설문 정보 업데이트
       console.log('설문 정보 업데이트 중');
@@ -83,14 +77,20 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
       });
       console.log('기존 질문 삭제 완료');
 
-      for (const [index, question] of questions.entries()) {
-        console.log(`새로운 질문 생성 중 ${index + 1}`);
+      for (const question of questions) {
+        if (
+          ![
+            'MULTIPLE_CHOICE',
+            'SUBJECTIVE_QUESTION',
+            'CHECKBOX',
+            'DROPDOWN',
+          ].includes(question.type)
+        ) {
+          throw new Error('Invalid question type');
+        }
+
         // 새로운 질문 생성
-        const imageUrl =
-          questionImageFiles && questionImageFiles[index]
-            ? await uploadFileToS3(questionImageFiles[index])
-            : null;
-        console.log(`질문 이미지 업로드 중 ${index + 1}: `, imageUrl);
+        const imageUrl = question.imageUrl || ''; // 이미지 URL을 설정합니다.
 
         const newQuestion = await Question.create(
           {
@@ -101,12 +101,10 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
           },
           { transaction: t },
         );
-        console.log(`새로운 질문 생성 완료 ${index + 1}`);
 
-        // 필요한 경우 선택지 추가
-        if (
-          ['CHECKBOX', 'MULTIPLE_CHOICE', 'DROPDOWN'].includes(question.type)
-        ) {
+        console.log(`questionId: ${newQuestion.id}`);
+
+        if (question.choices && question.choices.length > 0) {
           for (const choice of question.choices) {
             await Choice.create(
               {
