@@ -22,14 +22,21 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
 
     // 설문 조사의 소유권과 권한을 확인
     const survey = await Survey.findByPk(surveyId);
-    if (!survey || survey.userId !== userId) {
+    if (!survey) {
+      return res.status(404).json({ message: '설문이 존재하지 않습니다.' });
+    }
+
+    if (survey.userId !== userId) {
       return res
-        .status(404)
+        .status(400)
         .json({ message: userId + '는 설문을 작성한 사람이 아닙니다.' });
     }
 
-    if (survey.userId !== userId || open) {
-      return res.status(403).json({ message: '접근 및 수정 권한이 없습니다.' });
+    // 접근 권한이 있는지 확인
+    if (open) {
+      return res
+        .status(401)
+        .json({ message: '설문이 잠겨있어 접근 및 수정 권한이 없습니다.' });
     }
 
     // 기존 답변의 존재 여부 확인
