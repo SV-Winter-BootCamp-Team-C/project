@@ -30,7 +30,7 @@ const showAllSurveys = async (req, res) => {
     });
 
     if (!surveys.length) {
-      return res.status(404).json({ message: '작성된 설문지가 없습니다.' });
+      return res.status(204).json({ message: '작성된 설문지가 없습니다.' });
     }
 
     const result = [];
