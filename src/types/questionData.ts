@@ -49,3 +49,11 @@ export type QuestionResultForm = {
   deadline: string;
   questions: Questions;
 };
+
+export type ResponseSubmit = {
+  userId: number;
+  questions: {
+    questionId: number;
+    objContent?: number[];
+    subContent?: string;
+}[];
