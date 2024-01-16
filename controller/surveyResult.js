@@ -47,7 +47,7 @@ const surveyResult = async (req, res) => {
             questionId: question.id,
             type: question.type,
             content: question.content,
-            imageUrl: question.imageUrl,
+            imageUrl: question.imageUrl || null, // 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 처리
             choices: question.Choices.map((choice) => ({
               choiceId: choice.id,
               option: choice.option,
@@ -59,7 +59,7 @@ const surveyResult = async (req, res) => {
             questionId: question.id,
             type: question.type,
             content: question.content,
-            imageUrl: question.imageUrl,
+            imageUrl: question.imageUrl || null, // 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 처리
             answers: question.Answers.map((answer) => ({
               answerId: answer.id,
               content: answer.subContent,
@@ -73,7 +73,7 @@ const surveyResult = async (req, res) => {
             questionId: question.id,
             type: question.type,
             content: question.content,
-            imageUrl: question.imageUrl,
+            imageUrl: question.imageUrl || null, // 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 처리
             answers: question.Answers.map((answer) => ({
               answerId: answer.id,
               content: answer.objContent,
