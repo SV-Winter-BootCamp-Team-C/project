@@ -23,7 +23,7 @@ export type ExtendedQuestionData = QuestionData & {
   subContent?: string;
 };
 
-type Questions = QuestionData[] | ExtendedQuestionData[];
+export type Questions = QuestionData[] | ExtendedQuestionData[];
 
 export type QuestionDataForm = {
   surveyId: number;
@@ -39,11 +39,21 @@ export type QuestionDataForm = {
   questions: Questions;
 };
 
+export type QuestionResultForm = {
+  surveyId: number;
+  userName: string;
+  title: string;
+  open: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deadline: string;
+  questions: Questions;
+};
+
 export type ResponseSubmit = {
   userId: number;
   questions: {
     questionId: number;
     objContent?: number[];
     subContent?: string;
-  }[];
-};
+}[];

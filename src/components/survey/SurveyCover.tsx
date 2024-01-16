@@ -17,7 +17,7 @@ function SurveyCover({
   // updatedAt,
   deadline,
   // isAttended,
-  attedCount,
+  attendCount,
 }: Survey) {
   const location = useLocation();
   const { textLabel, textColor } = calculateRemainingDays(deadline);
@@ -40,7 +40,7 @@ function SurveyCover({
           <span className={`${textColor} text-xs leading-3`}>{textLabel}</span>
           <div className="flex items-center gap-1">
             <img src={participants} alt="participants" className="w-[0.625rem] h-3 align-middle" />
-            <span className="text-xs leading-3 text-darkGary">{attedCount}</span>
+            <span className="text-xs leading-3 text-darkGary">{attendCount}</span>
           </div>
           <div className="w-4 cursor-pointer" onClick={handleMenuClick}>
             <div className="flex flex-col items-center justify-center gap-[1px]">

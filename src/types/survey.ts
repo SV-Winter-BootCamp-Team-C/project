@@ -7,7 +7,7 @@ export type Survey = {
   updatedAt: string;
   deadline: string;
   isAttended?: boolean;
-  attedCount: number;
+  attendCount: number;
 };
 
 export type SurveyCoverType = {
