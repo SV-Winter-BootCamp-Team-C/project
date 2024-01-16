@@ -30,7 +30,7 @@ const showAllSurveys = async (req, res) => {
     });
 
     if (!surveys.length) {
-      return res.status(404).json({ message: 'No surveys found' });
+      return res.status(204).json({ message: 'No surveys found' });
     }
 
     const result = [];
@@ -45,7 +45,7 @@ const showAllSurveys = async (req, res) => {
         ],
       });
 
-      const user_count = await Answer.count({
+      const userCount = await Answer.count({
         distinct: true,
         col: 'userId',
         include: [
@@ -65,7 +65,7 @@ const showAllSurveys = async (req, res) => {
         updatedAt: survey.updatedAt,
         deadline: survey.deadline,
         isAttended: !!answer,
-        attendCount: user_count,
+        attendCount: userCount,
       });
     }
 
