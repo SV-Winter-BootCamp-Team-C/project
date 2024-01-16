@@ -878,6 +878,49 @@ paths:
       responses:
         '200':
           description: '사용자 정보 반환'
+
+  /api/surveys/downloadExcel/{surveyId}:
+    get:
+      summary: 설문 응답 데이터를 Excel 파일로 다운로드합니다.
+      tags:
+        - GET
+      parameters:
+        - in: path
+          name: surveyId
+          required: true
+          schema:
+            type: integer
+          description: 다운로드할 설문의 ID입니다.
+      responses:
+        '200':
+          description: Excel 파일 다운로드 성공
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+                description: 다운로드된 Excel 파일
+        '404':
+          description: 설문이나 관련된 질문이 없음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 설문이나 관련된 질문이 없습니다.
+        '500':
+          description: 서버 오류로 Excel 파일 생성 실패
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Excel 파일 생성 오류
+
   /api/images/search/{query}:
     get:
       summary: 검색어에 따른 이미지 검색
