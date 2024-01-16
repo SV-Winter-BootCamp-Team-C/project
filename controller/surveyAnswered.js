@@ -1,4 +1,4 @@
-const { Survey, User } = require('../models');
+const { Survey, User, Answer, Question } = require('../models');
 
 const surveyAnswered = async (req, res) => {
   const userId = req.params.id;
@@ -38,23 +38,35 @@ const surveyAnswered = async (req, res) => {
       });
     }
 
-    const total = await Survey.count({ where: { userId } });
-    const totalPages = Math.ceil(total / limit);
+    const result = [];
+    for (const survey of surveys) {
+      const userCount = await Answer.count({
+        distinct: true,
+        col: 'userId',
+        include: [
+          {
+            model: Question,
+            where: { surveyId: survey.id },
+          },
+        ],
+      });
 
-    const result = {
-      surveys: surveys.map((survey) => ({
-        id: survey.id,
+      result.push({
+        surveyId: survey.id,
         title: survey.title,
         open: survey.open,
         mainImageUrl: survey.mainImageUrl,
         createdAt: survey.createdAt,
         updatedAt: survey.updatedAt,
         deadline: survey.deadline,
-      })),
-      totalPages,
-    };
+        attendCount: userCount,
+      });
+    }
 
-    res.status(200).json(result);
+    const total = await Survey.count({ where: { userId } });
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({ survyes: result, totalPages: totalPages });
   } catch (err) {
     console.error(err);
     res.status(500).json({
