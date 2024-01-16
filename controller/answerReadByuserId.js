@@ -20,6 +20,7 @@ const getAnswerByuserId = async (req, res) => {
             {
               model: Choice,
               attributes: ['id', 'option'],
+              order: [['id', 'ASC']],
             },
             {
               model: Answer,
@@ -55,7 +56,9 @@ const getAnswerByuserId = async (req, res) => {
 
         // 'SUBJECTIVE_QUESTION'이 아닌 경우에만 choices와 objContent 추가
         if (question.type !== 'SUBJECTIVE_QUESTION') {
-          questionResponse.choices = question.Choices.map((choice) => ({
+          questionResponse.choices = question.Choices.sort(
+            (a, b) => a.id - b.id,
+          ).map((choice) => ({
             choiceId: choice.id,
             option: choice.option,
           }));
