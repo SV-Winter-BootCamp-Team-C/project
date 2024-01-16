@@ -5,7 +5,7 @@ const getAnswerByuserId = async (req, res) => {
     const { userId, surveyId } = req.params;
     const user = await Survey.findByPk(userId);
     if (!user) {
-      return res.status(400).send('User not found');
+      return res.status(400).json({ message: 'User not found' });
     }
     const survey = await Survey.findByPk(surveyId, {
       include: [
@@ -24,7 +24,6 @@ const getAnswerByuserId = async (req, res) => {
             {
               model: Answer,
               where: { userId: userId },
-              required: false,
             },
           ],
         },
@@ -32,7 +31,7 @@ const getAnswerByuserId = async (req, res) => {
     });
 
     if (!survey) {
-      return res.status(404).send('Survey not found');
+      return res.status(404).json({ message: 'Survey not found' });
     }
 
     const responseData = {
@@ -80,7 +79,9 @@ const getAnswerByuserId = async (req, res) => {
     console.error(err);
     res
       .status(500)
-      .send('사용자의 답변을 불러오는 것을 실패하였습니다.' + err.message);
+      .json({
+        message: '사용자의 답변을 불러오는 것을 실패하였습니다.' + err.message,
+      });
   }
 };
 module.exports = { getAnswerByuserId };

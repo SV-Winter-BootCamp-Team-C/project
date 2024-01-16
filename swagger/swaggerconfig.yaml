@@ -131,10 +131,35 @@ paths:
                             type: string
         '400':
           description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
         '404':
           description: Survey not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Survey not found'
         '500':
           description: Failed to retrieve user's answers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '사용자의 답변을 불러오는 것을 실패하였습니다.'
+
   /api/surveys/{id}/join:
     get:
       summary: 내 응답 조회
