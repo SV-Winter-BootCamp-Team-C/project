@@ -37,7 +37,7 @@ sequelize
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-    app.get('/downloadExcel/:surveyId', createAndDownloadExcel);
+    app.get('api/surveys/downloadExcel/:surveyId', createAndDownloadExcel);
 
     app.get('/api/images/search/:query', getImageByAPI);
 
