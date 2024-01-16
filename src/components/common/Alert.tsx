@@ -20,7 +20,7 @@ function Alert({ type, message, buttonText, buttonClick }: AlertProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-20">
       <div className="relative h-40 w-80 flex flex-col items-center justify-center bg-white shadow-md rounded-[1.25rem]">
         <div className="absolute right-2 top-2">
           <div className="flex items-center justify-center w-6 h-6 cursor-pointer" onClick={closeAlert}>

@@ -64,7 +64,7 @@ function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }:
               updatedAt={item.updatedAt}
               deadline={item.deadline}
               isAttended={item.isAttended}
-              attedCount={item.attedCount}
+              attendCount={item.attendCount}
             />
           ))}
         </div>

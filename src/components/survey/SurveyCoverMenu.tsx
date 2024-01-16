@@ -61,7 +61,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
 
   const handleItemClick = (itemName: string, sId: number) => {
     if (itemName === '분석') {
-      navigate(`/result/${sId}`);
+      navigate(`/result?id=${sId}`);
     } else if (itemName === '공유') {
       handleShareClick(); // '공유'를 클릭했을 때 ShareMailModal을 표시
     }
