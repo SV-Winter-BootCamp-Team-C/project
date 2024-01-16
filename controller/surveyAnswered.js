@@ -1,58 +1,65 @@
-const { Survey, Answer, Question } = require('../models');
+const { Survey, User } = require('../models');
 
 const surveyAnswered = async (req, res) => {
+  const userId = req.params.id;
+  const { page, limit } = req.query;
+
   try {
-    const userId = req.params.id;
+    const user = await User.findByPk(userId);
 
-    const totalSurveys = await Survey.count({
-      where: { open: true },
-    });
-
-    const pageLimit = req.query.limit;
-    const pageOffset = (req.query.page - 1) * pageLimit;
-
-    const totalPages = Math.ceil(totalSurveys / pageLimit);
-
-    // 해당 사용자가 답변한 설문조사를 찾습니다.
-    const answers = await Answer.findAll({
-      where: { userId },
-      include: [
-        {
-          model: Question,
-          include: [
-            {
-              model: Survey,
-              attributes: [
-                'id',
-                'title',
-                'open',
-                'mainImageUrl',
-                'createdAt',
-                'updatedAt',
-                'deadline',
-              ],
-            },
-          ],
-        },
-      ],
-      limit: pageLimit,
-      offset: pageOffset,
-    });
-
-    if (!answers.length) {
-      return res
-        .status(404)
-        .json({ message: 'No answered surveys found for this user' });
+    if (!user) {
+      return res.status(404).json({ message: 'not found' });
     }
 
-    // 조회된 설문조사를 반환합니다.
-    res.json({
-      surveys: answers.map((answer) => answer.Question.Survey),
-      totalPages: totalPages,
+    const offset = (page - 1) * limit;
+
+    const surveys = await Survey.findAll({
+      where: {
+        userId,
+      },
+      order: [['createdAt', 'DESC']],
+      offset,
+      limit,
+      attributes: [
+        'id',
+        'title',
+        'open',
+        'mainImageUrl',
+        'createdAt',
+        'updatedAt',
+        'deadline',
+      ],
     });
-  } catch (error) {
-    // 에러가 발생한 경우 에러 메시지를 반환합니다.
-    res.status(500).json({ message: error.message });
+
+    if (!surveys || surveys.length === 0) {
+      // 유저는 있지만 설문조사 게시글이 없는 경우
+      return res.status(204).json({
+        message: 'This user did not write survey',
+      });
+    }
+
+    const total = await Survey.count({ where: { userId } });
+    const totalPages = Math.ceil(total / limit);
+
+    const result = {
+      surveys: surveys.map((survey) => ({
+        id: survey.id,
+        title: survey.title,
+        open: survey.open,
+        mainImageUrl: survey.mainImageUrl,
+        createdAt: survey.createdAt,
+        updatedAt: survey.updatedAt,
+        deadline: survey.deadline,
+      })),
+      totalPages,
+    };
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Something went wrong',
+    });
   }
 };
 
