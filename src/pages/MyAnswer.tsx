@@ -8,7 +8,7 @@ import StaticDropDown from '@/components/staticresponse/StaticDropDown';
 import { QuestionDataForm } from '@/types/questionData';
 
 const testData: QuestionDataForm = {
-  surveyId: 1,
+  id: 1,
   userName: '소정',
   title: '맞춰봐',
   description: '여기에 설문 설명을 입력하세요',
