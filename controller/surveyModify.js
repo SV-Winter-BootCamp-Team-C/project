@@ -103,6 +103,7 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
         );
 
         console.log(`questionId: ${newQuestion.id}`);
+        console.log(`imageUrl for questionId ${newQuestion.id}: ${imageUrl}`);
 
         if (question.choices && question.choices.length > 0) {
           for (const choice of question.choices) {
