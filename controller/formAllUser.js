@@ -11,7 +11,7 @@ const getUserSurveys = async (req, res) => {
       attributes: [
         'id',
         'title',
-        'mainImageUrl',
+        'mainImageUrl', // Make sure to include 'mainImageUrl' here
         'createdAt',
         'deadline',
         'open',
@@ -38,10 +38,10 @@ const getUserSurveys = async (req, res) => {
         return {
           surveyId: survey.id,
           title: survey.title,
-          open: survey.open, // 여기에 open 상태를 결정하는 로직 추가
-          imageUrl: survey.mainImageUrl,
+          open: survey.open,
+          mainImageUrl: survey.mainImageUrl || null,
           createdAt: survey.createdAt,
-          deadline: survey.deadline, // 여기에 마감일 결정 로직 추가
+          deadline: survey.deadline,
           attendedCount: attendedCount,
         };
       }),
