@@ -59,8 +59,16 @@ const getResultsByResponses = async (req, res) => {
           (q) => q.id === answer.questionId,
         );
         if (questionIndex !== -1) {
-          userAnswersMap[answer.userId].responses[questionIndex] =
-            answer.subContent || choiceMap[answer.objContent]; //objContent 에 해당하는 Choice의  content 반환
+          // responses[questionIndex]가 배열인지 확인하고, 답변 추가
+          if (
+            !Array.isArray(
+              userAnswersMap[answer.userId].responses[questionIndex],
+            )
+          ) {
+            userAnswersMap[answer.userId].responses[questionIndex] = [];
+          }
+          const response = answer.subContent || choiceMap[answer.objContent];
+          userAnswersMap[answer.userId].responses[questionIndex].push(response);
         }
       });
     });
