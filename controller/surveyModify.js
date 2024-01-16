@@ -1,10 +1,12 @@
+// surveyModify.js
 const { sequelize } = require('../models');
 const { Survey, Question, Choice, Answer } = require('../models');
+const { uploadFileToS3 } = require('./imageUpload'); // 필요에 따라 경로를 조정하세요
 
-const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
+const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
   try {
-    const surveyId = req.params.id;
     const {
+      id: surveyId,
       userId,
       title,
       description,
@@ -15,31 +17,23 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
       mainImageUrl,
       deadline,
       questions,
-    } = req.body;
+      //questionImageFiles, // 질문 이미지 파일 배열
+    } = surveyData;
 
-    console.log('Request body:', req.body); // 요청 본문 로그 찍기
-
-    // 이 설문을 작성한 사람인지 확인
+    // 설문 조사의 소유권과 권한을 확인
     const survey = await Survey.findByPk(surveyId);
-
     if (!survey || survey.userId !== userId) {
       return res
         .status(404)
         .json({ message: userId + '는 설문을 작성한 사람이 아닙니다.' });
     }
 
-    // 접근 권한이 있는지 확인
     if (survey.userId !== userId || open) {
       return res.status(403).json({ message: '접근 및 수정 권한이 없습니다.' });
     }
 
-    // 답변이 있는지 확인
-    const answersCount = await Answer.count({
-      where: {
-        userId: userId,
-      },
-    });
-
+    // 기존 답변의 존재 여부 확인
+    const answersCount = await Answer.count({ where: { userId: userId } });
     if (answersCount > 0) {
       return res
         .status(403)
@@ -47,7 +41,18 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
     }
 
     await sequelize.transaction(async (t) => {
+      console.log('트랜잭션 시작');
+
+      // 메인 이미지 업로드/업데이트 처리
+      let updatedMainImageUrl = mainImageUrl;
+      if (surveyData.mainImageFile) {
+        console.log('메인 이미지 업로드 중');
+        updatedMainImageUrl = await uploadFileToS3(surveyData.mainImageFile);
+        console.log('메인 이미지 업로드 완료: ', updatedMainImageUrl);
+      }
+
       // 설문 정보 업데이트
+      console.log('설문 정보 업데이트 중');
       await survey.update(
         {
           title,
@@ -56,35 +61,51 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
           font,
           color,
           buttonStyle,
-          mainImageUrl,
+          mainImageUrl: updatedMainImageUrl,
           deadline,
         },
         { transaction: t },
       );
+      console.log('설문 정보 업데이트 완료');
 
-      // 기존 질문들을 삭제하고 새로운 질문들을 추가합니다.
+      // 기존 질문들 삭제 후 재생성
+      console.log('기존 질문 삭제 중');
       await Question.destroy({
         where: { surveyId: surveyId },
         transaction: t,
-        force: true, // 하드 삭제를 적용
+        force: true,
       });
+      console.log('기존 질문 삭제 완료');
 
       for (const question of questions) {
-        // 새로운 질문 추가
+        if (
+          ![
+            'MULTIPLE_CHOICE',
+            'SUBJECTIVE_QUESTION',
+            'CHECKBOX',
+            'DROPDOWN',
+          ].includes(question.type)
+        ) {
+          throw new Error('Invalid question type');
+        }
+
+        // 새로운 질문 생성
+        const imageUrl = question.imageUrl || ''; // 이미지 URL을 설정합니다.
+
         const newQuestion = await Question.create(
           {
             surveyId,
             type: question.type,
             content: question.content,
-            imageUrl: question.imageUrl,
+            imageUrl: imageUrl,
           },
           { transaction: t },
         );
 
-        // 체크박스, 다중 선택, 드롭다운 질문의 경우 선택지 추가
-        if (
-          ['CHECKBOX', 'MULTIPLE_CHOICE', 'DROPDOWN'].includes(question.type)
-        ) {
+        console.log(`questionId: ${newQuestion.id}`);
+        console.log(`imageUrl for questionId ${newQuestion.id}: ${imageUrl}`);
+
+        if (question.choices && question.choices.length > 0) {
           for (const choice of question.choices) {
             await Choice.create(
               {
@@ -102,9 +123,6 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
     });
 
     const updatedSurvey = await Survey.findByPk(surveyId);
-
-    console.log('Survey Update Result:', updatedSurvey);
-
     res.status(200).json({ message: '설문 수정 완료', updatedSurvey });
   } catch (error) {
     console.error('설문 수정 오류:', error.message);

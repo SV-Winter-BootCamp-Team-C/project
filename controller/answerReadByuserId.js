@@ -42,7 +42,7 @@ const getAnswerByuserId = async (req, res) => {
       font: survey.font,
       color: survey.color,
       buttonStyle: survey.buttonStyle,
-      mainImageUrl: survey.mainImageUrl,
+      mainImageUrl: survey.mainImageUrl || null, // 메인 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 설정
       createAt: survey.createdAt,
       deadline: survey.deadline,
       questions: survey.Questions.map((question) => {
@@ -50,7 +50,7 @@ const getAnswerByuserId = async (req, res) => {
           questionId: question.id,
           type: question.type,
           content: question.content,
-          imageUrl: question.imageUrl,
+          imageUrl: question.imageUrl || null, // 질문 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 설정
         };
 
         // 'SUBJECTIVE_QUESTION'이 아닌 경우에만 choices와 objContent 추가
@@ -74,6 +74,7 @@ const getAnswerByuserId = async (req, res) => {
         return questionResponse;
       }),
     };
+
     res.json(responseData);
   } catch (err) {
     console.error(err);

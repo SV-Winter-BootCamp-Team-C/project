@@ -38,6 +38,9 @@ const getSurveyById = async (req, res) => {
       return res.status(404).json({ message: '설문을 찾을 수 없습니다.' });
     }
 
+    // 이미지 URL이 null 또는 빈 문자열("")인 경우 null로 설정
+    const mainImageUrl = survey.mainImageUrl || null;
+
     // 최종 결과 구성
     const result = {
       surveyId: survey.id,
@@ -47,7 +50,7 @@ const getSurveyById = async (req, res) => {
       font: survey.font,
       color: survey.color,
       buttonStyle: survey.buttonStyle,
-      mainImageUrl: survey.mainImageUrl,
+      mainImageUrl: mainImageUrl,
       createdAt: survey.createdAt,
       deadline: survey.deadline,
       questions: survey.Questions.map((question) => {
