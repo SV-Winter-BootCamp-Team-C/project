@@ -12,7 +12,7 @@ import { AnswerData } from '@/types/answerData';
 
 function ResultPage() {
   const [searchParams] = useSearchParams();
-  const surveyId = searchParams.get('id');
+  const surveyId = Number(searchParams.get('id'));
 
   const [currentSwitch, setCurrentSwitch] = useState<'question' | 'answer'>('question');
 
@@ -22,13 +22,13 @@ function ResultPage() {
 
   const { data: questionData } = useQuery<QuestionResultForm, AxiosError>({
     queryKey: ['questionResult', surveyId],
-    queryFn: () => getQuestionResultAPI(surveyId as string),
+    queryFn: () => getQuestionResultAPI(surveyId),
     meta: { errorMessage: '설문지 결과를 불러오는 중 오류가 발생했습니다.' },
   });
 
   const { data: answerData } = useQuery<AnswerData, AxiosError>({
     queryKey: ['answerResult', surveyId],
-    queryFn: () => getAnswerResultAPI(surveyId as string),
+    queryFn: () => getAnswerResultAPI(surveyId),
     meta: { errorMessage: '설문지 결과를 불러오는 중 오류가 발생했습니다.' },
   });
 
@@ -44,7 +44,7 @@ function ResultPage() {
           {currentSwitch === 'question' ? (
             <Question questions={questionData?.questions as QuestionData[]} />
           ) : (
-            <Response list={answerData?.list || { head: [], rows: [] }} />
+            <Response title={answerData?.title as string} list={answerData?.list || { head: [], rows: [] }} />
           )}
         </div>
       </div>

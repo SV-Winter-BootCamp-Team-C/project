@@ -9,7 +9,7 @@ export function TextButton({ text, onClick }: ButtonProps) {
   return (
     <button
       type="button"
-      className="w-[6.25rem] h-9 bg-purple leading-4 rounded-[0.625rem] text-base text-white cltext-base focus:outline-none hover:bg-darkPurple transition duration-300 ease-in-out"
+      className="w-[6.25rem] h-9 bg-purple leading-4 rounded-[0.625rem] text-base text-white focus:outline-none hover:bg-darkPurple transition duration-300 ease-in-out"
       onClick={onClick}
     >
       {text}
