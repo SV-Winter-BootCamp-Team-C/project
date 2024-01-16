@@ -74,6 +74,7 @@ const searchSurveyByTitle = async (req, res) => {
         return {
           ...survey.toJSON(),
           isAttend,
+          mainImageUrl: survey.mainImageUrl || null, // 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 처리
         };
       }),
     );

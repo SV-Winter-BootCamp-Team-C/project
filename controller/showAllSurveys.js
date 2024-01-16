@@ -56,11 +56,13 @@ const showAllSurveys = async (req, res) => {
         ],
       });
 
+      const mainImageUrl = survey.mainImageUrl || null; // 기본 이미지 URL 또는 다른 처리 방식을 여기에 추가
+
       result.push({
         surveyId: survey.id,
         title: survey.title,
         open: survey.open,
-        mainImageUrl: survey.mainImageUrl,
+        mainImageUrl: mainImageUrl,
         createdAt: survey.createdAt,
         updatedAt: survey.updatedAt,
         deadline: survey.deadline,
