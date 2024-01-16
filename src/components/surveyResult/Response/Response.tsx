@@ -1,19 +1,38 @@
+import { ListData } from '@/types/answerData';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-function Response() {
-  const columns: GridColDef[] = [
-    { field: '날짜', headerName: '날짜', width: 200 },
-    { field: 'Q1', headerName: 'Q1', width: 150 },
-    { field: 'Q2', headerName: 'Q2', width: 150 },
-    { field: 'Q3', headerName: 'Q3', width: 150 },
-    { field: 'Q4', headerName: 'Q4', width: 150 },
-    { field: 'Q5', headerName: 'Q5', width: 150 },
-  ];
+interface ResponseProps {
+  list: ListData;
+}
 
-  const rows = [
-    { id: 1, 날짜: '2020.2.12 12:00', Q1: 'Jon', Q2: 14, Q3: 14, Q4: 14, Q5: 14 },
-    { id: 2, 날짜: '2020.2.12 12:00', Q1: 'Jon', Q2: 14, Q3: 14, Q4: 14, Q5: 14 },
-  ];
+interface Row {
+  id: number;
+  날짜: string;
+  [key: string]: string | number;
+}
+
+function Response({ list }: ResponseProps) {
+  const columns: GridColDef[] = [{ field: '날짜', headerName: '날짜', width: 200 }];
+
+  list.head.forEach((question, index) => {
+    columns.push({
+      field: `Q${index + 1}`,
+      headerName: `Q${index + 1}. ${question}`,
+      width: 150,
+    });
+  });
+
+  const rows = list.rows.map((row, index) => {
+    const newRow: Row = { id: index + 1, 날짜: row.createdAt };
+
+    row.responses.forEach((response, i) => {
+      newRow[`Q${i + 1}`] = response;
+    });
+
+    return newRow;
+  });
+  console.log(rows);
+
   return (
     <div>
       <button

@@ -23,7 +23,7 @@ export type ExtendedQuestionData = QuestionData & {
   subContent?: string;
 };
 
-type Questions = QuestionData[] | ExtendedQuestionData[];
+export type Questions = QuestionData[] | ExtendedQuestionData[];
 
 export type QuestionDataForm = {
   surveyId: number;
@@ -35,6 +35,17 @@ export type QuestionDataForm = {
   buttonStyle: 'angled' | 'smooth' | 'round'; // 각지게, 부드럽게, 동글게
   mainImageUrl: string;
   createdAt: string;
+  deadline: string;
+  questions: Questions;
+};
+
+export type QuestionResultForm = {
+  surveyId: number;
+  userName: string;
+  title: string;
+  open: boolean;
+  createdAt: string;
+  updatedAt: string;
   deadline: string;
   questions: Questions;
 };

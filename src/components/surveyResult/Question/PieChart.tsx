@@ -3,8 +3,8 @@ import { QuestionData } from '@/types/questionData';
 import Chart from 'react-apexcharts';
 
 interface PieChartProps {
-  question: QuestionData;
   index: number;
+  question: QuestionData;
 }
 
 const QUESTION_TYPE = {
@@ -13,12 +13,12 @@ const QUESTION_TYPE = {
   DROPDOWN: '드롭다운',
 };
 
-function PieChart({ question, index }: PieChartProps) {
+function PieChart({ index, question }: PieChartProps) {
   const getQuestionType = (type: string): string => {
     return QUESTION_TYPE[type as keyof typeof QUESTION_TYPE];
   };
 
-  const chartSeries = question.choices?.map((choice) => choice.count);
+  const chartSeries = question.choices?.map((choice) => choice.count) || [];
 
   const chartOptions = {
     chart: {
@@ -94,7 +94,11 @@ function PieChart({ question, index }: PieChartProps) {
         )}
 
         <div className="py-9">
-          <Chart options={chartOptions as any} series={chartSeries as number[]} type="donut" />
+          {chartSeries.length > 0 ? (
+            <Chart options={chartOptions as any} series={chartSeries as number[]} type="donut" />
+          ) : (
+            <p className="text-base text-gray">설문 결과가 없습니다.</p>
+          )}
         </div>
       </div>
     </div>

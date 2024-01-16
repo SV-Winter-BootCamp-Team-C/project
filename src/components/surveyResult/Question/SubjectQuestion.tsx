@@ -4,11 +4,11 @@ import { QuestionData } from '@/types/questionData';
 import t from '@/assets/t.svg';
 
 interface SubjectQuestionProps {
-  question: QuestionData;
   index: number;
+  question: QuestionData;
 }
 
-function SubjectQuestion({ question, index }: SubjectQuestionProps) {
+function SubjectQuestion({ index, question }: SubjectQuestionProps) {
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white border border-purple"
@@ -41,18 +41,24 @@ function SubjectQuestion({ question, index }: SubjectQuestionProps) {
             />
           </div>
         )}
-        <Scrollbars style={{ minHeight: 205, marginBottom: 15 }}>
-          <div className="w-full px-12 pt-6 pb-3 max-h-50">
-            {question.answers?.map((answer) => (
-              <div>
-                <div key={answer.answerId} className="flex items-center">
-                  <img src={t} alt="t" className="w-3 h-3" />
-                  <p className="pl-4 text-xs leading-3 text-black">{answer.content}</p>
-                </div>
+        <Scrollbars style={{ minHeight: 200, marginBottom: 15 }}>
+          <div className="w-full px-12 pt-6 pb-3 max-h-[22.5rem]">
+            {question.answers && question.answers.length > 0 ? (
+              question.answers?.map((answer) => (
+                <div key={answer.answerId}>
+                  <div className="flex items-center">
+                    <img src={t} alt="t" className="w-3 h-3" />
+                    <p className="pl-4 text-xs leading-3 text-black">{answer.content}</p>
+                  </div>
 
-                <div className="h-[0.5px] bg-darkGray my-2" />
+                  <div className="h-[0.5px] bg-darkGray my-2" />
+                </div>
+              ))
+            ) : (
+              <div className="flex items-center justify-center pt-5">
+                <p className="text-base text-gray">설문 결과가 없습니다.</p>
               </div>
-            ))}
+            )}
           </div>
         </Scrollbars>
       </div>
