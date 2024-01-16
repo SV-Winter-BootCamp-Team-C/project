@@ -108,7 +108,7 @@ const ModifySurveyWithQuestionsAndChoices = async (req, res) => {
     res.status(200).json({ message: '설문 수정 완료', updatedSurvey });
   } catch (error) {
     console.error('설문 수정 오류:', error.message);
-    res.status(500).json({ message: '설문 수정 오류', error: error.message });
+    res.status(404).json({ message: '설문 수정 오류', error: error.message });
   }
 };
 
