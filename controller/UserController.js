@@ -80,11 +80,11 @@ const isEmailRepeated = async (req, res) => {
 };
 const modifyPassword = async (req, res) => {
   try {
-    const { user_id, password } = req.body;
+    const { userId, password } = req.body;
 
     const user = await User.findOne({
       where: {
-        id: user_id,
+        id: userId,
       },
     });
 

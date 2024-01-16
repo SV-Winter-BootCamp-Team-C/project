@@ -30,7 +30,7 @@ const surveyResult = async (req, res) => {
     });
 
     if (!survey) {
-      return res.status(404).json({ message: 'Survey not found' });
+      return res.status(404).json({ message: '작성된 설문지가 없습니다.' });
     }
 
     const response = {
@@ -85,8 +85,13 @@ const surveyResult = async (req, res) => {
 
     return res.status(200).json(response);
   } catch (error) {
+    if (error.name === 'TimeoutError') {
+      return res.status(408).json({
+        message: '요청 시간이 초과되었습니다.',
+      });
+    }
     console.error(error);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: '데이터 로드에 실패하였습니다.' });
   }
 };
 
