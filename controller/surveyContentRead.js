@@ -63,7 +63,9 @@ const getSurveyById = async (req, res) => {
         };
         // 질문의 유형이 'SUBJECTIVE_QUESTION'가 아닐 경우에만 choices 추가
         if (question.type !== 'SUBJECTIVE_QUESTION') {
-          questionResponse.choices = question.Choices.map((choice) => ({
+          questionResponse.choices = question.Choices.sort(
+            (a, b) => a.id - b.id,
+          ).map((choice) => ({
             choiceId: choice.id,
             option: choice.option,
           }));
