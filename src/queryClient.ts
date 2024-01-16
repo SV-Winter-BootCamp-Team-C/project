@@ -16,7 +16,6 @@ export const getClient = new QueryClient({
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24시간
       staleTime: 1000 * 60, // 1분
-      throwOnError: true,
       refetchOnMount: false,
       refetchOnReconnect: false,
       refetchOnWindowFocus: false,
