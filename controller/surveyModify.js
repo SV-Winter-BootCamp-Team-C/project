@@ -20,24 +20,42 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
       //questionImageFiles, // 질문 이미지 파일 배열
     } = surveyData;
 
-    // 설문 조사의 소유권과 권한을 확인
+    // 요청하는 surveyId가 없을 경우
     const survey = await Survey.findByPk(surveyId);
-    if (!survey || survey.userId !== userId) {
+    if (!survey) {
       return res
         .status(404)
+        .json({ message: '요청하신 설문이 존재하지 않습니다.' });
+    }
+
+    // userId가 작성한 사람의 것이 아닌 경우
+    if (survey.userId !== userId) {
+      return res
+        .status(403)
         .json({ message: userId + '는 설문을 작성한 사람이 아닙니다.' });
     }
 
-    if (survey.userId !== userId || open) {
-      return res.status(403).json({ message: '접근 및 수정 권한이 없습니다.' });
-    }
-
-    // 기존 답변의 존재 여부 확인
-    const answersCount = await Answer.count({ where: { userId: userId } });
-    if (answersCount > 0) {
+    // 설문의 열람이 false가 아닌 경우
+    if (open) {
       return res
         .status(403)
-        .json({ message: '이미 답변이 있는 설문은 수정할 수 없습니다.' });
+        .json({ message: '설문이 잠겨있어 접근 및 수정 권한이 없습니다.' });
+    }
+
+    // 이미 설문에 답변이 존재하는 경우
+    for (const question of questions) {
+      const answersCount = await Answer.count({
+        where: {
+          userId: userId,
+          questionId: question.questionId,
+        },
+      });
+
+      if (answersCount > 0) {
+        return res
+          .status(403)
+          .json({ message: '이미 답변이 있는 설문은 수정할 수 없습니다.' });
+      }
     }
 
     await sequelize.transaction(async (t) => {
@@ -126,7 +144,7 @@ const ModifySurveyWithQuestionsAndChoices = async (surveyData, res) => {
     res.status(200).json({ message: '설문 수정 완료', updatedSurvey });
   } catch (error) {
     console.error('설문 수정 오류:', error.message);
-    res.status(404).json({ message: '설문 수정 오류', error: error.message });
+    res.status(500).json({ message: '설문 수정 오류', error: error.message });
   }
 };
 
