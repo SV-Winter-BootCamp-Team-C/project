@@ -487,78 +487,40 @@ paths:
 
   /api/surveys/{id}:
     put:
-      summary: 설문지 수정
+      summary: 수정된 설문 조사와 이미지를 업로드합니다.
       tags:
         - PUT
+      description: 메인 이미지와 질문 이미지를 포함한 수정된 설문 데이터를 업로드합니다.
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: integer
-          description: serveyId
+          description: 수정할 설문의 ID.
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  description: 사용자 ID
-                title:
+                survey:
                   type: string
-                  description: 설문조사 제목
-                open:
-                  type: boolean
-                  description: 설문 공개 여부
-                font:
+                  description: JSON 형식의 설문 데이터 문자열.
+                mainImage:
                   type: string
-                  description: 폰트 설정
-                color:
-                  type: string
-                  description: 설문조사 색깔
-                buttonStyle:
-                  type: string
-                  description: 버튼 스타일
-                mainImageUrl:
-                  type: string
-                  description: 메인 이미지 URL
-                deadline:
-                  type: string
-                  format: date-time
-                  description: 설문조사 마감 기간
-                questions:
+                  format: binary
+                  description: 메인 이미지 파일.
+                questionImages:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: 질문 타입 (MULTIPLE_CHOICE, SUBJECTIVE_QUESTION, CHECKBOX, DROPDOWN)
-                        enum:
-                          - MULTIPLE_CHOICE
-                          - SUBJECTIVE_QUESTION
-                          - CHECKBOX
-                          - DROPDOWN
-                      content:
-                        type: string
-                        description: 질문 내용
-                      imageUrl:
-                        type: string
-                        description: 질문 관련 이미지 URL
-                      choices:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            option:
-                              type: string
-                              description: 선택지 내용
+                    type: string
+                    format: binary
+                  description: 질문 이미지 파일 배열.
       responses:
         '200':
-          description: 설문 수정 완료
+          description: 설문 수정이 완료되었습니다.
           content:
             application/json:
               schema:
@@ -566,41 +528,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 성공 메시지
-                  updatedSurvey:
-                    type: object
-                    properties:
-                      userId:
-                        type: integer
-                        description: 사용자 ID
-                      title:
-                        type: string
-                        description: 설문조사 제목
-                      open:
-                        type: boolean
-                        description: 설문 공개 여부
-                      font:
-                        type: string
-                        description: 폰트 설정
-                      color:
-                        type: string
-                        description: 설문조사 색깔
-                      buttonStyle:
-                        type: string
-                        description: 버튼 스타일
-                      mainImageUrl:
-                        type: string
-                        description: 메인 이미지 URL
-                      deadline:
-                        type: string
-                        format: date-time
-                        description: 설문조사 마감 기간
-                      updatedAt:
-                        type: string
-                        format: date-time
-                        description: 설문 수정 시간
-        '403':
-          description: 접근 및 수정 권한이 없습니다.
+                    example: 설문 수정 완료
+                  surveyId:
+                    type: integer
+                    example: 9
+        '400':
+          description: 요청이 올바르지 않아 설문 수정에 실패했습니다.
           content:
             application/json:
               schema:
@@ -608,19 +541,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 오류 메시지
-        '404':
-          description: 설문을 찾을 수 없습니다.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
+                    example: Invalid survey data
+                  error:
                     type: string
-                    description: 오류 메시지
+                    example: No survey data provided
         '500':
-          description: 설문 수정 오류
+          description: 서버 에러로 인해 설문 수정에 실패했습니다.
           content:
             application/json:
               schema:
@@ -628,7 +554,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    description: 오류 메시지
+                    example: 설문 수정 오류
+                  error:
+                    type: string
+                    example: Internal server error
+
     post:
       tags:
         - POST
