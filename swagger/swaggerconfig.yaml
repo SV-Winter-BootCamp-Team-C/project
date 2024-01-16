@@ -98,39 +98,39 @@ paths:
               schema:
                 type: object
                 properties:
-                  main_url:
+                  mainImageUrl:
                     type: string
                   title:
                     type: string
                   description:
                     type: string
-                  create_at:
+                  createdAt:
                     type: string
                     format: date-time
                   deadline:
                     type: string
                     format: date-time
-                  user_id:
-                    type: integer
-                  totalPages:
+                  userId:
                     type: integer
                   questions:
                     type: array
                     items:
                       type: object
                       properties:
-                        question_id:
+                        questionId:
                           type: integer
                         content:
                           type: string
-                        image_url:
+                        imageUrl:
                           type: string
-                        sub_content:
+                        subContent:
                           type: string
-                        obj_content:
+                        objContent:
                           type: array
                           items:
                             type: string
+        '400':
+          description: User not found
         '404':
           description: Survey not found
         '500':
@@ -678,7 +678,39 @@ paths:
                   surveyId:
                     type: integer
                     description: 생성된 설문조사의 ID
-        '408':
+        '400':
+          description: 잘못된 데이터 입력
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '데이터를 찾을 수 없습니다.'
+
+        '404':
+          description: 잘못된 데이터 입력
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '설문에 해당 질문이 없습니다.'
+        '409':
+          description: 중복된 데이터 입력
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '하나만 선택해주세요.'
+
+        '500':
           description: 요청 실패
           content:
             application/json:

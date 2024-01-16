@@ -1,23 +1,29 @@
 const { sequelize } = require('../models');
-const { Question, Answer, Choice } = require('../models');
+const { Survey, Question, Answer, Choice } = require('../models');
 
 const createAnswer = async (req, res) => {
   const t = await sequelize.transaction(); // 트랜잭션 시작
   const surveyId = req.params.id;
-
   try {
     const { userId, questions } = req.body;
-
+    const survey = await Survey.findByPk(surveyId);
+    if (!survey) {
+      return res.status(400).json({ message: '설문이 존재하지 않습니다.' });
+    }
     for (const question of questions) {
       // 질문의 타입을 확인
       const questionData = await Question.findByPk(question.questionId, { t });
       if (!questionData) {
         return res
           .status(400)
-          .send(`Question with ID ${question.questionId} not found`);
+          .json({
+            message: `Question with ID ${question.questionId} not found`,
+          });
       }
       if (questionData.surveyId != surveyId) {
-        return res.status(400).send(`설문에 해당 질문이 없습니다.`);
+        return res
+          .status(404)
+          .json({ message: `설문에 해당 질문이 없습니다.` });
       }
 
       // 질문 타입에 따라 답변 저장
@@ -36,12 +42,13 @@ const createAnswer = async (req, res) => {
           if (!option) {
             return res
               .status(400)
-              .send(`Choice with ID ${objContentItem} not found`);
+              .json({ message: `Choice with ID ${objContentItem} not found` });
           }
           if (option.questionId != question.questionId) {
-            return res.status(400).send(`질문에 해당 선택지가 없습니다.`);
+            return res
+              .status(404)
+              .json({ message: `질문에 해당 선택지가 없습니다.` });
           }
-
           // 같은 레코드 있는지 확인
           const existingAnswer = await Answer.findOne({
             where: {
@@ -76,7 +83,7 @@ const createAnswer = async (req, res) => {
             questionData.type !== 'CHECKBOX' &&
             question.objContent.length > 1
           ) {
-            return res.status(400).send(`하나만 선택해주세요.`);
+            return res.status(409).json({ message: `하나만 선택해주세요.` });
           }
           if (
             !existingAnswer &&

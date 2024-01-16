@@ -3,7 +3,10 @@ const { Survey, User, Question, Answer, Choice } = require('../models');
 const getAnswerByuserId = async (req, res) => {
   try {
     const { userId, surveyId } = req.params;
-
+    const user = await Survey.findByPk(userId);
+    if (!user) {
+      return res.status(400).send('User not found');
+    }
     const survey = await Survey.findByPk(surveyId, {
       include: [
         {
