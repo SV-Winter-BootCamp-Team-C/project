@@ -510,19 +510,20 @@ paths:
         500:
           description: 서버 오류가 발생했을 때 반환합니다.
 
+  paths:
   /api/surveys/{id}:
     put:
-      summary: 수정된 설문 조사와 이미지를 업로드합니다.
+      summary: 설문 조사 데이터와 이미지 수정
       tags:
         - PUT
-      description: 메인 이미지와 질문 이미지를 포함한 수정된 설문 데이터를 업로드합니다.
+      description: 수정된 설문 데이터와 이미지를 업로드합니다.
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: integer
-          description: 수정할 설문의 ID.
+          description: 수정할 설문의 ID
       requestBody:
         required: true
         content:
@@ -532,20 +533,20 @@ paths:
               properties:
                 survey:
                   type: string
-                  description: JSON 형식의 설문 데이터 문자열.
-                mainImage:
+                  description: JSON 문자열 형식의 설문 데이터
+                mainImageUrl:
                   type: string
                   format: binary
-                  description: 메인 이미지 파일.
-                questionImages:
+                  description: 메인 이미지 파일
+                imageUrl:
                   type: array
                   items:
                     type: string
                     format: binary
-                  description: 질문 이미지 파일 배열.
+                  description: 질문 이미지 파일 배열
       responses:
         '200':
-          description: 설문 수정이 완료되었습니다.
+          description: 설문 수정 성공
           content:
             application/json:
               schema:
@@ -553,12 +554,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 설문 수정 완료
+                    example: 설문이 성공적으로 수정되었습니다
                   surveyId:
                     type: integer
                     example: 9
         '400':
-          description: 요청이 올바르지 않아 설문 수정에 실패했습니다.
+          description: 잘못된 요청으로 설문 수정 실패
           content:
             application/json:
               schema:
@@ -566,12 +567,32 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Invalid survey data
+                    example: 잘못된 설문 데이터
                   error:
                     type: string
-                    example: No survey data provided
+                    example: 설문 데이터가 제공되지 않았거나 잘못된 질문 유형
+        '403':
+          description: 접근 또는 수정이 금지됨
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 무단 사용자 또는 설문이 잠겨 있거나 설문에 답변이 있습니다
+        '404':
+          description: 요청한 설문이 존재하지 않음
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 요청한 설문이 존재하지 않습니다
         '500':
-          description: 서버 에러로 인해 설문 수정에 실패했습니다.
+          description: 서버 오류로 설문 수정 실패
           content:
             application/json:
               schema:
@@ -582,7 +603,7 @@ paths:
                     example: 설문 수정 오류
                   error:
                     type: string
-                    example: Internal server error
+                    example: 내부 서버 오류
 
     post:
       tags:
