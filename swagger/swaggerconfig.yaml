@@ -827,7 +827,7 @@ paths:
         '404':
           description: '존재하지 않는 메일입니다.'
   /api/users/{email}/check-email:
-    get:
+    post:
       summary: 이메일 중복 확인
       tags:
         - USER
