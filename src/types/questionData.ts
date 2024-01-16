@@ -26,7 +26,7 @@ export type ExtendedQuestionData = QuestionData & {
 type Questions = QuestionData[] | ExtendedQuestionData[];
 
 export type QuestionDataForm = {
-  id: number;
+  surveyId: number;
   userName?: string;
   title: string;
   description: string;
