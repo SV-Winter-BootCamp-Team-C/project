@@ -16,8 +16,8 @@ import Loading from '@/components/common/Loading';
 
 function ResponseForm() {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const surveyId = id ? parseInt(id, 10) : 0; // id가 없는 경우 0으로 초기화;
+  const params = useParams<{ surveyId?: string }>();
+  const surveyId = params.surveyId ? parseInt(params.surveyId, 10) : 0;
   const myId = useAuthStore((state) => state.userId);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);

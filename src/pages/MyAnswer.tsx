@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import StaticCheckBox from '@/components/staticresponse/StaticCheckBox';
 import StaticMultipleChoice from '@/components/staticresponse/StaticMultipleChoice';
@@ -6,88 +5,86 @@ import { TextButton } from '@/components/common/Button';
 import StaticSubjective from '@/components/staticresponse/StaticSubjective';
 import StaticDropDown from '@/components/staticresponse/StaticDropDown';
 import { QuestionDataForm } from '@/types/questionData';
-
-const testData: QuestionDataForm = {
-  id: 1,
-  userName: '소정',
-  title: '맞춰봐',
-  description: '여기에 설문 설명을 입력하세요',
-  font: 'sans-serif',
-  color: '#000000',
-  buttonStyle: 'round',
-  mainImageUrl: 'https://i.pinimg.com/564x/89/df/e4/89dfe4af08bbb2d64aef7988170cba94.jpg',
-  createdAt: '2022.03.22',
-  deadline: '2022.03.30',
-  questions: [
-    {
-      questionId: 1,
-      type: 'MULTIPLE_CHOICE',
-      content: '가장 좋아하는 계절은?',
-      imageUrl: '',
-      choices: [
-        { choiceId: 1, option: '봄' },
-        { choiceId: 2, option: '여름' },
-        { choiceId: 3, option: '가을' },
-        { choiceId: 4, option: '겨울' },
-      ],
-      objContent: [1],
-    },
-
-    {
-      questionId: 2,
-      type: 'SUBJECTIVE_QUESTION',
-      content: '당신에게 여행이란 무엇인가요?',
-      imageUrl: 'https://i.pinimg.com/564x/89/df/e4/89dfe4af08bbb2d64aef7988170cba94.jpg',
-      subContent: '여행은 좋은 것이다.',
-    },
-    {
-      questionId: 3,
-      type: 'CHECKBOX',
-      content: '좋아하는 과일을 선택하세요.',
-      imageUrl: '',
-      choices: [
-        { choiceId: 1, option: '바나나' },
-        { choiceId: 2, option: '사과' },
-        { choiceId: 3, option: '배' },
-      ],
-      objContent: [1, 3],
-    },
-    {
-      questionId: 4,
-      type: 'DROPDOWN',
-      content: '옵션을 선택해주세요.',
-      imageUrl: '',
-      choices: [
-        { choiceId: 1, option: '옵션1' },
-        { choiceId: 2, option: '옵션2' },
-        { choiceId: 3, option: '옵션3' },
-      ],
-      objContent: [3],
-    },
-  ],
-};
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { myAnswerAPI } from '@/api/myanswer';
+import { useAuthStore } from '@/store/AuthStore';
+import Loading from '@/components/common/Loading';
+import Alert from '@/components/common/Alert';
 
 function MyAnswer() {
-  const [surveyData] = useState(testData);
+  const navigate = useNavigate();
+  const params = useParams<{ userId?: string; surveyId?: string }>();
+  const userId = params.userId ? parseInt(params.userId, 10) : 0;
+  const surveyId = params.surveyId ? parseInt(params.surveyId, 10) : 0;
+  const myId = useAuthStore((state) => state.userId);
+
+  // 데이터 로딩 및 에러 상태 처리
+  const {
+    data: surveyData,
+    isLoading,
+    isError,
+  } = useQuery<QuestionDataForm, AxiosError>({
+    queryKey: ['surveyData', surveyId],
+    queryFn: () => myAnswerAPI(userId, surveyId),
+  });
+
+  // 데이터 로딩 중인 경우
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  // 에러 발생 시 처리
+  if (isError || !surveyData) {
+    return (
+      <Alert
+        type="error"
+        message="설문 데이터를 불러오는 데 실패했습니다."
+        buttonText="확인"
+        buttonClick={() => navigate('/all')}
+      />
+    );
+  }
+
+  // 현재 사용자의 ID와 가져온 데이터의 ID가 일치하는지 확인
+  if (userId !== myId) {
+    // ID가 다른 경우, 사용자에게 메시지를 보여주거나 다른 페이지로 리디렉션
+    return (
+      <Alert
+        type="error"
+        message="이 응답에 대한 접근 권한이 없습니다."
+        buttonText="확인"
+        buttonClick={() => navigate('/all')}
+      />
+    );
+  }
 
   return (
-    <div className="relative flex mt-[2.25rem] ml-[0.1rem]">
+    <div
+      className="relative flex mt-[2.25rem] ml-[0.1rem]"
+      style={{
+        fontFamily: `${surveyData.font}`,
+      }}
+    >
       <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
         <div className="flex flex-col px-[8.75rem]">
-          {testData.mainImageUrl && (
+          {surveyData.mainImageUrl && (
             <img
-              src={testData.mainImageUrl}
+              src={surveyData.mainImageUrl}
               alt="Preview"
-              className="rounded-[1.25rem] border border-purple max-w-[50rem] mb-6"
-              style={{ boxShadow: '0 0 0.25rem 0.25rem rgba(145,141,202,0.25)' }}
+              className="rounded-[1.25rem] max-w-[50rem] my-6"
+              style={{
+                boxShadow: `0 0 0.25rem 0.25rem ${surveyData.color}40`,
+              }}
             />
           )}
           <div
-            className="flex flex-col mb-6 rounded-[1.25rem] bg-white border border-purple"
-            style={{ boxShadow: '0 0 0.25rem 0.25rem rgba(145,141,202,0.25)' }}
+            className="flex flex-col mb-6 rounded-[1.25rem] bg-white"
+            style={{ boxShadow: `0 0 0.25rem 0.25rem ${surveyData.color}40` }}
           >
             <div className="flex flex-col items-center justify-center">
-              <div className="w-[50rem] h-4 rounded-t-[1.25rem] bg-purple" />
+              <div className="w-[50rem] h-4 rounded-t-[1.25rem]" style={{ background: `${surveyData.color}` }} />
               <h1 className="text-[2rem] font-semibold text-center text-black mt-4">{surveyData.title}</h1>
             </div>
             <div className="flex flex-col mb-6">
@@ -101,30 +98,53 @@ function MyAnswer() {
               </div>
             </div>
           </div>
-          {surveyData.questions.map((question) => {
+
+          {surveyData.questions.map((question, index) => {
             switch (question.type) {
               case 'MULTIPLE_CHOICE':
                 return (
                   <div className="mb-6">
-                    <StaticMultipleChoice key={question.questionId} question={question} />
+                    <StaticMultipleChoice
+                      key={question.questionId}
+                      index={index + 1}
+                      question={question}
+                      color={surveyData.color}
+                      buttonStyle={surveyData.buttonStyle}
+                    />
                   </div>
                 );
               case 'SUBJECTIVE_QUESTION':
                 return (
                   <div className="mb-6">
-                    <StaticSubjective key={question.questionId} question={question} />
+                    <StaticSubjective
+                      key={question.questionId}
+                      index={index + 1}
+                      question={question}
+                      color={surveyData.color}
+                    />
                   </div>
                 );
               case 'CHECKBOX':
                 return (
                   <div className="mb-6">
-                    <StaticCheckBox key={question.questionId} question={question} />
+                    <StaticCheckBox
+                      key={question.questionId}
+                      index={index + 1}
+                      question={question}
+                      color={surveyData.color}
+                      buttonStyle={surveyData.buttonStyle}
+                    />
                   </div>
                 );
               case 'DROPDOWN':
                 return (
                   <div className="mb-6">
-                    <StaticDropDown key={question.questionId} question={question} />
+                    <StaticDropDown
+                      key={question.questionId}
+                      index={index + 1}
+                      question={question}
+                      color={surveyData.color}
+                    />
                   </div>
                 );
               default:
@@ -133,7 +153,7 @@ function MyAnswer() {
           })}
 
           <div className="flex items-center justify-center gap-3 mt-3 mb-9">
-            <TextButton text="나가기" onClick={() => {}} />
+            <TextButton text="나가기" onClick={() => navigate('/all')} />
           </div>
         </div>
       </Scrollbars>

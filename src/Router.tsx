@@ -29,8 +29,8 @@ const routerData: RouterElement[] = [
   { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: false, isNavbar: true },
   { id: 7, path: '/create', element: <Create />, withAuth: false, isNavbar: true },
   { id: 8, path: '/result/:id', element: <ResultPage />, withAuth: true, isNavbar: true }, // 설문 id
-  { id: 9, path: '/responseform/:id', element: <ResponseForm />, withAuth: false, isNavbar: true }, // 설문 id
-  { id: 10, path: '/myanswer', element: <MyAnswer />, withAuth: false, isNavbar: true },
+  { id: 9, path: '/responseform/:surveyId', element: <ResponseForm />, withAuth: false, isNavbar: true }, // 설문 id
+  { id: 10, path: '/:userId/myanswer/:surveyId', element: <MyAnswer />, withAuth: false, isNavbar: true },
 ];
 
 const Router = createBrowserRouter(
