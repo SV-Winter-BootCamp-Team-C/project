@@ -8,7 +8,7 @@ const getImageByAPI = async (req, res) => {
   try {
     const perPage = req.query.perPage || '5';
     const response = await axios.get(
-      `https://api.pexels.com/v1/search?query=${req.params.query}&per_page=${perPage}`,
+      `https://api.pexels.com/v1/search?query=${req.params.query}&per_page=${perPage}&locale=ko-KR`,
       {
         headers: {
           Authorization: PEXELS_API_KEY,
