@@ -44,5 +44,5 @@ jobs:
       - name: Docker build and push
         run: |
           echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-          docker build --platform linux/amd64 -t myusername/myrepo:${GITHUB_SHA::7} .
+          docker build --platform linux/amd64 -t myusername/myrepo:${GITHUB_SHA::7} ./backend
           docker push myusername/myrepo:${GITHUB_SHA::7}
