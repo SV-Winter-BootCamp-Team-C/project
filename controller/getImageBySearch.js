@@ -16,17 +16,13 @@ const getImageByAPI = async (req, res) => {
       },
     );
 
-    // 각 이미지에서 'id'와 'src.original' 필드만 추출하여 새 배열 생성
-    const photos = response.data.photos.map((photo) => ({
-      id: photo.id,
-      original: photo.src.original,
-    }));
+    // 각 이미지에서 'src.original' 필드만 추출하여 새 배열 생성
+    const imageUrl = response.data.photos.map((photo) => photo.src.original);
 
     // 필요한 데이터만 포함된 새로운 응답 객체 생성
     const modifiedResponse = {
-      photos: photos,
+      url: imageUrl,
     };
-
     res.json(modifiedResponse);
   } catch (error) {
     res.status(500).send(error.toString());
