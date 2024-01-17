@@ -1,6 +1,6 @@
 import { useQuery, useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import Alert from '@/components/common/Alert';
 import { Scrollbars } from 'react-custom-scrollbars-2';
@@ -16,8 +16,8 @@ import Loading from '@/components/common/Loading';
 
 function ResponseForm() {
   const navigate = useNavigate();
-  const params = useParams<{ surveyId?: string }>();
-  const surveyId = params.surveyId ? parseInt(params.surveyId, 10) : 0;
+  const [searchParams] = useSearchParams();
+  const surveyId = Number(searchParams.get('id'));
   const myId = useAuthStore((state) => state.userId);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -94,7 +94,12 @@ function ResponseForm() {
 
   if (showSuccess) {
     return (
-      <Alert type="success" message="제출에 성공하였습니다." buttonText="확인" buttonClick={() => navigate('/all')} />
+      <Alert
+        type="success"
+        message="제출에 성공하였습니다."
+        buttonText="확인"
+        buttonClick={() => window.location.replace('/all')}
+      />
     );
   }
 

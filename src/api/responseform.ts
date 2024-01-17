@@ -1,7 +1,7 @@
 import { restFetcher } from '@/queryClient';
-import { QuestionDataForm, ResponseSubmit } from '@/types/questionData';
+import { ResponseSubmit } from '@/types/questionData';
 
-export const responseformAPI = async (surveyId: number): Promise<QuestionDataForm> => {
+export const responseformAPI = async (surveyId: number) => {
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${surveyId}`,
