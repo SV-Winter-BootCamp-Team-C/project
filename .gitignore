@@ -1,0 +1,5 @@
+.env.test
+pqdata
+.DS_Store
+data
+.env
