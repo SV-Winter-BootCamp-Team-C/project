@@ -43,6 +43,6 @@ jobs:
       - run: npm run build --if-present
       - name: Docker build and push
         run: |
-          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-          docker build --platform linux/amd64 -t your-dockerhub-username/your-repo-name:${GITHUB_SHA::7} .
-          docker push your-dockerhub-username/your-repo-name:${GITHUB_SHA::7}
+          echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker build --platform linux/amd64 -t ssjojung/myrepo:${GITHUB_SHA::7} ./backend
+          docker push ssjojung/myrepo:${GITHUB_SHA::7}
