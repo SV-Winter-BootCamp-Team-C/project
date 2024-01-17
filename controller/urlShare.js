@@ -17,8 +17,8 @@ const sendSurveyEmailWithSurveyId = async (surveyId, emails) => {
         type: 'OAuth2',
         user: process.env.GMAIL_OAUTH_USER,
         clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
-        clientSecret: process.env.GAMIL_OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.GAMIL_OAUTH_REFRESH_TOKEN,
+        clientSecret: process.env.GMAIL_OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_OAUTH_REFRESH_TOKEN,
       },
     });
 
