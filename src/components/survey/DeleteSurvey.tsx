@@ -24,7 +24,7 @@ function DeleteSurvey({ surveyId, userId, onMutation }: DeleteSurveyProps) {
     mutationFn: () => deleteSurveyAPI(surveyId, userId),
     onSuccess: () => {
       setAlert({ type: 'success', message: '삭제되었습니다.' });
-      getClient.invalidateQueries({ queryKey: ['surveyData', surveyId] });
+      getClient.invalidateQueries({ queryKey: ['myForm', userId] });
     },
     onError: (error: AxiosError) => {
       let message = '오류가 발생했습니다.';
