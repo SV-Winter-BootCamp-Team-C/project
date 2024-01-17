@@ -54,17 +54,13 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     return icon || '';
   };
 
-  // 함수 선언을 사용하는 경우
   const handleShareClick = () => {
     setIsShareModalVisible(true);
   };
 
   const handleItemClick = (itemName: string, sId: number) => {
-    if (itemName === '분석') {
-      navigate(`/result?id=${sId}`);
-    } else if (itemName === '공유') {
-      handleShareClick(); // '공유'를 클릭했을 때 ShareMailModal을 표시
-    }
+    if (itemName === '공유') handleShareClick();
+    if (itemName === '분석') navigate(`/result?id=${sId}`);
   };
 
   return (
@@ -86,7 +82,11 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
         ))}
       </div>
       {isShareModalVisible && (
-        <ShareMailModal isVisible={isShareModalVisible} onClose={() => setIsShareModalVisible(false)} />
+        <ShareMailModal
+          surveyId={surveyId}
+          isVisible={isShareModalVisible}
+          onClose={() => setIsShareModalVisible(false)}
+        />
       )}
     </>
   );
