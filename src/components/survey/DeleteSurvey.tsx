@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import Alert from '@/components/common/Alert';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
+import { getClient } from '@/queryClient';
 
 interface DeleteSurveyProps {
   surveyId: number;
@@ -23,6 +24,7 @@ function DeleteSurvey({ surveyId, userId, onMutation }: DeleteSurveyProps) {
     mutationFn: () => deleteSurveyAPI(surveyId, userId),
     onSuccess: () => {
       setAlert({ type: 'success', message: '삭제되었습니다.' });
+      getClient.invalidateQueries({ queryKey: ['surveyData', surveyId] });
     },
     onError: (error: AxiosError) => {
       let message = '오류가 발생했습니다.';
