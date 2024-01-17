@@ -58,7 +58,6 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     return icon || '';
   };
 
-  // 함수 선언을 사용하는 경우
   const handleShareClick = () => {
     setIsShareModalVisible(true);
   };
@@ -100,7 +99,11 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
         ))}
       </div>
       {isShareModalVisible && (
-        <ShareMailModal isVisible={isShareModalVisible} onClose={() => setIsShareModalVisible(false)} />
+        <ShareMailModal
+          surveyId={surveyId}
+          isVisible={isShareModalVisible}
+          onClose={() => setIsShareModalVisible(false)}
+        />
       )}
       <DeleteSurvey
         surveyId={surveyId}
