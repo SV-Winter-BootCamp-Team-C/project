@@ -3,9 +3,10 @@ import { calculateRemainingDays } from '@/utils/calculateRemainingDays';
 import { useState } from 'react';
 import openIcon from '@/assets/open.svg';
 import privateIcon from '@/assets/private.svg';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Survey } from '@/types/survey';
 import noImage from '@/assets/noImage.png';
+import { useAuthStore } from '@/store/AuthStore';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
 function SurveyCover({
@@ -19,22 +20,41 @@ function SurveyCover({
   // isAttended,
   attendCount,
 }: Survey) {
+  const navigate = useNavigate();
   const location = useLocation();
   const { textLabel, textColor } = calculateRemainingDays(deadline);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const myId = useAuthStore((state) => state.userId);
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const handleNavigateToSurvey = () => {
+    if (location.pathname.includes('/all')) {
+      navigate(`/responseform?id=${surveyId}`);
+    } else if (location.pathname.includes('/myform')) {
+      navigate(`/responseform?id=${surveyId}`);
+    } else if (location.pathname.includes('/myresponse')) {
+      navigate(`/myanswer?userId=${myId}&surveyId=${surveyId}`);
+    }
+  };
 
   return (
     <div className="relative">
-      <div className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGray">
+      <div
+        className="inline-block w-80 h-[11.25rem] rounded-[0.625rem] border-2 border-solid border-darkGray cursor-pointer"
+        onClick={handleNavigateToSurvey}
+      >
         <img src={mainImageUrl || noImage} alt="survey" className="object-cover w-full h-full" />
       </div>
 
       <div className="flex items-center justify-between px-3 pt-[0.625rem]">
-        <div className="w-40 text-base font-medium text-left text-black truncate">{title}</div>
+        <div
+          className="w-40 text-base font-medium text-left text-black truncate cursor-pointer"
+          onClick={handleNavigateToSurvey}
+        >
+          {title}
+        </div>
         <div className="flex items-center gap-3">
           {location.pathname !== '/all' && <img src={open ? openIcon : privateIcon} alt={open ? 'Open' : 'Private'} />}
           <span className={`${textColor} text-xs leading-3`}>{textLabel}</span>

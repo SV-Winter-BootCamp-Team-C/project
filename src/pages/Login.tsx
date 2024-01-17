@@ -48,12 +48,12 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-custom-gradient">
-      <div className="relative flex items-center w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
+      <div className="relative flex items-start w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
         <div className="flex flex-col items-center justify-center w-full">
           <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
-          <div className="absolute bottom-[4.75rem] left-[3.5rem]">
-            <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" />
-          </div>
+        </div>
+        <div className="absolute bottom-[4.75rem] left-[3.5rem]">
+          <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" />
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex justify-center w-full">

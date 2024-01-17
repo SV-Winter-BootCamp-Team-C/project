@@ -5,7 +5,7 @@ import { TextButton } from '@/components/common/Button';
 import StaticSubjective from '@/components/staticresponse/StaticSubjective';
 import StaticDropDown from '@/components/staticresponse/StaticDropDown';
 import { QuestionDataForm } from '@/types/questionData';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { myAnswerAPI } from '@/api/myanswer';
@@ -15,9 +15,9 @@ import Alert from '@/components/common/Alert';
 
 function MyAnswer() {
   const navigate = useNavigate();
-  const params = useParams<{ userId?: string; surveyId?: string }>();
-  const userId = params.userId ? parseInt(params.userId, 10) : 0;
-  const surveyId = params.surveyId ? parseInt(params.surveyId, 10) : 0;
+  const [searchParams] = useSearchParams();
+  const userId = Number(searchParams.get('userId'));
+  const surveyId = Number(searchParams.get('surveyId'));
   const myId = useAuthStore((state) => state.userId);
 
   // 데이터 로딩 및 에러 상태 처리

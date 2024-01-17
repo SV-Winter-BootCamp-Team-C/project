@@ -5,7 +5,9 @@ import menuLink from '@/assets/menuLink.svg';
 import menuAnalysis from '@/assets/menuAnalysis.svg';
 import menuEdit from '@/assets/menuEdit.svg';
 import menuDel from '@/assets/menuDel.svg';
+import { useAuthStore } from '@/store/AuthStore';
 import ShareMailModal from '../common/ShareMailModal';
+import DeleteSurvey from './DeleteSurvey';
 
 interface SurveyCoverMenuProps {
   surveyId: number;
@@ -42,6 +44,8 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
   const location = useLocation();
   const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+  const [deleteSurvey, setDeleteSurvey] = useState<(() => void) | null>(null);
+  const myId = useAuthStore((state) => state.userId) ?? 0;
 
   const items = currentMenuItems ? [...currentMenuItems.item] : [];
 
@@ -58,9 +62,22 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     setIsShareModalVisible(true);
   };
 
+  const handleDeleteSurvey = () => {
+    if (deleteSurvey) {
+      deleteSurvey();
+    }
+  };
+
   const handleItemClick = (itemName: string, sId: number) => {
-    if (itemName === '공유') handleShareClick();
-    if (itemName === '분석') navigate(`/result?id=${sId}`);
+    if (itemName === '보기') {
+      navigate(`/responseform?id=${sId}`);
+    } else if (itemName === '분석') {
+      navigate(`/result?id=${sId}`);
+    } else if (itemName === '공유') {
+      handleShareClick(); // '공유'를 클릭했을 때 ShareMailModal을 표시
+    } else if (itemName === '삭제') {
+      handleDeleteSurvey();
+    }
   };
 
   return (
@@ -88,6 +105,11 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
           onClose={() => setIsShareModalVisible(false)}
         />
       )}
+      <DeleteSurvey
+        surveyId={surveyId}
+        userId={myId}
+        onMutation={(mutateFunction) => setDeleteSurvey(() => mutateFunction)}
+      />
     </>
   );
 }
