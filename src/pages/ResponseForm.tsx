@@ -199,9 +199,8 @@ function ResponseForm() {
             switch (question.type) {
               case 'MULTIPLE_CHOICE':
                 return (
-                  <div className="mb-6">
+                  <div className="mb-6" key={question.questionId}>
                     <ResponseMultipleChoice
-                      key={question.questionId}
                       index={index + 1}
                       question={question} // Question 객체 전체를 question prop으로 전달
                       color={surveyData.color}
@@ -212,9 +211,8 @@ function ResponseForm() {
                 );
               case 'SUBJECTIVE_QUESTION':
                 return (
-                  <div className="mb-6">
+                  <div className="mb-6" key={question.questionId}>
                     <ResponseSubjective
-                      key={question.questionId}
                       index={index + 1}
                       question={question}
                       color={surveyData.color}
@@ -224,9 +222,8 @@ function ResponseForm() {
                 );
               case 'CHECKBOX':
                 return (
-                  <div className="mb-6">
+                  <div className="mb-6" key={question.questionId}>
                     <ResponseCheckBox
-                      key={question.questionId}
                       index={index + 1}
                       question={question}
                       color={surveyData.color}
@@ -239,9 +236,8 @@ function ResponseForm() {
                 );
               case 'DROPDOWN':
                 return (
-                  <div className="mb-6">
+                  <div className="mb-6" key={question.questionId}>
                     <ResponseDropDown
-                      key={question.questionId}
                       index={index + 1}
                       question={question}
                       color={surveyData.color}

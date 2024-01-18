@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData'; // questionData.ts에서 타입 가져오기
+import { QuestionData } from '@/types/questionData';
+import { getRoundedClass } from '@/utils/getRoundedClass';
 
 interface ResponseMultipleChoiceProps {
   question: QuestionData; // 수정된 QuestionData 타입 사용
@@ -16,17 +17,6 @@ function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionS
   const handleOptionSelect = (choiceId: number) => {
     setSelectedOption(choiceId);
     onOptionSelect(choiceId); // 선택한 옵션을 콜백으로 전달
-  };
-
-  const getRoundedClass = () => {
-    switch (buttonStyle) {
-      case 'smooth':
-        return 'rounded-[0.625rem]';
-      case 'round':
-        return 'rounded-[1.875rem]';
-      default:
-        return 'rounded-0';
-    }
   };
 
   return (
@@ -63,7 +53,7 @@ function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionS
           <button
             type="button"
             key={choice.choiceId}
-            className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass()}`}
+            className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)}`}
             style={{
               backgroundColor: selectedOption === choice.choiceId ? `gray` : `${color}`,
             }}

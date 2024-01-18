@@ -2,6 +2,7 @@ import { useState } from 'react';
 import typeIcon from '@/assets/type.svg';
 import checkIcon from '@/assets/check.svg';
 import { QuestionData } from '@/types/questionData';
+import { getRoundedClass } from '@/utils/getRoundedClass';
 
 interface ResponseCheckBoxProps {
   question: QuestionData;
@@ -35,16 +36,6 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
     onOptionSelect(newSelectedOptions);
   };
 
-  const getRoundedClass = () => {
-    switch (buttonStyle) {
-      case 'smooth':
-        return 'rounded-[0.625rem]';
-      case 'round':
-        return 'rounded-[1.875rem]';
-      default:
-        return 'rounded-0';
-    }
-  };
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white"
@@ -78,7 +69,7 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
         {question.choices?.map((choice) => (
           <div key={choice.choiceId} className="flex items-center justify-center w-full mb-2">
             <div
-              className={`relative flex justify-center items-center w-[25rem] h-10 ${getRoundedClass()}`}
+              className={`relative flex justify-center items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
               style={{
                 backgroundColor: selectedOptions.includes(choice.choiceId) ? `gray` : `${color}`,
               }}

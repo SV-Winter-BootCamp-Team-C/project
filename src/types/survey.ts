@@ -2,7 +2,7 @@ export type Survey = {
   surveyId: number;
   title: string;
   open?: boolean;
-  mainImageUrl: string;
+  mainImageUrl?: string;
   createdAt: string;
   updatedAt: string;
   deadline: string;
