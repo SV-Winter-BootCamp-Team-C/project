@@ -12,5 +12,6 @@ export type Survey = {
 
 export type SurveyCoverType = {
   surveys: Survey[];
+  sortedList?: Survey[];
   totalPages: number;
 };
