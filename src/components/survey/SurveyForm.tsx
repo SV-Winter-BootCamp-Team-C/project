@@ -10,10 +10,22 @@ interface SurvayFormProps {
   currentPage: number;
   onClickAddButton?: () => void;
   onPageChange: (page: number) => void;
+  searchTerm: string; // 현재 검색어 상태
+  setSearchTerm: (searchTerm: string) => void; // 검색어 상태를 업데이트하는 함수
 }
 
-function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }: SurvayFormProps) {
+function SurveyForm({
+  surveyData,
+  currentPage,
+  onClickAddButton,
+  onPageChange,
+  searchTerm,
+  setSearchTerm,
+}: SurvayFormProps) {
   const location = useLocation();
+
+  console.log('전달된 surveyData:', surveyData);
+  console.log('검색 결과:', surveyData.surveys);
   return (
     <div className="flex flex-col items-center pt-6">
       <div className="flex justify-between w-[25rem] h-12 px-7 py-3 rounded-[1.875rem] border-2 border-gray border-solid gap-7 hover:border-darkGray transition duration-300 ease-in-out">
@@ -22,6 +34,8 @@ function SurveyForm({ surveyData, currentPage, onClickAddButton, onPageChange }:
           type="text"
           placeholder="설문 제목을 입력하세요."
           className="w-[18.75rem] text-base focus:outline-none"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <div className="flex items-center justify-center w-6 h-6">
           <img src={search} alt="search" />
