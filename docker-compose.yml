@@ -37,6 +37,18 @@ services:
       - ./backend:/app
       - /app/node_modules
 
+  front:
+    container_name: front
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    command: ["npm", "run", "dev"]
+
   nginx:
     container_name: nginx
     build:
