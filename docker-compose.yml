@@ -82,7 +82,7 @@ services:
     restart: always
     container_name: grafana
     ports:
-      - "3005:3005"
+      - "3000:3000"
     depends_on:
       - prometheus
     volumes:
