@@ -1,12 +1,10 @@
 const { sequelize } = require('../models');
 const { Survey, Question, Choice } = require('../models');
 
-const createSurveyWithQuestionsAndChoices = async (surveyData, res) => {
+const createSurveyWithQuestionsAndChoices = async (req, res) => {
   const t = await sequelize.transaction();
 
   try {
-    console.log('Received survey data:', surveyData);
-
     const {
       userId,
       title,
@@ -15,14 +13,12 @@ const createSurveyWithQuestionsAndChoices = async (surveyData, res) => {
       font,
       color,
       buttonStyle,
+      mainImageUrl,
       deadline,
       questions,
-      mainImageUrl, // 메인 이미지 URL
-      //imageUrl, // 질문 이미지 URL 배열
-    } = surveyData;
+    } = req.body;
 
-    console.log('요청 본문 수신:', surveyData);
-
+    // surveyUrl을 미리 정의
     const surveyUrl = `http://yourwebsite.com/survey/placeholder`;
 
     const survey = await Survey.create(
@@ -64,19 +60,15 @@ const createSurveyWithQuestionsAndChoices = async (surveyData, res) => {
         throw new Error('Invalid question type');
       }
 
-      const questionImageUrl = question.imageUrl;
-
       const newQuestion = await Question.create(
         {
           surveyId,
           type: question.type,
           content: question.content,
-          imageUrl: questionImageUrl, // 여기에서 사용
+          imageUrl: question.imageUrl,
         },
         { transaction: t },
       );
-
-      console.log(`questionId: ${newQuestion.id}`);
 
       if (question.choices && question.choices.length > 0) {
         for (const choice of question.choices) {
