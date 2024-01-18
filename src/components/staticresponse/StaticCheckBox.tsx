@@ -1,6 +1,7 @@
 import typeIcon from '@/assets/type.svg';
 import checkIcon from '@/assets/check.svg';
 import { ExtendedQuestionData } from '@/types/questionData';
+import { getRoundedClass } from '@/utils/getRoundedClass';
 
 interface StaticCheckBoxProps {
   question: ExtendedQuestionData;
@@ -10,16 +11,6 @@ interface StaticCheckBoxProps {
 }
 
 function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxProps) {
-  const getRoundedClass = () => {
-    switch (buttonStyle) {
-      case 'smooth':
-        return 'rounded-[0.625rem]';
-      case 'round':
-        return 'rounded-[1.875rem]';
-      default:
-        return 'rounded-0';
-    }
-  };
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white"
@@ -53,7 +44,7 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
         {question.choices?.map((choice) => (
           <div key={choice.choiceId} className="relative flex items-center justify-center w-full mb-2">
             <div
-              className={`flex justify-center items-center w-[25rem] h-10 ${getRoundedClass()}`}
+              className={`flex justify-center items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
               style={{
                 backgroundColor: (question.objContent ?? []).includes(choice.choiceId) ? 'gray' : `${color}`,
                 border: (question.objContent ?? []).includes(choice.choiceId) ? '0.125rem solid' : 'none',

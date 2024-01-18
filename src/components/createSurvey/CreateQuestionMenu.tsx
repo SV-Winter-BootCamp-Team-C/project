@@ -4,19 +4,20 @@ import createDrop from '@/assets/createDrop.svg';
 import createSubjective from '@/assets/createSubjective.svg';
 
 interface CreateQuestionMenuProps {
-  onSelect: (type: string) => void;
+  onSelect: (type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN') => void;
 }
 
 interface QuestionMenuItem {
   icon: string;
-  type: string;
+  type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN';
+  name: string;
 }
 
 const QUESTION_MENU_ITEMS: QuestionMenuItem[] = [
-  { icon: createMultiple, type: '객관식 문항' },
-  { icon: createCheck, type: '체크박스 문항' },
-  { icon: createDrop, type: '드롭다운 문항' },
-  { icon: createSubjective, type: '주관식 문항' },
+  { icon: createMultiple, type: 'MULTIPLE_CHOICE', name: '객관식 문항' },
+  { icon: createCheck, type: 'CHECKBOX', name: '체크박스 문항' },
+  { icon: createDrop, type: 'DROPDOWN', name: '드롭다운 문항' },
+  { icon: createSubjective, type: 'SUBJECTIVE_QUESTION', name: '주관식 문항' },
 ];
 
 function CreateQuestionMenu({ onSelect }: CreateQuestionMenuProps) {
@@ -30,7 +31,7 @@ function CreateQuestionMenu({ onSelect }: CreateQuestionMenuProps) {
         >
           <div className="flex items-center h-6 gap-2 pl-4 cursor-pointer">
             <img src={item.icon} alt={item.icon} className="min-w-[0.875rem] h-[0.875rem]" />
-            <p className="text-base leading-4 text-black">{item.type}</p>
+            <p className="text-base leading-4 text-black">{item.name}</p>
           </div>
         </div>
       ))}

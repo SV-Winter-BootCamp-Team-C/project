@@ -24,8 +24,8 @@ const usePaginationSurveyList = (path: PathType) => {
   const queryFn = QUERY_FN_MAP[path];
 
   const { data, isError, isPending } = useQuery<SurveyCoverType, AxiosError>({
-    queryKey: [path, currentPage, userId],
-    queryFn: () => queryFn({ userId, currentPage }),
+    queryKey: [path, currentPage, userId as number],
+    queryFn: () => queryFn({ userId: userId as number, currentPage }),
     placeholderData: keepPreviousData,
     meta: { errorMessage: '설문지 목록을 불러오는 중 오류가 발생했습니다.' },
   });

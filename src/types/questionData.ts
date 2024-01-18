@@ -56,4 +56,5 @@ export type ResponseSubmit = {
     questionId: number;
     objContent?: number[];
     subContent?: string;
-}[];
+  }[];
+};

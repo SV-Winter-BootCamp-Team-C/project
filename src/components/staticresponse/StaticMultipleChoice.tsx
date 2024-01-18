@@ -1,5 +1,6 @@
 import typeIcon from '@/assets/type.svg';
 import { ExtendedQuestionData } from '@/types/questionData';
+import { getRoundedClass } from '@/utils/getRoundedClass';
 
 interface StiticMultipleChoiceProps {
   question: ExtendedQuestionData;
@@ -9,16 +10,6 @@ interface StiticMultipleChoiceProps {
 }
 
 function StiticMultipleChoice({ question, color, buttonStyle, index }: StiticMultipleChoiceProps) {
-  const getRoundedClass = () => {
-    switch (buttonStyle) {
-      case 'smooth':
-        return 'rounded-[0.625rem]';
-      case 'round':
-        return 'rounded-[1.875rem]';
-      default:
-        return 'rounded-0';
-    }
-  };
   return (
     <div
       className="flex flex-col items-center justify-center rounded-[1.25rem] bg-white"
@@ -53,7 +44,7 @@ function StiticMultipleChoice({ question, color, buttonStyle, index }: StiticMul
           <button
             type="button"
             key={choice.choiceId}
-            className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass()}`}
+            className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)}`}
             style={{
               backgroundColor: (question.objContent ?? []).includes(choice.choiceId) ? 'gray' : `${color}`,
               border: (question.objContent ?? []).includes(choice.choiceId) ? '0.125rem solid' : 'none',

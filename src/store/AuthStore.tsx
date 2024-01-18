@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface AuthStoreProps {
-  userId?: number | null;
+  userId: number | null;
   isLoggedIn: boolean;
   setUserId: (userId: number | null) => void;
   setLoginStatus: (status: boolean) => void;
@@ -11,7 +11,7 @@ interface AuthStoreProps {
 export const useAuthStore = create<AuthStoreProps>()(
   persist(
     (set) => ({
-      userId: undefined,
+      userId: null,
       isLoggedIn: false,
       setUserId: (userId: number | null) => set({ userId }),
       setLoginStatus: (status: boolean) => set({ isLoggedIn: status }),

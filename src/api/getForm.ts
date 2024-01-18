@@ -3,7 +3,7 @@ import { restFetcher } from '@/queryClient';
 const LIMIT = 9;
 
 interface AllSurveyResponse {
-  userId?: number;
+  userId: number;
   currentPage: number;
 }
 
