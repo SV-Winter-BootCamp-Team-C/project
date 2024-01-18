@@ -75,7 +75,12 @@ const surveyAnswered = async (req, res) => {
 
       // surveys를 응답으로 보내기
       res.json({
-        surveys: surveys.map((survey) => survey.dataValues),
+        surveys: surveys.map((survey) => { survey.dataValues.surveyId = survey.dataValues.id;
+          delete survey.dataValues.id;
+          return {
+            surveyId: survey.dataValues.surveyId,
+            ...survey.dataValues,
+          };}),
         totalPages,
       });
     } else {
