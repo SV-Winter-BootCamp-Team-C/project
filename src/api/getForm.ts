@@ -7,11 +7,13 @@ interface AllSurveyResponse {
   currentPage: number;
 }
 
-export const getAllSurveyAPI = async ({ userId, currentPage }: AllSurveyResponse) => {
+export const getAllSurveyAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+  const params: any = { page: currentPage, limit: LIMIT };
+  if (title) params.title = title;
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/all`,
-    params: { page: currentPage, limit: LIMIT },
+    params,
   });
   return response;
 };
@@ -25,7 +27,9 @@ export const getMySurveyAPI = async ({ userId, currentPage }: AllSurveyResponse)
   return response;
 };
 
-export const getMyResponseAPI = async ({ userId, currentPage }: AllSurveyResponse) => {
+export const getMyResponseAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+  const params: any = { page: currentPage, limit: LIMIT };
+  if (title) params.title = title;
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/join`,
