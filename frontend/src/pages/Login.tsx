@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { LoginForm } from '@/types/auth';
-import { useAuthStore } from '@/store/AuthStore';
 import { useState } from 'react';
-import { ApiResponseError } from '@/types/apiResponseError';
 import { useMutation } from '@tanstack/react-query';
-import Alert from '@/components/common/Alert';
-import { loginAPI } from '@/api/login';
 import { AxiosError } from 'axios';
+import { LoginForm } from '../types/auth';
+import { useAuthStore } from '../store/AuthStore';
+import { ApiResponseError } from '../types/apiResponseError';
+import Alert from '../components/common/Alert';
+import { loginAPI } from '../api/login';
 import fileImage from '../assets/file.png';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
@@ -60,7 +60,7 @@ function Login() {
             <div className="w-[35rem] h-[45.25rem] rounded-[2.5rem] bg-white shadow-lg flex flex-col items-center justify-center">
               <span className="text-[2rem] font-bold text-black">Login</span>
               <div className="pt-12">
-                <div className="flex items-center w-[25rem] h-[3.75rem] mb-[1.25rem] rounded-[1.875rem] border-solid border-[0.00625rem] border-gray hover:border-[0.125rem] hover:border-darkGray">
+                <div className="relative flex items-center w-[25rem] h-[3.75rem] mb-[1.25rem] rounded-[1.875rem] border-solid border-[0.00625rem] border-gray hover:border-[0.125rem] hover:border-darkGray">
                   <input
                     type="email"
                     name="email"
@@ -68,10 +68,11 @@ function Login() {
                     onChange={handleInputChange}
                     required
                     placeholder="Email"
-                    className="w-full h-[3.75rem] text-[1rem] text-black pl-[1.875rem] focus:outline-none"
+                    className="w-full mx-[1.875rem] py-2 text-base text-black focus:outline-none"
                   />
                   <img src={emailIcon} alt="Email" className="w-[2.25rem] h-[2.25rem] inline-block mr-[1.875rem]" />
                 </div>
+
                 <div className="flex items-center w-[25rem] h-[3.75rem] rounded-[1.875rem] border-solid border-[0.00625rem] border-gray hover:border-[0.125rem] hover:border-darkGray">
                   <input
                     type="password"
@@ -80,7 +81,7 @@ function Login() {
                     onChange={handleInputChange}
                     required
                     placeholder="Password"
-                    className="w-full h-[3.75rem] text-[1rem] text-black pl-[1.875rem] focus:outline-none"
+                    className="w-full h-[3.75rem] text-base text-black pl-[1.875rem] focus:outline-none"
                   />
                   <img
                     src={passwordIcon}
