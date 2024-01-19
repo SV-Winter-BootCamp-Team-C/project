@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import menuSee from '@/assets/menuSee.svg';
-import menuLink from '@/assets/menuLink.svg';
-import menuAnalysis from '@/assets/menuAnalysis.svg';
-import menuEdit from '@/assets/menuEdit.svg';
-import menuDel from '@/assets/menuDel.svg';
-import { useAuthStore } from '@/store/AuthStore';
+import menuSee from '../../assets/menuSee.svg';
+import menuLink from '../../assets/menuLink.svg';
+import menuAnalysis from '../../assets/menuAnalysis.svg';
+import menuEdit from '../../assets/menuEdit.svg';
+import menuDel from '../../assets/menuDel.svg';
+import { useAuthStore } from '../../store/AuthStore';
 import ShareMailModal from '../common/ShareMailModal';
 import DeleteSurvey from './DeleteSurvey';
 

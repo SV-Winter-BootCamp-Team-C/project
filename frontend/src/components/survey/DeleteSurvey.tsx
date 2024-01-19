@@ -1,9 +1,9 @@
-import { deleteSurveyAPI } from '@/api/deleteSurvey';
 import { useMutation } from '@tanstack/react-query';
-import Alert from '@/components/common/Alert';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
-import { getClient } from '@/queryClient';
+import Alert from '../common/Alert';
+import { deleteSurveyAPI } from '../../api/deleteSurvey';
+import { getClient } from '../../queryClient';
 
 interface DeleteSurveyProps {
   surveyId: number;

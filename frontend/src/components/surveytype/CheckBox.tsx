@@ -5,7 +5,7 @@ import copyIcon from '../../assets/copy.svg';
 import deleteIcon from '../../assets/delete.svg';
 import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
-// import checkIcon from '../../assets/check.svg';
+import checkIcon from '../../assets/check.svg';
 import { EditableObjectiveQuestion } from '../../types/editableSurvey';
 import { uploadS3 } from '../../utils/s3ImgUpload';
 

@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import Alert from '@/components/common/Alert';
-import { ApiResponseError } from '@/types/apiResponseError';
-import { SignupForm } from '@/types/auth';
 import { useNavigate } from 'react-router-dom';
-import { checkEmailAPI, singupAPI } from '@/api/signup';
 import { AxiosError } from 'axios';
+import Alert from '../components/common/Alert';
+import { ApiResponseError } from '../types/apiResponseError';
+import { SignupForm } from '../types/auth';
+import { checkEmailAPI, singupAPI } from '../api/signup';
 import fileImage from '../assets/file.png';
 import usernameIcon from '../assets/username.svg';
 import emailIcon from '../assets/email.svg';

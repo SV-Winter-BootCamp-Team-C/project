@@ -8,6 +8,7 @@ import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableObjectiveQuestion } from '../../types/editableSurvey';
 import { uploadS3 } from '../../utils/s3ImgUpload';
 
+
 interface MultipleChoiceProps {
   index: number;
   data: EditableObjectiveQuestion;

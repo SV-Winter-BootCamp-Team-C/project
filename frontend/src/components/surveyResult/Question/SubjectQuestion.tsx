@@ -1,7 +1,7 @@
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
-import t from '@/assets/t.svg';
+import typeIcon from '../../../assets/type.svg';
+import { QuestionData } from '../../../types/questionData';
+import t from '../../../assets/t.svg';
 
 interface SubjectQuestionProps {
   index: number;

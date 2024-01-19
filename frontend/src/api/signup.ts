@@ -1,5 +1,5 @@
-import { restFetcher } from '@/queryClient';
-import { SignupForm } from '@/types/auth';
+import { restFetcher } from '../queryClient';
+import { SignupForm } from '../types/auth';
 
 export const singupAPI = async (data: SignupForm) => {
   const response = await restFetcher({

@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import ResultTypeSwitch from '@/components/common/ResultTypeSwitch';
-import Question from '@/components/surveyResult/Question/Question';
-import Response from '@/components/surveyResult/Response/Response';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { QuestionData, QuestionResultForm } from '@/types/questionData';
 import { AxiosError } from 'axios';
-import { getAnswerResultAPI, getQuestionResultAPI } from '@/api/getResult';
-import { AnswerData } from '@/types/answerData';
+import ResultTypeSwitch from '../components/common/ResultTypeSwitch';
+import Question from '../components/surveyResult/Question/Question';
+import Response from '../components/surveyResult/Response/Response';
+import { QuestionData, QuestionResultForm } from '../types/questionData';
+import { getAnswerResultAPI, getQuestionResultAPI } from '../api/getResult';
+import { AnswerData } from '../types/answerData';
 
 function ResultPage() {
   const [searchParams] = useSearchParams();

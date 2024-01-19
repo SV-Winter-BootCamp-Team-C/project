@@ -1,4 +1,4 @@
-import { QuestionData } from '@/types/questionData';
+import { QuestionData } from '../../../types/questionData';
 import PieChart from './PieChart';
 import SubjectQuestion from './SubjectQuestion';
 
