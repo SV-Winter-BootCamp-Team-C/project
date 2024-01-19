@@ -1,13 +1,13 @@
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import StaticCheckBox from '@/components/staticresponse/StaticCheckBox';
 import StaticMultipleChoice from '@/components/staticresponse/StaticMultipleChoice';
 import { TextButton } from '@/components/common/Button';
 import StaticSubjective from '@/components/staticresponse/StaticSubjective';
 import StaticDropDown from '@/components/staticresponse/StaticDropDown';
 import { QuestionDataForm } from '@/types/questionData';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { myAnswerAPI } from '@/api/myanswer';
 import { useAuthStore } from '@/store/AuthStore';
 import Loading from '@/components/common/Loading';
@@ -42,7 +42,7 @@ function MyAnswer() {
         type="error"
         message="설문 데이터를 불러오는 데 실패했습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }
@@ -55,7 +55,7 @@ function MyAnswer() {
         type="error"
         message="이 응답에 대한 접근 권한이 없습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }
