@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
-import { getRoundedClass } from '@/utils/getRoundedClass';
+import typeIcon from '../../assets/type.svg';
+import { QuestionData } from '../../types/questionData';
+import { getRoundedClass } from '../../utils/getRoundedClass';
 
 interface ResponseMultipleChoiceProps {
   question: QuestionData; // 수정된 QuestionData 타입 사용

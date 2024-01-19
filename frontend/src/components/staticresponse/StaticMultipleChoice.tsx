@@ -1,6 +1,6 @@
-import typeIcon from '@/assets/type.svg';
-import { ExtendedQuestionData } from '@/types/questionData';
-import { getRoundedClass } from '@/utils/getRoundedClass';
+import typeIcon from '../../assets/type.svg';
+import { ExtendedQuestionData } from '../../types/questionData';
+import { getRoundedClass } from '../../utils/getRoundedClass';
 
 interface StiticMultipleChoiceProps {
   question: ExtendedQuestionData;

@@ -1,4 +1,4 @@
-import { restFetcher } from '@/queryClient';
+import { restFetcher } from '../queryClient';
 
 const LIMIT = 9;
 
@@ -18,11 +18,13 @@ export const getAllSurveyAPI = async ({ userId, currentPage, title }: AllSurveyR
   return response;
 };
 
-export const getMySurveyAPI = async ({ userId, currentPage }: AllSurveyResponse) => {
+export const getMySurveyAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+  const params: any = { page: currentPage, limit: LIMIT };
+  if (title) params.title = title;
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/forms`,
-    params: { page: currentPage, limit: LIMIT },
+    params,
   });
   return response;
 };
@@ -33,7 +35,8 @@ export const getMyResponseAPI = async ({ userId, currentPage, title }: AllSurvey
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/join`,
-    params: { page: currentPage, limit: LIMIT },
+    params,
   });
+  console.log(params);
   return response;
 };

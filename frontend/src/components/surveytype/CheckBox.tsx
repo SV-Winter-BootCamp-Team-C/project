@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import addIcon from '@/assets/add.svg';
-import copyIcon from '@/assets/copy.svg';
-import deleteIcon from '@/assets/delete.svg';
-import imageaddIcon from '@/assets/imageadd.svg';
-import trashcanIcon from '@/assets/trashcan.svg';
-import checkIcon from '@/assets/check.svg';
+import typeIcon from '../../assets/type.svg';
+import addIcon from '../../assets/add.svg';
+import copyIcon from '../../assets/copy.svg';
+import deleteIcon from '../../assets/delete.svg';
+import imageaddIcon from '../../assets/imageadd.svg';
+import trashcanIcon from '../../assets/trashcan.svg';
+import checkIcon from '../../assets/check.svg';
 
 interface Choice {
   id: number;

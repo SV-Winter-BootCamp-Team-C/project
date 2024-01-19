@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { LoginForm } from '@/types/auth';
-import { useAuthStore } from '@/store/AuthStore';
 import { useState } from 'react';
-import { ApiResponseError } from '@/types/apiResponseError';
 import { useMutation } from '@tanstack/react-query';
-import Alert from '@/components/common/Alert';
-import { loginAPI } from '@/api/login';
 import { AxiosError } from 'axios';
+import { LoginForm } from '../types/auth';
+import { useAuthStore } from '../store/AuthStore';
+import { ApiResponseError } from '../types/apiResponseError';
+import Alert from '../components/common/Alert';
+import { loginAPI } from '../api/login';
 import fileImage from '../assets/file.png';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';

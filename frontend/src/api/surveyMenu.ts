@@ -1,4 +1,4 @@
-import { restFetcher } from '@/queryClient';
+import { restFetcher } from '../queryClient';
 
 export const shareSurveyAPI = async (surveyId: number, emails: string[]) => {
   const response = await restFetcher({

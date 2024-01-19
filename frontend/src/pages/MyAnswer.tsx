@@ -1,17 +1,17 @@
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import StaticCheckBox from '@/components/staticresponse/StaticCheckBox';
-import StaticMultipleChoice from '@/components/staticresponse/StaticMultipleChoice';
-import { TextButton } from '@/components/common/Button';
-import StaticSubjective from '@/components/staticresponse/StaticSubjective';
-import StaticDropDown from '@/components/staticresponse/StaticDropDown';
-import { QuestionDataForm } from '@/types/questionData';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { myAnswerAPI } from '@/api/myanswer';
-import { useAuthStore } from '@/store/AuthStore';
-import Loading from '@/components/common/Loading';
-import Alert from '@/components/common/Alert';
+import StaticCheckBox from '../components/staticresponse/StaticCheckBox';
+import StaticMultipleChoice from '../components/staticresponse/StaticMultipleChoice';
+import { TextButton } from '../components/common/Button';
+import StaticSubjective from '../components/staticresponse/StaticSubjective';
+import StaticDropDown from '../components/staticresponse/StaticDropDown';
+import { QuestionDataForm } from '../types/questionData';
+import { myAnswerAPI } from '../api/myanswer';
+import { useAuthStore } from '../store/AuthStore';
+import Loading from '../components/common/Loading';
+import Alert from '../components/common/Alert';
 
 function MyAnswer() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { restFetcher } from '@/queryClient';
+import { restFetcher } from '../queryClient';
 
 export const createSurveyAPI = async (formData: FormData) => {
   const response = await restFetcher({

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import copyIcon from '@/assets/copy.svg';
-import deleteIcon from '@/assets/delete.svg';
-import imageaddIcon from '@/assets/imageadd.svg';
-import trashcanIcon from '@/assets/trashcan.svg';
+import typeIcon from '../../assets/type.svg';
+import copyIcon from '../../assets/copy.svg';
+import deleteIcon from '../../assets/delete.svg';
+import imageaddIcon from '../../assets/imageadd.svg';
+import trashcanIcon from '../../assets/trashcan.svg';
 
 function Subjective() {
   const [image, setImage] = useState<string | null>(null); // 이미지 상태 초기화

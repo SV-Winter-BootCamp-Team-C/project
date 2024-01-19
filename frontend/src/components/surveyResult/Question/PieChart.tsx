@@ -1,6 +1,6 @@
-import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
 import Chart from 'react-apexcharts';
+import typeIcon from '../../../assets/type.svg';
+import { QuestionData } from '../../../types/questionData';
 
 interface PieChartProps {
   index: number;

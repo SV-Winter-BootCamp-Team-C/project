@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useNavbarStore } from '@/store/NavbarStore';
-import all from '@/assets/navAll.svg';
-import myform from '@/assets/navForm.svg';
-import myresponses from '@/assets/navRes.svg';
-import profile from '@/assets/profile.svg';
-import logout from '@/assets/logout.svg';
-import { useAuthStore } from '@/store/AuthStore';
+import { useNavbarStore } from '../../store/NavbarStore';
+import all from '../../assets/navAll.svg';
+import myform from '../../assets/navForm.svg';
+import myresponses from '../../assets/navRes.svg';
+import profile from '../../assets/profile.svg';
+import logout from '../../assets/logout.svg';
+import { useAuthStore } from '../../store/AuthStore';
 import MyProfileModal from './MyProfileModal';
 
 interface NavbarProps {

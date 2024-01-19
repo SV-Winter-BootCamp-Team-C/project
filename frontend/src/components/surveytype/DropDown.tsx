@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import addIcon from '@/assets/add.svg';
-import copyIcon from '@/assets/copy.svg';
-import deleteIcon from '@/assets/delete.svg';
-import imageaddIcon from '@/assets/imageadd.svg';
-import trashcanIcon from '@/assets/trashcan.svg';
-import dropIcon from '@/assets/drop.svg';
+import typeIcon from '../../assets/type.svg';
+import addIcon from '../../assets/add.svg';
+import copyIcon from '../../assets/copy.svg';
+import deleteIcon from '../../assets/delete.svg';
+import imageaddIcon from '../../assets/imageadd.svg';
+import trashcanIcon from '../../assets/trashcan.svg';
+import dropIcon from '../../assets/drop.svg';
 
 function DropDown() {
   const [choices, setChoices] = useState([{ id: 1, value: '' }]); // 초기 상태에 1개의 빈 선택지를 설정

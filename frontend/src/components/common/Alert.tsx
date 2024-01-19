@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import close from '@/assets/closebtn.svg';
-import alertSuccess from '@/assets/alertSuccess.svg';
-import alertError from '@/assets/alertError.svg';
+import close from '../../assets/closebtn.svg';
+import alertSuccess from '../../assets/alertSuccess.svg';
+import alertError from '../../assets/alertError.svg';
 
 interface AlertProps {
   type?: 'success' | 'error';

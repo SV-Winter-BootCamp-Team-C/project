@@ -1,5 +1,5 @@
-import { restFetcher } from '@/queryClient';
 import axios from 'axios';
+import { restFetcher } from '../queryClient';
 
 export const getQuestionResultAPI = async (surveyId: number) => {
   const response = await restFetcher({

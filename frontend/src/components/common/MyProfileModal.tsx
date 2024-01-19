@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import profile from '@/assets/profile.svg';
-import close from '@/assets/closebtn.svg';
-import pencil from '@/assets/pencil.svg';
-import { getIdAPI, patchPasswordAPI } from '@/api/myprofile';
-import { useAuthStore } from '@/store/AuthStore';
 import { useState } from 'react';
-import { getClient } from '@/queryClient';
+import profile from '../../assets/profile.svg';
+import close from '../../assets/closebtn.svg';
+import pencil from '../../assets/pencil.svg';
+import { getIdAPI, patchPasswordAPI } from '../../api/myprofile';
+import { useAuthStore } from '../../store/AuthStore';
+import { getClient } from '../../queryClient';
 import { TextButton } from './Button';
 import Alert from './Alert';
 
