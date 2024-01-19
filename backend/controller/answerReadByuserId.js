@@ -3,7 +3,7 @@ const { Survey, User, Question, Answer, Choice } = require('../models');
 const getAnswerByuserId = async (req, res) => {
   try {
     const { userId, surveyId } = req.params;
-    const user = await Survey.findByPk(userId);
+    const user = await User.findByPk(userId);
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
