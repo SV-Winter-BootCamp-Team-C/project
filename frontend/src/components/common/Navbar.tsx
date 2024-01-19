@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useNavbarStore } from '@/store/NavbarStore';
 import all from '@/assets/navAll.svg';
 import myform from '@/assets/navForm.svg';
@@ -30,7 +30,17 @@ function Navbar({ children }: NavbarProps) {
   const { setUserId, setLoginStatus } = useAuthStore();
   const { activeItem, handleItem } = useNavbarStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeNavItem = NAV_ITEMS.find((item) => item.path === currentPath)?.id;
+
+    if (activeNavItem) {
+      handleItem(activeNavItem);
+    }
+  }, [location, handleItem]);
 
   const handleClick = (item: string) => {
     handleItem(item);
