@@ -25,8 +25,11 @@ function DeleteSurvey({ surveyId, userId, onMutation }: DeleteSurveyProps) {
     onSuccess: () => {
       setAlert({ type: 'success', message: '삭제되었습니다.' });
       getClient.invalidateQueries({ queryKey: ['allSurveys'] });
+      getClient.refetchQueries({ queryKey: ['allSurveys'] });
       getClient.invalidateQueries({ queryKey: ['myForm', userId] });
-      getClient.invalidateQueries({ queryKey: ['myResponses', userId] });
+      getClient.refetchQueries({ queryKey: ['myForm', userId] });
+      getClient.invalidateQueries({ queryKey: ['myResponse', userId] });
+      getClient.refetchQueries({ queryKey: ['myResponse', userId] });
     },
     onError: (error: AxiosError) => {
       let message = '오류가 발생했습니다.';
