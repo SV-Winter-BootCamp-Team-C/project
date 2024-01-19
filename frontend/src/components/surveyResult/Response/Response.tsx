@@ -1,10 +1,10 @@
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getExcelDownloadAPI } from '@/api/getResult';
 import Alert from '@/components/common/Alert';
 import Loading from '@/components/common/Loading';
 import { ListData } from '@/types/answerData';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 interface ResponseProps {
   title: string;
@@ -51,7 +51,7 @@ function Response({ title, list }: ResponseProps) {
     try {
       const response = await getExcelDownloadAPI(surveyId);
 
-      // 엓셀 파일 다운로드
+      // 엑셀 파일 다운로드
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -73,31 +73,38 @@ function Response({ title, list }: ResponseProps) {
 
   return (
     <div>
-      <button
-        type="button"
-        className="absolute top-[8.25rem] right-[7.5rem] w-[6.25rem] h-9 leading-4 bg-darkPurple rounded-[0.625rem] text-base text-white cltext-base focus:outline-none hover:bg-[#403B82] transition duration-300 ease-in-out"
-        onClick={handleDownload}
-      >
-        저장하기
-      </button>
+      {list.rows && list.rows.length > 0 ? (
+        <div>
+          <button
+            type="button"
+            className="absolute top-[8.25rem] right-[7.5rem] w-[6.25rem] h-9 leading-4 bg-darkPurple rounded-[0.625rem] text-base text-white cltext-base focus:outline-none hover:bg-[#403B82] transition duration-300 ease-in-out"
+            onClick={handleDownload}
+          >
+            저장하기
+          </button>
+
+          <div className="max-w-[52.5rem] max-h-[41rem] pt-4">
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
+                },
+              }}
+              pageSizeOptions={[10]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              disableColumnFilter
+            />
+          </div>
+        </div>
+      ) : (
+        <p className="text-base text-gray">설문 결과가 없습니다.</p>
+      )}
       {error && <Alert type="error" message="엑셀 파일 다운로드에 실패했습니다." buttonText="확인" />}
-      <div className="max-w-[52.5rem] max-h-[41rem] pt-4">
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-          }}
-          pageSizeOptions={[10]}
-          checkboxSelection
-          disableRowSelectionOnClick
-          disableColumnFilter
-        />
-      </div>
     </div>
   );
 }
