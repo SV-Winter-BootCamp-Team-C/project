@@ -42,7 +42,7 @@ function MyAnswer() {
         type="error"
         message="설문 데이터를 불러오는 데 실패했습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }
@@ -55,7 +55,7 @@ function MyAnswer() {
         type="error"
         message="이 응답에 대한 접근 권한이 없습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }
@@ -153,7 +153,7 @@ function MyAnswer() {
           })}
 
           <div className="flex items-center justify-center gap-3 mt-3 mb-9">
-            <TextButton text="나가기" onClick={() => navigate('/all')} />
+            <TextButton text="나가기" onClick={() => navigate('/myresponses')} />
           </div>
         </div>
       </Scrollbars>

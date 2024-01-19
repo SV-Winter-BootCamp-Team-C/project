@@ -98,7 +98,7 @@ function ResponseForm() {
         type="success"
         message="제출에 성공하였습니다."
         buttonText="확인"
-        buttonClick={() => window.location.replace('/all')}
+        buttonClick={() => window.location.replace('/myresponses')}
       />
     );
   }

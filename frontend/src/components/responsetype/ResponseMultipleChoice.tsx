@@ -43,7 +43,7 @@ function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionS
         <img
           src={question.imageUrl}
           alt="Question"
-          className="rounded-[0.625rem] max-w-[45rem] max-h-[45rem]"
+          className="rounded-[0.625rem] max-w-[30rem] max-h-[36rem]"
           style={{ border: `0.125rem solid ${color}` }}
         />
       )}
