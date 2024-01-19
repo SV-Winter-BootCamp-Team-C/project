@@ -31,7 +31,7 @@ const usePaginationSurveyList = (path: PathType) => {
 
   const { data, isError, isPending } = useQuery<SurveyCoverType, AxiosError>({
     queryKey: [path, currentPage, userId, searchTerm], // 검색어를 쿼리 키에 추가
-    queryFn: () => queryFn({ userId: userId!, currentPage, title: searchTerm }), // API 호출 시 검색어 전달
+    queryFn: () => queryFn({ userId: userId as number, currentPage, title: searchTerm }), // API 호출 시 검색어 전달
     select: (responseData) => {
       return {
         surveys: responseData.sortedList ?? responseData.surveys,

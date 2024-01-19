@@ -42,7 +42,7 @@ function MyAnswer() {
         type="error"
         message="설문 데이터를 불러오는 데 실패했습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }
@@ -55,7 +55,7 @@ function MyAnswer() {
         type="error"
         message="이 응답에 대한 접근 권한이 없습니다."
         buttonText="확인"
-        buttonClick={() => navigate('/all')}
+        buttonClick={() => navigate('/myresponses')}
       />
     );
   }

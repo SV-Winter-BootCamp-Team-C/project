@@ -24,9 +24,6 @@ function SurveyForm({
 }: SurvayFormProps) {
   const location = useLocation();
 
-  console.log('전달된 surveyData:', surveyData);
-  console.log('검색:', surveyData.surveys);
-
   return (
     <div className="flex flex-col items-center pt-6">
       <div className="flex justify-between w-[25rem] h-12 px-7 py-3 rounded-[1.875rem] border-2 border-gray border-solid gap-7 hover:border-darkGray transition duration-300 ease-in-out">
@@ -89,7 +86,7 @@ function SurveyForm({
         </div>
       )}
 
-      {surveyData.totalPages !== 0 && (
+      {surveyData.surveys && surveyData?.surveys.length > 0 && (
         <Pagination
           count={surveyData?.totalPages}
           page={currentPage}
