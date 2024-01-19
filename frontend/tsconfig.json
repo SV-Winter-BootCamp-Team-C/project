@@ -6,10 +6,10 @@
     "types": ["vite/client"],
     "module": "ESNext",
     "skipLibCheck": true,
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@/*": ["src/*"],
-    // },
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    },
 
     /* Bundler mode */
     "moduleResolution": "Node",
