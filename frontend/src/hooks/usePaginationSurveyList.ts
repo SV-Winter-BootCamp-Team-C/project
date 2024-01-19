@@ -1,9 +1,9 @@
-import { useAuthStore } from '@/store/AuthStore';
-import { SurveyCoverType } from '@/types/survey';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
-import { getAllSurveyAPI, getMySurveyAPI, getMyResponseAPI } from '@/api/getForm';
+import { SurveyCoverType } from '../types/survey';
+import { useAuthStore } from '../store/AuthStore';
+import { getAllSurveyAPI, getMySurveyAPI, getMyResponseAPI } from '../api/getForm';
 
 type PathType = 'allForm' | 'myForm' | 'myResponse';
 
@@ -31,7 +31,7 @@ const usePaginationSurveyList = (path: PathType) => {
 
   const { data, isError, isPending } = useQuery<SurveyCoverType, AxiosError>({
     queryKey: [path, currentPage, userId, searchTerm], // 검색어를 쿼리 키에 추가
-    queryFn: () => queryFn({ userId, currentPage, title: searchTerm }), // API 호출 시 검색어 전달
+    queryFn: () => queryFn({ userId: userId as number, currentPage, title: searchTerm }), // API 호출 시 검색어 전달
     select: (responseData) => {
       // API 응답에서 sortedList가 있는지 확인하고,
       // 있다면 그것을 surveys로 매핑하거나,
