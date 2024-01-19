@@ -36,6 +36,7 @@
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
+    "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.2.3",
     "zustand": "^4.4.7"
   },
