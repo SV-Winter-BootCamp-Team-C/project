@@ -28,6 +28,8 @@ import insertImage from '../assets/insertImage.svg';
 import { uploadS3 } from '../utils/s3ImgUpload';
 import ImageSearchModal from '../components/common/ImageSearchModal';
 import pexelIcon from '../assets/pexel.svg';
+import { getClient } from '../queryClient';
+
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -56,6 +58,7 @@ const OPTION_ITEMS: OptionItem[] = [
 function Create() {
   const userId = useAuthStore((state) => state.userId);
   const activeItem = useNavbarStore((state) => state.activeItem);
+  const queryClient = getClient;
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState<'style' | 'problem'>('style');
   const [createSurvey, setCreateSurvey] = useState<EditableSurvey>({
@@ -78,6 +81,14 @@ function Create() {
 
   const { mutate, isSuccess, isError } = useMutation({
     mutationFn: createSurveyAPI,
+    onSuccess: () => {
+      if (createSurvey.open) {
+        queryClient.invalidateQueries({ queryKey: ['allForm'] });
+        queryClient.refetchQueries({ queryKey: ['allForm'] });
+      }
+      queryClient.invalidateQueries({ queryKey: ['myForm', userId] });
+      queryClient.refetchQueries({ queryKey: ['myForm', userId] });
+    },
   });
 
   const handlePageClick = () => {
@@ -246,8 +257,6 @@ function Create() {
   const handleSubmit = () => {
     mutate(createSurvey);
   };
-
-  console.log(createSurvey);
 
   return (
     <Scrollbars style={{ position: 'absolute', top: '2.25rem', right: '0.1rem', width: 1080, height: 830 }}>
