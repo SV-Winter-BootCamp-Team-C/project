@@ -1,10 +1,11 @@
 import { restFetcher } from '@/queryClient';
+import { EditableSurvey } from '@/types/editableSurvey';
 
-export const createSurveyAPI = async (formData: FormData) => {
+export const createSurveyAPI = async (createSurveyData: EditableSurvey) => {
   const response = await restFetcher({
     method: 'POST',
     path: '/surveys',
-    body: formData,
+    body: createSurveyData,
   });
 
   return response.data;
