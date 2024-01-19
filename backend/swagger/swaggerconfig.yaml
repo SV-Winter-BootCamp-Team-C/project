@@ -936,7 +936,7 @@ paths:
           name: perPage
           schema:
             type: string
-            default: '5'
+            default: '6'
           description: 페이지 당 이미지 수 설정
       responses:
         '200':

@@ -6,7 +6,7 @@ const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 // 이미지 검색 API 라우트
 const getImageByAPI = async (req, res) => {
   try {
-    const perPage = req.query.perPage || '5';
+    const perPage = req.query.perPage || 6;
     const response = await axios.get(
       `https://api.pexels.com/v1/search?query=${req.params.query}&per_page=${perPage}&locale=ko-KR`,
       {
