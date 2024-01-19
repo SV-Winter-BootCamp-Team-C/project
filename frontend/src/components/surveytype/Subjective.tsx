@@ -6,7 +6,8 @@ import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableSubjectiveQuestion } from '../../types/editableSurvey';
 import { uploadS3 } from '../../utils/s3ImgUpload';
-
+import ImageSearchModal from '../common/ImageSearchModal';
+import pexelIcon from '../../assets/pexel.svg';
 
 interface SubjectiveProps {
   index: number;
@@ -18,6 +19,17 @@ interface SubjectiveProps {
 
 function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion }: SubjectiveProps) {
   const [image, setImage] = useState<string | null>(null);
+  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
+
+  const handleImageSearchClick = () => {
+    setImageSearchModalVisible(true);
+  };
+
+  const handleSelectImage = (imageUrl: string) => {
+    setImage(imageUrl);
+    updateQuestion(index, { ...data, imageUrl });
+    setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
+  };
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,16 +105,32 @@ function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion 
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="subjective-image-upload"
+            id="checkbox-image-upload"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
             style={{ display: 'none' }}
           />
-          <label htmlFor="subjective-image-upload" className="image-upload-label">
+          <label htmlFor="checkbox-image-upload" className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5 cursor-pointer" />
           </label>
+        </div>
+        <div className="absolute right-[13.625rem]">
+          <button
+            type="button"
+            className="flex items-center justify-start focus:outline-none "
+            onClick={handleImageSearchClick}
+          >
+            <img src={pexelIcon} alt="pexel" className="flex w-5 h-5" />
+          </button>
+          {isImageSearchModalVisible && (
+            <ImageSearchModal
+              isVisible={isImageSearchModalVisible}
+              onClose={() => setImageSearchModalVisible(false)}
+              onSelectImage={handleSelectImage}
+            />
+          )}
         </div>
       </div>
 
@@ -118,7 +146,7 @@ function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion 
           <img
             src={data.imageUrl}
             alt="Preview"
-            className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
+            className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[30rem] max-h-[36rem]"
           />
           <div className="flex items-center justify-center w-full" />
         </div>

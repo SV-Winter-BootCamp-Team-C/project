@@ -5,9 +5,11 @@ import copyIcon from '../../assets/copy.svg';
 import deleteIcon from '../../assets/delete.svg';
 import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
-import checkIcon from '../../assets/check.svg';
+// import checkIcon from '../../assets/check.svg';
 import { EditableObjectiveQuestion } from '../../types/editableSurvey';
 import { uploadS3 } from '../../utils/s3ImgUpload';
+import ImageSearchModal from '../common/ImageSearchModal';
+import pexelIcon from '../../assets/pexel.svg';
 
 interface CheckBoxProps {
   index: number;
@@ -19,6 +21,7 @@ interface CheckBoxProps {
 
 function CheckBox({ index, data, updateQuestion, copyQuestion, deleteQuestion }: CheckBoxProps) {
   const [image, setImage] = useState<string | null>(null);
+  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   // 새 선택지를 추가하는 함수
   const addChoice = () => {
@@ -30,6 +33,16 @@ function CheckBox({ index, data, updateQuestion, copyQuestion, deleteQuestion }:
   const deleteChoice = (choiceIndex: number) => {
     const newChoices = data.choices.filter((_, i) => i !== choiceIndex);
     updateQuestion(index, { ...data, choices: newChoices });
+  };
+
+  const handleImageSearchClick = () => {
+    setImageSearchModalVisible(true);
+  };
+
+  const handleSelectImage = (imageUrl: string) => {
+    setImage(imageUrl);
+    updateQuestion(index, { ...data, imageUrl });
+    setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
   // 이미지 업로드 핸들러
@@ -130,6 +143,22 @@ function CheckBox({ index, data, updateQuestion, copyQuestion, deleteQuestion }:
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5 cursor-pointer" />
           </label>
         </div>
+        <div className="absolute right-[13.625rem]">
+          <button
+            type="button"
+            className="flex items-center justify-start focus:outline-none "
+            onClick={handleImageSearchClick}
+          >
+            <img src={pexelIcon} alt="pexel" className="flex w-5 h-5" />
+          </button>
+          {isImageSearchModalVisible && (
+            <ImageSearchModal
+              isVisible={isImageSearchModalVisible}
+              onClose={() => setImageSearchModalVisible(false)}
+              onSelectImage={handleSelectImage}
+            />
+          )}
+        </div>
       </div>
 
       {image && (
@@ -144,7 +173,7 @@ function CheckBox({ index, data, updateQuestion, copyQuestion, deleteQuestion }:
           <img
             src={data.imageUrl}
             alt="Preview"
-            className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[45rem] max-h-[45rem]"
+            className="rounded-[0.625rem] border-2 border-solid border-gray max-w-[30rem] max-h-[36rem]"
           />
           <div className="flex items-center justify-center w-full" />
         </div>

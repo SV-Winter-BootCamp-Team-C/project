@@ -21,12 +21,15 @@ import {
 import { getRoundedClass } from '../utils/getRoundedClass';
 import Alert from '../components/common/Alert';
 import { useNavbarStore } from '../store/NavbarStore';
-import deleteIcon from '../assets/deleteIcon.svg';
+import deleteIcon from '../assets/delete.svg';
 import privateIcon from '../assets/privateIcon.svg';
 import publicIcon from '../assets/publicIcon.svg';
 import insertImage from '../assets/insertImage.svg';
 import { uploadS3 } from '../utils/s3ImgUpload';
+import ImageSearchModal from '../components/common/ImageSearchModal';
+import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
+
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -74,6 +77,7 @@ function Create() {
   const [customColor, setCustomColor] = useState<string>('#640FF2');
   const [mainImg, setMainImg] = useState<string | null>(null);
   const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
+  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   const { mutate, isSuccess, isError } = useMutation({
     mutationFn: createSurveyAPI,
@@ -107,6 +111,16 @@ function Create() {
   const handleOptionClick = (optionId: string) => {
     const isOpen = optionId === 'public';
     setCreateSurvey({ ...createSurvey, open: isOpen });
+  };
+
+  const handleImageSearchClick = () => {
+    setImageSearchModalVisible(true);
+  };
+
+  const handleSelectImage = (imageUrl: string) => {
+    setMainImg(imageUrl);
+    setCreateSurvey((prev) => ({ ...prev, mainImageUrl: imageUrl }));
+    setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -426,16 +440,32 @@ function Create() {
           </div>
 
           <div className="flex flex-col mt-[2.63rem]">
-            <div className="flex flex-row items-end  w-[16rem] h-[2.0315rem] gap-x-4 mb-[1.01rem]">
+            <div className="flex flex-row items-end  w-[20rem] h-[2.0315rem] gap-x-4 mb-[1.01rem]">
               <span className="text-[2rem] font-semibold">커버 이미지</span>
               <button
                 type="button"
                 className="flex items-center justify-start focus:outline-none "
+                onClick={handleImageSearchClick}
+              >
+                <img src={pexelIcon} alt="pexel" className="flex w-8 h-8 ml-6" />
+              </button>
+              {isImageSearchModalVisible && (
+                <ImageSearchModal
+                  isVisible={isImageSearchModalVisible}
+                  onClose={() => setImageSearchModalVisible(false)}
+                  onSelectImage={handleSelectImage}
+                />
+              )}
+            </div>
+            {mainImg && ( // mainImg 상태가 있을 때만 삭제 버튼을 표시
+              <button
+                type="button"
+                className="flex items-start justify-start w-6 h-6 focus:outline-none"
                 onClick={handleDeleteImage} // 이미지 삭제
               >
-                <img src={deleteIcon} alt="Delete" className="flex w-5 h-5 ml-15" />
+                <img src={deleteIcon} alt="Delete" className="w-full h-full rounded-[0.625rem]" />
               </button>
-            </div>
+            )}
             <div
               className="flex justify-center items-center w-[18.75rem] h-[12.5rem] cursor-pointer border-dashed border-[0.06rem] border-[#b4b4b4]"
               onClick={() => document.getElementById('imageInput')?.click()}
