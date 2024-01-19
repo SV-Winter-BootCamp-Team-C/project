@@ -1,8 +1,8 @@
-import { deleteSurveyAPI } from '@/api/deleteSurvey';
 import { useMutation } from '@tanstack/react-query';
-import Alert from '@/components/common/Alert';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
+import Alert from '@/components/common/Alert';
+import { deleteSurveyAPI } from '@/api/deleteSurvey';
 import { getClient } from '@/queryClient';
 
 interface DeleteSurveyProps {
@@ -24,7 +24,9 @@ function DeleteSurvey({ surveyId, userId, onMutation }: DeleteSurveyProps) {
     mutationFn: () => deleteSurveyAPI(surveyId, userId),
     onSuccess: () => {
       setAlert({ type: 'success', message: '삭제되었습니다.' });
+      getClient.invalidateQueries({ queryKey: ['allSurveys'] });
       getClient.invalidateQueries({ queryKey: ['myForm', userId] });
+      getClient.invalidateQueries({ queryKey: ['myResponses', userId] });
     },
     onError: (error: AxiosError) => {
       let message = '오류가 발생했습니다.';

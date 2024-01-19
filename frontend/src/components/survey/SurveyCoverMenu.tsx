@@ -82,7 +82,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
 
   return (
     <>
-      <div className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-10">
+      <div className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-[5]">
         {items.map((itemName, index) => (
           <div
             key={index}
