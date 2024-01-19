@@ -12,7 +12,12 @@ import CreateQuestionMenu from '../components/createSurvey/CreateQuestionMenu';
 import { createSurveyAPI } from '../api/survey';
 import { useAuthStore } from '../store/AuthStore';
 import { ButtonItem, FontItem, OptionItem } from '../types/create';
-import { EditableQuestions, EditableSurvey } from '../types/editableSurvey';
+import {
+  EditableObjectiveQuestion,
+  EditableQuestions,
+  EditableSubjectiveQuestion,
+  EditableSurvey,
+} from '../types/editableSurvey';
 import { getRoundedClass } from '../utils/getRoundedClass';
 import Alert from '../components/common/Alert';
 import { useNavbarStore } from '../store/NavbarStore';
@@ -20,6 +25,7 @@ import deleteIcon from '../assets/deleteIcon.svg';
 import privateIcon from '../assets/privateIcon.svg';
 import publicIcon from '../assets/publicIcon.svg';
 import insertImage from '../assets/insertImage.svg';
+import { uploadS3 } from '../utils/s3ImgUpload';
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -58,13 +64,13 @@ function Create() {
     buttonStyle: 'angled',
     color: '#918DCA',
     font: 'pretendard',
+    mainImageUrl: '',
     deadline: '',
     questions: [],
   });
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [customColor, setCustomColor] = useState<string>('#640FF2');
-  const [mainImg, setMainImg] = useState<string | null>();
-  const [mainImgFile, setMainImgFile] = useState<File | null>(null);
+  const [mainImg, setMainImg] = useState<string | null>(null);
   const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
 
   const { mutate, isSuccess, isError } = useMutation({
@@ -93,23 +99,29 @@ function Create() {
     setCreateSurvey({ ...createSurvey, open: isOpen });
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (files && files[0]) {
       const file = files[0];
-      setMainImgFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setMainImg(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+
+      // S3에 이미지 업로드
+      try {
+        const uploadedUrl = await uploadS3(file);
+        setCreateSurvey((prev) => ({ ...prev, mainImageUrl: uploadedUrl }));
+      } catch (error) {
+        console.error('이미지 업로드 실패:', error);
+      }
     }
   };
 
   // 이미지 삭제
   const handleDeleteImage = () => {
     setMainImg(null);
-    setMainImgFile(null);
   };
 
   const handleAddQuestion = () => {
@@ -129,7 +141,7 @@ function Create() {
         type,
         content: '',
         imageUrl: '',
-        choices: [],
+        choices: [{ option: '' }],
       };
     }
     setCreateSurvey((prev) => ({
@@ -139,42 +151,87 @@ function Create() {
     setAddQuestionDropdown(false);
   };
 
-  // const updateQuestion = (index: number, updatedData: EditableQuestions) => {
-  //   setCreateSurvey((prev) => {
-  //     const updatedQuestions = [...prev.questions];
-  //     updatedQuestions[index] = updatedData;
-  //     return { ...prev, questions: updatedQuestions };
-  //   });
-  // };
+  // 문항 내용 업데이트
+  const updateQuestion = (questionId: number, updatedData: EditableQuestions) => {
+    const updatedQuestions = createSurvey.questions.map((question, index) =>
+      index === questionId ? { ...question, ...updatedData } : question,
+    );
+    setCreateSurvey({ ...createSurvey, questions: updatedQuestions });
+  };
 
-  const renderQuestionComponent = (type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN') => {
+  // 문항 복제
+  const copyQuestion = (index: number) => {
+    const questionToCopy = createSurvey.questions[index];
+
+    // 문항 목록에 복사된 문항 삽입
+    const newQuestions = [
+      ...createSurvey.questions.slice(0, index + 1),
+      { ...questionToCopy },
+      ...createSurvey.questions.slice(index + 1),
+    ];
+
+    setCreateSurvey({ ...createSurvey, questions: newQuestions });
+  };
+
+  // 문항 삭제
+  const deleteQuestion = (index: number) => {
+    const newQuestions = createSurvey.questions.filter((_, i) => i !== index);
+    setCreateSurvey({ ...createSurvey, questions: newQuestions });
+  };
+
+  const renderQuestionComponent = (
+    type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN',
+    index: number,
+    data: EditableQuestions,
+  ) => {
     switch (type) {
       case 'MULTIPLE_CHOICE': // 객관식 문항
-        return <MultipleChoice />;
+        return (
+          <MultipleChoice
+            index={index}
+            data={data as EditableObjectiveQuestion}
+            updateQuestion={updateQuestion}
+            copyQuestion={copyQuestion}
+            deleteQuestion={deleteQuestion}
+          />
+        );
       case 'CHECKBOX': // 체크박스 문항
-        return <Checkbox />;
+        return (
+          <Checkbox
+            index={index}
+            data={data as EditableObjectiveQuestion}
+            updateQuestion={updateQuestion}
+            copyQuestion={copyQuestion}
+            deleteQuestion={deleteQuestion}
+          />
+        );
       case 'DROPDOWN': // 드롭다운 문항
-        return <DropDown />;
+        return (
+          <DropDown
+            index={index}
+            data={data as EditableObjectiveQuestion}
+            updateQuestion={updateQuestion}
+            copyQuestion={copyQuestion}
+            deleteQuestion={deleteQuestion}
+          />
+        );
       case 'SUBJECTIVE_QUESTION': // 주관식 문항
-        return <Subjective />;
+        return (
+          <Subjective
+            index={index}
+            data={data as EditableSubjectiveQuestion}
+            updateQuestion={updateQuestion}
+            copyQuestion={copyQuestion}
+            deleteQuestion={deleteQuestion}
+          />
+        );
       default:
         return null;
     }
   };
 
   const handleSubmit = () => {
-    const formData = new FormData();
-    formData.append('userId', userId?.toString() as string);
-    formData.append('title', createSurvey.title);
-    formData.append('description', createSurvey.description);
-    formData.append('open', createSurvey.open.toString());
-    formData.append('color', createSurvey.color);
-    formData.append('buttonStyle', createSurvey.buttonStyle);
-    if (mainImgFile) formData.append('mainImageUrl', mainImgFile);
-    formData.append('deadline', createSurvey.deadline);
-    // formData.append('questions', );
-
-    mutate(formData);
+    mutate(createSurvey);
   };
 
   console.log(createSurvey);
@@ -472,7 +529,7 @@ function Create() {
               createSurvey.questions.map((item, index) => {
                 return (
                   <div key={index} className="pb-6">
-                    {renderQuestionComponent(item.type)}
+                    {renderQuestionComponent(item.type, index, createSurvey.questions[index])}
                   </div>
                 );
               })
