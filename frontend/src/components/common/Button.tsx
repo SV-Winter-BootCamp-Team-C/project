@@ -1,4 +1,4 @@
-import plus from '@/assets/plus.svg';
+import plus from '../../assets/plus.svg';
 
 interface ButtonProps {
   text: string;

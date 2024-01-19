@@ -2,17 +2,17 @@ import { useQuery, useMutation, UseMutationOptions } from '@tanstack/react-query
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import Alert from '@/components/common/Alert';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import ResponseMultipleChoice from '@/components/responsetype/ResponseMultipleChoice';
-import ResponseSubjective from '@/components/responsetype/ResponseSubjective';
-import ResponseCheckBox from '@/components/responsetype/ResponseCheckBox';
-import ResponseDropDown from '@/components/responsetype/ResponseDropDown';
-import { TextButton } from '@/components/common/Button';
-import { QuestionDataForm, ResponseSubmit } from '@/types/questionData';
-import { responseformAPI, responseSubmitAPI } from '@/api/responseform';
-import { useAuthStore } from '@/store/AuthStore';
-import Loading from '@/components/common/Loading';
+import Alert from '../components/common/Alert';
+import ResponseMultipleChoice from '../components/responsetype/ResponseMultipleChoice';
+import ResponseSubjective from '../components/responsetype/ResponseSubjective';
+import ResponseCheckBox from '../components/responsetype/ResponseCheckBox';
+import ResponseDropDown from '../components/responsetype/ResponseDropDown';
+import { TextButton } from '../components/common/Button';
+import { QuestionDataForm, ResponseSubmit } from '../types/questionData';
+import { responseformAPI, responseSubmitAPI } from '../api/responseform';
+import { useAuthStore } from '../store/AuthStore';
+import Loading from '../components/common/Loading';
 
 function ResponseForm() {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import close from '@/assets/closebtn.svg';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useMutation } from '@tanstack/react-query';
-import { shareSurveyAPI } from '@/api/surveyMenu';
 import { AxiosError } from 'axios';
-import { ApiResponseError } from '@/types/apiResponseError';
+import { shareSurveyAPI } from '../../api/surveyMenu';
+import close from '../../assets/closebtn.svg';
+import { ApiResponseError } from '../../types/apiResponseError';
 import { AddButton, TextButton } from './Button';
 import Alert from './Alert';
 import Loading from './Loading';

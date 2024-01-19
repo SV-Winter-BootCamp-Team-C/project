@@ -1,5 +1,5 @@
-import typeIcon from '@/assets/type.svg';
-import { ExtendedQuestionData } from '@/types/questionData';
+import typeIcon from '../../assets/type.svg';
+import { ExtendedQuestionData } from '../../types/questionData';
 
 interface StaticDropDownProps {
   question: ExtendedQuestionData;

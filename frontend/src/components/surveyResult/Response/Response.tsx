@@ -1,10 +1,10 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getExcelDownloadAPI } from '@/api/getResult';
-import Alert from '@/components/common/Alert';
-import Loading from '@/components/common/Loading';
-import { ListData } from '@/types/answerData';
+import { getExcelDownloadAPI } from '../../../api/getResult';
+import Alert from '../../common/Alert';
+import Loading from '../../common/Loading';
+import { ListData } from '../../../types/answerData';
 
 interface ResponseProps {
   title: string;

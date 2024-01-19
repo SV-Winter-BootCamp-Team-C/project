@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import participants from '@/assets/participants.svg';
-import { calculateRemainingDays } from '@/utils/calculateRemainingDays';
-import openIcon from '@/assets/open.svg';
-import privateIcon from '@/assets/private.svg';
-import { Survey } from '@/types/survey';
-import noImage from '@/assets/noImage.png';
-import { useAuthStore } from '@/store/AuthStore';
+import participants from '../../assets/participants.svg';
+import { calculateRemainingDays } from '../../utils/calculateRemainingDays';
+import openIcon from '../../assets/open.svg';
+import privateIcon from '../../assets/private.svg';
+import { Survey } from '../../types/survey';
+import noImage from '../../assets/noImage.png';
+import { useAuthStore } from '../../store/AuthStore';
 import SurveyCoverMenu from './SurveyCoverMenu';
 
 function SurveyCover({

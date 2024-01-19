@@ -1,4 +1,4 @@
-import { restFetcher } from '@/queryClient';
+import { restFetcher } from '../queryClient';
 
 export const deleteSurveyAPI = async (surveyId: number, userId: number) => {
   const response = await restFetcher({

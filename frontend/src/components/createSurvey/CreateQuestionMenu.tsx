@@ -1,7 +1,7 @@
-import createMultiple from '@/assets/createMultiple.svg';
-import createCheck from '@/assets/createCheck.svg';
-import createDrop from '@/assets/createDrop.svg';
-import createSubjective from '@/assets/createSubjective.svg';
+import createMultiple from '../../assets/createMultiple.svg';
+import createCheck from '../../assets/createCheck.svg';
+import createDrop from '../../assets/createDrop.svg';
+import createSubjective from '../../assets/createSubjective.svg';
 
 interface CreateQuestionMenuProps {
   onSelect: (type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN') => void;

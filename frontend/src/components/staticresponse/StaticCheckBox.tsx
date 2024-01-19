@@ -1,7 +1,7 @@
-import typeIcon from '@/assets/type.svg';
-import checkIcon from '@/assets/check.svg';
-import { ExtendedQuestionData } from '@/types/questionData';
-import { getRoundedClass } from '@/utils/getRoundedClass';
+import typeIcon from '../../assets/type.svg';
+import checkIcon from '../../assets/check.svg';
+import { ExtendedQuestionData } from '../../types/questionData';
+import { getRoundedClass } from '../../utils/getRoundedClass';
 
 interface StaticCheckBoxProps {
   question: ExtendedQuestionData;

@@ -7,6 +7,7 @@ import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableSubjectiveQuestion } from '../../types/editableSurvey';
 import { uploadS3 } from '../../utils/s3ImgUpload';
 
+
 interface SubjectiveProps {
   index: number;
   data: EditableSubjectiveQuestion;

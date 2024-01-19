@@ -1,5 +1,5 @@
-import SurveyForm from '@/components/survey/SurveyForm';
-import usePaginationSurveyList from '@/hooks/usePaginationSurveyList';
+import SurveyForm from '../components/survey/SurveyForm';
+import usePaginationSurveyList from '../hooks/usePaginationSurveyList';
 
 function MyResponse() {
   const { data, currentPage, handlePageChange, searchTerm, setSearchTerm } = usePaginationSurveyList('myResponse');

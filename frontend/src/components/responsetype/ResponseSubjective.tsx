@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import { QuestionData } from '@/types/questionData';
+import typeIcon from '../../assets/type.svg';
+import { QuestionData } from '../../types/questionData';
 
 interface ResponseSubjectiveProps {
   question: QuestionData;

@@ -1,8 +1,8 @@
 import { Pagination } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { SurveyCoverType } from '@/types/survey';
-import search from '@/assets/search.svg';
-import { AddButton } from '@/components/common/Button';
+import { SurveyCoverType } from '../../types/survey';
+import search from '../../assets/search.svg';
+import { AddButton } from '../common/Button';
 import SurveyCover from './SurveyCover';
 
 interface SurvayFormProps {

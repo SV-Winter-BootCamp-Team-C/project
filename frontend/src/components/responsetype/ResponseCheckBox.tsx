@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import typeIcon from '@/assets/type.svg';
-import checkIcon from '@/assets/check.svg';
-import { QuestionData } from '@/types/questionData';
-import { getRoundedClass } from '@/utils/getRoundedClass';
+import typeIcon from '../../assets/type.svg';
+import checkIcon from '../../assets/check.svg';
+import { QuestionData } from '../../types/questionData';
+import { getRoundedClass } from '../../utils/getRoundedClass';
 
 interface ResponseCheckBoxProps {
   question: QuestionData;

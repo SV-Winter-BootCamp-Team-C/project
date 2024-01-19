@@ -45,7 +45,7 @@ const getUserSurveys = async (req, res) => {
             mainImageUrl: survey.mainImageUrl || null,
             createdAt: survey.createdAt,
             deadline: survey.deadline,
-            attendedCount: attendedCount,
+            attendCount: attendedCount,
           };
         }),
       );

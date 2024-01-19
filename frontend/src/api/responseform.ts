@@ -1,5 +1,5 @@
-import { restFetcher } from '@/queryClient';
-import { ResponseSubmit } from '@/types/questionData';
+import { restFetcher } from '../queryClient';
+import { ResponseSubmit } from '../types/questionData';
 
 export const responseformAPI = async (surveyId: number) => {
   const response = await restFetcher({
