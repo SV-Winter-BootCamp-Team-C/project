@@ -30,7 +30,6 @@ import ImageSearchModal from '../components/common/ImageSearchModal';
 import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
 
-
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
   { id: 'smooth', label: '부드럽게' },
