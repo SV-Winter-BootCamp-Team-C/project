@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import menuSee from '../../assets/menuSee.svg';
 import menuLink from '../../assets/menuLink.svg';
 import menuAnalysis from '../../assets/menuAnalysis.svg';
@@ -7,7 +9,10 @@ import menuEdit from '../../assets/menuEdit.svg';
 import menuDel from '../../assets/menuDel.svg';
 import { useAuthStore } from '../../store/AuthStore';
 import ShareMailModal from '../common/ShareMailModal';
-import DeleteSurvey from './DeleteSurvey';
+import { deleteSurveyAPI } from '../../api/deleteSurvey';
+import { getClient } from '../../queryClient';
+import Alert from '../common/Alert';
+import { ApiResponseError } from '../../types/apiResponseError';
 
 interface SurveyCoverMenuProps {
   surveyId: number;
@@ -42,10 +47,30 @@ const ITEM_ICON: ItemIcon[] = [
 function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
-  const [isShareModalVisible, setIsShareModalVisible] = useState(false);
-  const [deleteSurvey, setDeleteSurvey] = useState<(() => void) | null>(null);
   const myId = useAuthStore((state) => state.userId) ?? 0;
+  const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+
+  const {
+    mutate,
+    isSuccess: deleteSuccess,
+    isError: deleteError,
+  } = useMutation({
+    mutationFn: () => deleteSurveyAPI(surveyId, myId),
+    onSuccess: () => {
+      getClient.invalidateQueries({ queryKey: ['allSurveys'] });
+      getClient.refetchQueries({ queryKey: ['allSurveys'] });
+      getClient.invalidateQueries({ queryKey: ['myForm', myId] });
+      getClient.refetchQueries({ queryKey: ['myForm', myId] });
+      getClient.invalidateQueries({ queryKey: ['myResponse', myId] });
+      getClient.refetchQueries({ queryKey: ['myResponse', myId] });
+    },
+    onError: (error: AxiosError) => {
+      const err = error as AxiosError<ApiResponseError>;
+      setErrorMessage(err.response?.data?.message || '설문 삭제에 실패했습니다.');
+    },
+  });
 
   const items = currentMenuItems ? [...currentMenuItems.item] : [];
 
@@ -63,9 +88,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
   };
 
   const handleDeleteSurvey = () => {
-    if (deleteSurvey) {
-      deleteSurvey();
-    }
+    mutate();
   };
 
   const handleItemClick = (itemName: string, sId: number) => {
@@ -74,7 +97,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     } else if (itemName === '분석') {
       navigate(`/result?id=${sId}`);
     } else if (itemName === '공유') {
-      handleShareClick(); // '공유'를 클릭했을 때 ShareMailModal을 표시
+      handleShareClick();
     } else if (itemName === '삭제') {
       handleDeleteSurvey();
     }
@@ -105,11 +128,8 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
           onClose={() => setIsShareModalVisible(false)}
         />
       )}
-      <DeleteSurvey
-        surveyId={surveyId}
-        userId={myId}
-        onMutation={(mutateFunction) => setDeleteSurvey(() => mutateFunction)}
-      />
+      {deleteSuccess && <Alert type="success" message="삭제되었습니다." buttonText="확인" />}
+      {deleteError && <Alert type="error" message={errorMessage} buttonText="확인" />}
     </>
   );
 }
