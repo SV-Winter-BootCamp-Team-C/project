@@ -30,7 +30,6 @@ import ImageSearchModal from '../components/common/ImageSearchModal';
 import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
 
-
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
   { id: 'smooth', label: '부드럽게' },
@@ -363,6 +362,7 @@ function Create() {
                   {COROL_ITEMS[0].map((item) => {
                     return (
                       <button
+                        key={item}
                         aria-label={`Select color ${item}`}
                         type="button"
                         className={`w-8 h-8 rounded-full ${
@@ -378,6 +378,7 @@ function Create() {
                   {COROL_ITEMS[1].map((item) => {
                     return (
                       <button
+                        key={item}
                         aria-label={`Select color ${item}`}
                         type="button"
                         className={`w-8 h-8 rounded-full ${

@@ -61,7 +61,6 @@ function Response({ title, list }: ResponseProps) {
         window.URL.revokeObjectURL(url);
       }, 60000);
       link.remove();
-      console.log(response);
     } catch (err) {
       setError(true);
     } finally {

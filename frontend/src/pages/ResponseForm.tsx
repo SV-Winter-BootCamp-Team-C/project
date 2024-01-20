@@ -70,7 +70,6 @@ function ResponseForm() {
     if (isEveryQuestionAnswered) {
       // 모든 질문이 적절히 답변되었을 경우
       await mutation.mutateAsync(responseSubmit);
-      console.log(responseSubmit);
     } else {
       // 하나라도 답변되지 않은 질문이 있을 경우
       setShowError(true);

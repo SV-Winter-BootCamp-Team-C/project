@@ -37,6 +37,5 @@ export const getMyResponseAPI = async ({ userId, currentPage, title }: AllSurvey
     path: `/surveys/${userId}/join`,
     params,
   });
-  console.log(params);
   return response;
 };
