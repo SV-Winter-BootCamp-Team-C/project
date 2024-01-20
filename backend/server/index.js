@@ -13,6 +13,7 @@ const { createAndDownloadExcel } = require('../excel/excelGengerate');
 const surveyRouters = require('../routers/surveyRouter');
 const userRouters = require('../routers/UserRouter');
 const { getImageByAPI } = require('../controller/getImageBySearch');
+const { callChatGPT } = require('../gpt/gptAPI');
 
 const cors = require('cors');
 
