@@ -26,6 +26,14 @@ function ResponseForm() {
     questions: [],
   });
 
+  const fontClasses: { [key: string]: string } = {
+    pretendard: 'font-pretendardFont',
+    tmoney: 'font-tMoney',
+    nps: 'font-npsFont',
+    omyu: 'font-omyuFont',
+    seolleim: 'font-seolleimFont',
+  };
+
   const {
     data: surveyData,
     isLoading,
@@ -157,12 +165,7 @@ function ResponseForm() {
   };
 
   return (
-    <div
-      className="relative flex mt-[2.25rem] ml-[0.1rem]"
-      style={{
-        fontFamily: `${surveyData.font}`,
-      }}
-    >
+    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}>
       <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
         <div className="flex flex-col px-[8.75rem]">
           {surveyData.mainImageUrl && (
