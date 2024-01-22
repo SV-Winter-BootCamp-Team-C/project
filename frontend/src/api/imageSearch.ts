@@ -1,6 +1,6 @@
 import { restFetcher } from '../queryClient';
 
-export const imageSearchAPI = async (query: string, perPage: number = 5) => {
+export const imageSearchAPI = async (query: string, perPage: number = 6) => {
   const response = await restFetcher({
     method: 'GET',
     path: `/images/search/${encodeURIComponent(query)}`,

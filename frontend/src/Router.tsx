@@ -33,6 +33,7 @@ const routerData: RouterElement[] = [
   { id: 8, path: '/result', element: <ResultPage />, withAuth: true, isNavbar: true }, // 설문 id
   { id: 9, path: '/responseform', element: <ResponseForm />, withAuth: true, isNavbar: true }, // 설문 id
   { id: 10, path: '/myanswer', element: <MyAnswer />, withAuth: true, isNavbar: true },
+  { id: 11, path: '/edit', element: <Create />, withAuth: true, isNavbar: true }, // 설문 편집
 ];
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {

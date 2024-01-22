@@ -3,3 +3,4 @@ pqdata
 .DS_Store
 data
 .env
+node_modules

@@ -6,7 +6,7 @@ function AllForm() {
   const navigate = useNavigate();
 
   const { data, currentPage, handlePageChange, searchTerm, setSearchTerm } = usePaginationSurveyList('allForm');
-  console.log(searchTerm);
+
   return (
     <SurveyForm
       surveyData={data || { surveys: [], totalPages: 0 }}

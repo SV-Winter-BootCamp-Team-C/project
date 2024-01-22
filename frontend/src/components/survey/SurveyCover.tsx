@@ -34,7 +34,7 @@ function SurveyCover({
       navigate(`/responseform?id=${surveyId}`);
     } else if (location.pathname.includes('/myform')) {
       navigate(`/responseform?id=${surveyId}`);
-    } else if (location.pathname.includes('/myresponse')) {
+    } else if (location.pathname.includes('/myresponses')) {
       navigate(`/myanswer?userId=${myId}&surveyId=${surveyId}`);
     }
   };
@@ -75,7 +75,7 @@ function SurveyCover({
           </div>
         </div>
       </div>
-      {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} />}
+      {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} attendCount={attendCount} />}
     </div>
   );
 }
