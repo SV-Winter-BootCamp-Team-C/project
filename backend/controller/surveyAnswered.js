@@ -118,6 +118,10 @@ const surveyAnswered = async (req, res) => {
         surveyTitle: survey.title,
       }));
 
+      if (!surveys.length) {
+        return res.status(204).json({ message: '작성된 설문지가 없습니다.' });
+      }
+
       const searchList = { surveys: surveyed, title };
       const resultList = surveyTitleSearch(searchList);
       const len = resultList.surveys.length;
