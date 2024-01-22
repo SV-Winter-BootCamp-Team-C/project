@@ -9,6 +9,7 @@ const getUserSurveys = async (req, res) => {
     const title = req.query.title;
 
     if (!title) {
+      const preResult = [];
       const surveys = await Survey.findAll({
         where: { userId: userId },
         attributes: [
@@ -38,17 +39,25 @@ const getUserSurveys = async (req, res) => {
             ],
           });
 
-          return {
+          preResult.push({
             surveyId: survey.id,
             title: survey.title,
             open: survey.open,
             mainImageUrl: survey.mainImageUrl || null,
             createdAt: survey.createdAt,
+            updatedAt: survey.updatedAt,
             deadline: survey.deadline,
             attendCount: attendedCount,
-          };
+          });
         }),
       );
+      if ('attendCount' in req.query) {
+        preResult.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        preResult.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        preResult.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
 
       const totalCount = await Survey.count({ where: { userId: userId } });
 
@@ -122,7 +131,7 @@ const getUserSurveys = async (req, res) => {
           surveyId: survey.dataValues.id,
           title: survey.dataValues.title,
           open: survey.dataValues.open,
-          mainImageUrl: survey.dataValues.mainImageUrl,
+          mainImageUrl: survey.dataValues.mainImageUrl || null,
           createdAt: survey.dataValues.createdAt,
           updatedAt: survey.dataValues.updatedAt,
           deadline: survey.dataValues.deadline,
@@ -130,6 +139,15 @@ const getUserSurveys = async (req, res) => {
           attendCount: userCount,
         });
       }
+
+      if ('attendCount' in req.query) {
+        sortedList.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        sortedList.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        sortedList.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
+
       res.status(200).json({ sortedList, totalPages: tp });
     }
   } catch (error) {
