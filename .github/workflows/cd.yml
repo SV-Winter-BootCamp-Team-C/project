@@ -44,8 +44,8 @@ jobs:
       - name: Execute remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/project
