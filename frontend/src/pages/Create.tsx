@@ -31,7 +31,6 @@ import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
 // import { responseformAPI } from '../api/responseform';
 
-
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
   { id: 'smooth', label: '부드럽게' },
