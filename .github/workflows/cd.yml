@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x" # 여기서 사용할 Node.js 버전을 설정
+          node-version: "18.x" # 여기서 사용할 Node.js 버전을 설정
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -48,7 +48,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/backend
+            cd /home/ubuntu/project
             git stash
             git pull
             docker-compose -f docker-compose.yml down
