@@ -6,7 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_KEY,
 });
 async function callChatGPT(prompt) {
-  console.log('Received prompt:', prompt); // 로그 추가
+  console.log('Received prompt:', prompt); 
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
