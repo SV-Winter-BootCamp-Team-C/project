@@ -48,8 +48,7 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ubuntu/project
-            git stash
+            cd /home/ubuntu/backend
             git pull
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml pull
