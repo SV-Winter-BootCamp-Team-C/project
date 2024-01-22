@@ -7,6 +7,29 @@ const getAnswerByuserId = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
+
+    // Answer와 관련된 Question을 조회합니다.
+    const userAnswers = await Answer.findAll({
+      where: { userId: userId },
+      include: [
+        {
+          model: Question,
+          attributes: ['surveyId'], // Question에서 surveyId를 포함합니다.
+          where: { surveyId: surveyId }, // 해당 설문조사의 질문만 필터링합니다.
+        },
+      ],
+    });
+
+    // Answer가 없는 경우 에러 응답을 반환합니다.
+    if (
+      userAnswers.length === 0 ||
+      userAnswers.some((answer) => answer.Question == null)
+    ) {
+      return res
+        .status(404)
+        .json({ message: '사용자가 이 설문에 응답하지 않았습니다.' });
+    }
+
     const survey = await Survey.findByPk(surveyId, {
       include: [
         {
@@ -32,7 +55,7 @@ const getAnswerByuserId = async (req, res) => {
     });
 
     if (!survey) {
-      return res.status(404).json({ message: 'Survey not found' });
+      return res.status(400).json({ message: 'Survey not found' });
     }
 
     const responseData = {
