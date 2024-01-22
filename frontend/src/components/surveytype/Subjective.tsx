@@ -5,20 +5,23 @@ import deleteIcon from '../../assets/delete.svg';
 import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableSubjectiveQuestion } from '../../types/editableSurvey';
-import { uploadS3 } from '../../utils/s3ImgUpload';
 import ImageSearchModal from '../common/ImageSearchModal';
 import pexelIcon from '../../assets/pexel.svg';
 
 interface SubjectiveProps {
   index: number;
   data: EditableSubjectiveQuestion;
+  handleImageUpload: (
+    index: number,
+    data: EditableSubjectiveQuestion,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
   updateQuestion: (index: number, data: EditableSubjectiveQuestion) => void;
   copyQuestion: (index: number) => void;
   deleteQuestion: (index: number) => void;
 }
 
-function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion }: SubjectiveProps) {
-  const [image, setImage] = useState<string | null>(null);
+function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuestion, deleteQuestion }: SubjectiveProps) {
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   const handleImageSearchClick = () => {
@@ -26,34 +29,11 @@ function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion 
   };
 
   const handleSelectImage = (imageUrl: string) => {
-    setImage(imageUrl);
     updateQuestion(index, { ...data, imageUrl });
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
-  // 이미지 업로드 핸들러
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-
-      // S3에 이미지 업로드
-      try {
-        const uploadedUrl = await uploadS3(file);
-        updateQuestion(index, { ...data, imageUrl: uploadedUrl });
-      } catch (error) {
-        console.error('이미지 업로드 실패:', error);
-      }
-    }
-  };
-
   const handleDeleteImage = () => {
-    setImage(null);
     updateQuestion(index, { ...data, imageUrl: '' });
   };
 
@@ -108,7 +88,7 @@ function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion 
             id="checkbox-image-upload"
             type="file"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={(event) => handleImageUpload(index, data, event)}
             style={{ display: 'none' }}
           />
           <label htmlFor="checkbox-image-upload" className="image-upload-label">
@@ -134,7 +114,7 @@ function Subjective({ index, data, updateQuestion, copyQuestion, deleteQuestion 
         </div>
       </div>
 
-      {image && (
+      {data.imageUrl && (
         <div className="mb-4">
           <button
             type="button"

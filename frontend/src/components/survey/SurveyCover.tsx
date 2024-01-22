@@ -75,7 +75,7 @@ function SurveyCover({
           </div>
         </div>
       </div>
-      {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} />}
+      {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} attendCount={attendCount} />}
     </div>
   );
 }
