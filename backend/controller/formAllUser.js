@@ -24,6 +24,10 @@ const getUserSurveys = async (req, res) => {
         limit: pageLimit,
       });
 
+      if (!surveys.length) {
+        return res.status(204).json({ message: '작성된 설문지가 없습니다.' });
+      }
+
       // 각 설문조사에 대한 attended_count 계산
       const modifiedSurveys = await Promise.all(
         surveys.map(async (survey) => {
@@ -61,7 +65,7 @@ const getUserSurveys = async (req, res) => {
 
       const totalCount = await Survey.count({ where: { userId: userId } });
 
-      res.json({
+      res.status(200).json({
         surveys: modifiedSurveys,
         totalPages: Math.ceil(totalCount / pageLimit),
       });
@@ -131,7 +135,7 @@ const getUserSurveys = async (req, res) => {
           surveyId: survey.dataValues.id,
           title: survey.dataValues.title,
           open: survey.dataValues.open,
-          mainImageUrl: survey.dataValues.mainImageUrl || null,
+          mainImageUrl: survey.dataValues.mainImageUrl,
           createdAt: survey.dataValues.createdAt,
           updatedAt: survey.dataValues.updatedAt,
           deadline: survey.dataValues.deadline,
