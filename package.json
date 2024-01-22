@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "openai": "^4.24.7"
-  }
+  },
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-docker": "docker-compose up --build"
+  },
+  "author": "",
+  "license": "ISC"
 }
