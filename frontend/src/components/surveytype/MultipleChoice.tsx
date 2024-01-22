@@ -6,20 +6,30 @@ import deleteIcon from '../../assets/delete.svg';
 import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableObjectiveQuestion } from '../../types/editableSurvey';
-import { uploadS3 } from '../../utils/s3ImgUpload';
 import ImageSearchModal from '../common/ImageSearchModal';
 import pexelIcon from '../../assets/pexel.svg';
 
 interface MultipleChoiceProps {
   index: number;
   data: EditableObjectiveQuestion;
+  handleImageUpload: (
+    index: number,
+    data: EditableObjectiveQuestion,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
   updateQuestion: (index: number, data: EditableObjectiveQuestion) => void;
   copyQuestion: (index: number) => void;
   deleteQuestion: (index: number) => void;
 }
 
-function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuestion }: MultipleChoiceProps) {
-  const [image, setImage] = useState<string | null>(null);
+function MultipleChoice({
+  index,
+  data,
+  handleImageUpload,
+  updateQuestion,
+  copyQuestion,
+  deleteQuestion,
+}: MultipleChoiceProps) {
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   // 새 선택지를 추가하는 함수
@@ -39,34 +49,11 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
   };
 
   const handleSelectImage = (imageUrl: string) => {
-    setImage(imageUrl);
     updateQuestion(index, { ...data, imageUrl });
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
-  // // 이미지 업로드 핸들러
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-
-      // S3에 이미지 업로드
-      try {
-        const uploadedUrl = await uploadS3(file);
-        updateQuestion(index, { ...data, imageUrl: uploadedUrl });
-      } catch (error) {
-        console.error('이미지 업로드 실패:', error);
-      }
-    }
-  };
-
   const handleDeleteImage = () => {
-    setImage(null);
     updateQuestion(index, { ...data, imageUrl: '' });
   };
 
@@ -130,7 +117,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
             id="checkbox-image-upload"
             type="file"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={(event) => handleImageUpload(index, data, event)}
             style={{ display: 'none' }}
           />
           <label htmlFor="checkbox-image-upload" className="image-upload-label">
@@ -156,7 +143,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
         </div>
       </div>
 
-      {image && (
+      {data.imageUrl && (
         <div className="mb-4">
           <button
             type="button"

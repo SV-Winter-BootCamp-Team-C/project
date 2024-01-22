@@ -17,6 +17,7 @@ import { ApiResponseError } from '../../types/apiResponseError';
 interface SurveyCoverMenuProps {
   surveyId: number;
   open?: boolean;
+  attendCount?: number;
 }
 
 interface MenuItem {
@@ -44,12 +45,13 @@ const ITEM_ICON: ItemIcon[] = [
   { item: '삭제', icon: menuDel },
 ];
 
-function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
+function SurveyCoverMenu({ surveyId, open, attendCount }: SurveyCoverMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const myId = useAuthStore((state) => state.userId) ?? 0;
   const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showEditAlert, setShowEditAlert] = useState<boolean>(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
 
   const {
@@ -72,7 +74,7 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     },
   });
 
-  const items = currentMenuItems ? [...currentMenuItems.item] : [];
+  const items = currentMenuItems ? [...currentMenuItems.item].filter((item) => !(open && item === '편집')) : [];
 
   if (location.pathname === '/myresponses' && open) {
     items.push('분석');
@@ -91,13 +93,23 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
     mutate();
   };
 
+  const isEditable = () => {
+    return open === false && attendCount === 0;
+  };
+
   const handleItemClick = (itemName: string, sId: number) => {
     if (itemName === '보기') {
       navigate(`/responseform?id=${sId}`);
-    } else if (itemName === '분석') {
-      navigate(`/result?id=${sId}`);
+    } else if (itemName === '편집') {
+      if (isEditable()) {
+        navigate(`/edit?id=${sId}`);
+      } else {
+        setShowEditAlert(true);
+      }
     } else if (itemName === '공유') {
       handleShareClick();
+    } else if (itemName === '분석') {
+      navigate(`/result?id=${sId}`);
     } else if (itemName === '삭제') {
       handleDeleteSurvey();
     }
@@ -130,6 +142,14 @@ function SurveyCoverMenu({ surveyId, open }: SurveyCoverMenuProps) {
       )}
       {deleteSuccess && <Alert type="success" message="삭제되었습니다." buttonText="확인" />}
       {deleteError && <Alert type="error" message={errorMessage} buttonText="확인" />}
+      {showEditAlert && (
+        <Alert
+          type="error"
+          message="참여자가 있는 설문은 편집할 수 없습니다."
+          buttonText="확인"
+          buttonClick={() => setShowEditAlert(false)}
+        />
+      )}
     </>
   );
 }

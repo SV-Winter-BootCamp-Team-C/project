@@ -43,7 +43,8 @@ function ImageSearchModal({ isVisible, onClose: providedOnClose, onSelectImage }
     }
   }, [queryTerm, isVisible, refetch]);
 
-  const handleSearch = () => {
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!searchTerm) {
       setErrorMessage('검색어를 입력해주세요');
       return;
@@ -84,19 +85,26 @@ function ImageSearchModal({ isVisible, onClose: providedOnClose, onSelectImage }
         </div>
 
         <div className="w-full">
-          <div className="flex flex-row items-center justify-center gap-3">
+          <form onSubmit={handleSearch} className="flex flex-row items-center justify-center gap-3">
             <input
               type="text"
               placeholder="이미지를 검색해주세요."
               value={searchTerm}
+              required
               onChange={handleSearchChange}
               className="w-[20rem] h-9 p-2 text-black border border-solid border-gray rounded-[0.625rem] focus:outline-none"
             />
 
             <div className="flex justify-center">
-              <TextButton text="검색" onClick={handleSearch} />
+              <button
+                type="submit"
+                className="w-[6.25rem] h-9 bg-purple leading-4 rounded-[0.625rem] text-base text-white focus:outline-none hover:bg-darkPurple transition duration-300 ease-in-out"
+              >
+                검색
+              </button>
             </div>
-          </div>
+          </form>
+
           {errorMessage && (
             <div className="pl-7">
               <p className="pt-1 text-xs text-red-500">{errorMessage}</p>
@@ -109,16 +117,22 @@ function ImageSearchModal({ isVisible, onClose: providedOnClose, onSelectImage }
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2 mx-6 mt-4">
-              {imageUrls.map((url: string, index: number) => (
-                <div
-                  key={index}
-                  className={`w-full h-32 bg-cover bg-center rounded cursor-pointer ${
-                    selectedImageUrl === url ? 'border-4 border-solid border-blue-500' : ''
-                  }`}
-                  style={{ backgroundImage: `url(${url})` }}
-                  onClick={() => handleImageClick(url)}
-                />
-              ))}
+              {imageUrls && imageUrls.length > 0 ? (
+                imageUrls.map((url: string, index: number) => (
+                  <div
+                    key={index}
+                    className={`w-full h-32 bg-cover bg-center rounded cursor-pointer ${
+                      selectedImageUrl === url ? 'border-4 border-solid border-blue-500' : ''
+                    }`}
+                    style={{ backgroundImage: `url(${url})` }}
+                    onClick={() => handleImageClick(url)}
+                  />
+                ))
+              ) : (
+                <div className="absolute left-[35%] pt-2">
+                  <p className="text-base text-gray">검색 결과가 없습니다.</p>
+                </div>
+              )}
             </div>
           )}
           {imageUrls && imageUrls.length > 0 && (
