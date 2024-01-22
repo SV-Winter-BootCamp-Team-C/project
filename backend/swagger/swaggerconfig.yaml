@@ -140,7 +140,7 @@ paths:
                     type: string
                     example: 'User not found'
         '404':
-          description: Survey not found
+          description: User has not responded to this survey
           content:
             application/json:
               schema:
@@ -148,7 +148,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Survey not found'
+                    example: '사용자가 이 설문에 응답하지 않았습니다.'
         '500':
           description: Failed to retrieve user's answers
           content:
@@ -936,7 +936,7 @@ paths:
           name: perPage
           schema:
             type: string
-            default: '5'
+            default: '6'
           description: 페이지 당 이미지 수 설정
       responses:
         '200':

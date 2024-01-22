@@ -76,10 +76,13 @@ const surveyResult = async (req, res) => {
             type: question.type,
             content: question.content,
             imageUrl: question.imageUrl || null, // 이미지 URL이 null 또는 빈 문자열인 경우 빈 문자열로 처리
-            answers: question.Answers.map((answer) => ({
-              answerId: answer.id,
-              content: answer.objContent,
-            })),
+            choices: question.Choices.sort((a, b) => a.id - b.id).map(
+              (choice) => ({
+                choiceId: choice.id,
+                option: choice.option,
+                count: choice.count,
+              }),
+            ),
           };
         }
       }),
