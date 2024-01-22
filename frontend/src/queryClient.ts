@@ -8,7 +8,7 @@ type AnyOBJ = {
 export const getClient = new QueryClient({
   // 전역 에러 핸들링
   queryCache: new QueryCache({
-    onError: (error, query) => {
+    onError: (_, query) => {
       if (query.meta?.errorMessage) console.error(query.meta.errorMessage);
     },
   }),

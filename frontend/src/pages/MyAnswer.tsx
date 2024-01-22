@@ -9,7 +9,6 @@ import StaticSubjective from '../components/staticresponse/StaticSubjective';
 import StaticDropDown from '../components/staticresponse/StaticDropDown';
 import { QuestionDataForm } from '../types/questionData';
 import { myAnswerAPI } from '../api/myanswer';
-// import { useAuthStore } from '../store/AuthStore';
 import Loading from '../components/common/Loading';
 // import Alert from '../components/common/Alert';
 
@@ -18,7 +17,6 @@ function MyAnswer() {
   const [searchParams] = useSearchParams();
   const userId = Number(searchParams.get('userId'));
   const surveyId = Number(searchParams.get('surveyId'));
-  // const myId = useAuthStore((state) => state.userId);
 
   const fontClasses: { [key: string]: string } = {
     pretendard: 'font-pretendardFont',
@@ -69,7 +67,9 @@ function MyAnswer() {
   // }
 
   return (
-    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}>
+    <div
+      className={`${fontClasses[surveyData!.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}
+    >
       <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
         <div className="flex flex-col px-[8.75rem]">
           {surveyData?.mainImageUrl && (
