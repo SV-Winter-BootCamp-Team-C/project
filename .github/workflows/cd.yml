@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x" # 여기서 사용할 Node.js 버전을 설정
+          node-version: "18.x" # 여기서 사용할 Node.js 버전을 설정
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -44,9 +44,10 @@ jobs:
       - name: Execute remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: ${{secrets.AWS_PORT}}
           script: |
             cd /home/ubuntu/backend
             git stash

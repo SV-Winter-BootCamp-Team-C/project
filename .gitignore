@@ -4,3 +4,4 @@ pqdata
 data
 .env
 node_modules
+package-lock.json
