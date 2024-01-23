@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AddButton, TextButton } from '../components/common/Button';
 import MultipleChoice from '../components/surveytype/MultipleChoice';
 import Checkbox from '../components/surveytype/CheckBox';
@@ -29,7 +29,9 @@ import { uploadS3 } from '../utils/s3ImgUpload';
 import ImageSearchModal from '../components/common/ImageSearchModal';
 import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
-// import { responseformAPI } from '../api/responseform';
+import { responseformAPI } from '../api/responseform';
+import { editSurveyAPI } from '../api/editSurvey';
+import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -60,8 +62,32 @@ function Create() {
   const activeItem = useNavbarStore((state) => state.activeItem);
   const queryClient = getClient;
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
   const [activePage, setActivePage] = useState<'style' | 'problem'>('style');
+  const [showPicker, setShowPicker] = useState<boolean>(false);
+  const [customColor, setCustomColor] = useState<string>('#640FF2');
+  const [mainImg, setMainImg] = useState<string | null>(null);
+  const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
+  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
+
+  // 설문 수정 시 사용할 설문 ID
+  const editId = Number(new URLSearchParams(location.search).get('id'));
+  const isEditMode = editId !== null && !Number.isNaN(editId); // 편집 모드인지 확인
+
+  const { data: editSurveyData } = useQuery({
+    queryKey: ['editSurvey', editId],
+    queryFn: () => responseformAPI(editId as number),
+    enabled: isEditMode && !!editId,
+  });
+
+  const {
+    mutate: editMutate,
+    isSuccess: editSuccess,
+    isError: editError,
+  } = useMutation({
+    mutationFn: editSurveyAPI,
+  });
+
   const [createSurvey, setCreateSurvey] = useState<EditableSurvey>({
     userId: userId as number,
     title: '',
@@ -74,20 +100,12 @@ function Create() {
     deadline: '',
     questions: [],
   });
-  const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [customColor, setCustomColor] = useState<string>('#640FF2');
-  const [mainImg, setMainImg] = useState<string | null>(null);
-  const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
-  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
-  // 설문 수정 시 사용할 설문 ID
-  // const editId = Number(new URLSearchParams(location.search).get('userId'));
-
-  // const { data: editSurveyData } = useQuery({
-  //   queryKey: ['editSurvey', editId],
-  //   queryFn: () => responseformAPI(editId),
-  //   enabled: !!editId,
-  // });
+  useEffect(() => {
+    if (editSurveyData) {
+      setCreateSurvey(editSurveyData);
+    }
+  }, [editSurveyData]);
 
   // 설문 생성
   const { mutate, isSuccess, isError } = useMutation({
@@ -134,7 +152,7 @@ function Create() {
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (files && files[0]) {
       const file = files[0];
@@ -292,6 +310,19 @@ function Create() {
     }
   };
 
+  // 설문 수정
+  const handleEditSubmit = () => {
+    if (userId === null) return;
+
+    const surveyDataWithUserId = {
+      ...createSurvey,
+      userId,
+    };
+
+    editMutate({ surveyId: editId, editSurveyData: surveyDataWithUserId });
+  };
+
+  // 설문 생성
   const handleSubmit = () => {
     mutate(createSurvey);
   };
@@ -527,7 +558,7 @@ function Create() {
                 <input
                   id="imageInput"
                   type="file"
-                  onChange={handleImageChange}
+                  onChange={handleMainImageChange}
                   style={{ display: 'none' }}
                   accept="image/jpg, image/png, image/jpeg"
                 />
@@ -542,7 +573,7 @@ function Create() {
                 <input
                   name="date"
                   type="date"
-                  value={createSurvey.deadline}
+                  value={formatDeadlineDate(createSurvey.deadline)}
                   onChange={(e) => setCreateSurvey({ ...createSurvey, deadline: e.target.value })}
                   required
                 />
@@ -627,20 +658,32 @@ function Create() {
 
             {createSurvey.questions.length > 0 && (
               <div className="flex items-center justify-center pt-2">
-                <TextButton text="저장하기" onClick={handleSubmit} />
+                {isEditMode ? (
+                  <TextButton text="수정하기" onClick={handleEditSubmit} />
+                ) : (
+                  <TextButton text="저장하기" onClick={handleSubmit} />
+                )}
               </div>
             )}
-
-            {isError && <Alert type="error" message="설문 생성에 실패했습니다." buttonText="확인" />}
-            {isSuccess && (
-              <Alert
-                type="success"
-                message="설문이 생성되었습니다."
-                buttonText="확인"
-                buttonClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')}
-              />
-            )}
           </Scrollbars>
+          {isError && <Alert type="error" message="설문 생성에 실패했습니다." buttonText="확인" />}
+          {isSuccess && (
+            <Alert
+              type="success"
+              message="설문이 생성되었습니다."
+              buttonText="확인"
+              buttonClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')}
+            />
+          )}
+          {editError && <Alert type="error" message="설문 수정에 실패했습니다." buttonText="확인" />}
+          {editSuccess && (
+            <Alert
+              type="success"
+              message="설문이 수정되었습니다."
+              buttonText="확인"
+              buttonClick={() => navigate('/myform')}
+            />
+          )}
         </div>
       )}
     </div>
