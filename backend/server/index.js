@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
+const http = require('http');
 const { sequelize } = require('../models');
 const { createAndDownloadExcel } = require('../excel/excelGengerate');
 const { callChatGPT } = require('../gpt/gptAPI');
@@ -16,12 +17,27 @@ const userRouters = require('../routers/UserRouter');
 const { getImageByAPI } = require('../controller/getImageBySearch');
 const cors = require('cors');
 
-let corsOptions = {
-  origin: '*', // 출처 허용 옵션
-  credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
-};
+// let corsOptions = {
+//   origin: '*', // 출처 허용 옵션
+//   credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
+// };
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*',
+  credential: true,
+}));
+
+//app.use(cors(corsOptions));
+
+// app.all("/*", function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://formflex");
+//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//   res.header("Access-Control-Allow-Methods", "OPTIONS,POST,GET,PUT,DELETE");
+//   next();
+// });
+// app.use(
+//   cors()
+// );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
