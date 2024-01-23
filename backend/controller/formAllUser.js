@@ -128,7 +128,7 @@ const getUserSurveys = async (req, res) => {
           surveyId: survey.dataValues.id,
           title: survey.dataValues.title,
           open: survey.dataValues.open,
-          mainImageUrl: survey.dataValues.mainImageUrl || null,
+          mainImageUrl: survey.dataValues.mainImageUrl,
           createdAt: survey.dataValues.createdAt,
           updatedAt: survey.dataValues.updatedAt,
           deadline: survey.dataValues.deadline,

@@ -3,6 +3,7 @@ export type EditableChoice = {
 };
 
 export type EditableObjectiveQuestion = {
+  id?: number;
   type: 'MULTIPLE_CHOICE' | 'CHECKBOX' | 'DROPDOWN';
   content: string;
   imageUrl?: string;
@@ -10,6 +11,7 @@ export type EditableObjectiveQuestion = {
 };
 
 export type EditableSubjectiveQuestion = {
+  id?: number;
   type: 'SUBJECTIVE_QUESTION';
   content: string;
   imageUrl?: string;

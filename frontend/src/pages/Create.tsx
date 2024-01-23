@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AddButton, TextButton } from '../components/common/Button';
 import MultipleChoice from '../components/surveytype/MultipleChoice';
 import Checkbox from '../components/surveytype/CheckBox';
@@ -29,7 +29,9 @@ import { uploadS3 } from '../utils/s3ImgUpload';
 import ImageSearchModal from '../components/common/ImageSearchModal';
 import pexelIcon from '../assets/pexel.svg';
 import { getClient } from '../queryClient';
-// import { responseformAPI } from '../api/responseform';
+import { responseformAPI } from '../api/responseform';
+import { editSurveyAPI } from '../api/editSurvey';
+import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 import ChatButton from '../components/common/ChatButton';
 
 const BUTTON_ITEMS: ButtonItem[] = [
@@ -61,8 +63,32 @@ function Create() {
   const activeItem = useNavbarStore((state) => state.activeItem);
   const queryClient = getClient;
   const navigate = useNavigate();
-  // const location = useLocation();
+  const location = useLocation();
   const [activePage, setActivePage] = useState<'style' | 'problem'>('style');
+  const [showPicker, setShowPicker] = useState<boolean>(false);
+  const [customColor, setCustomColor] = useState<string>('#640FF2');
+  const [mainImg, setMainImg] = useState<string | null>(null);
+  const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
+  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
+
+  // 설문 수정 시 사용할 설문 ID
+  const editId = Number(new URLSearchParams(location.search).get('id'));
+  const isEditMode = editId !== null && !Number.isNaN(editId); // 편집 모드인지 확인
+
+  const { data: editSurveyData } = useQuery({
+    queryKey: ['editSurvey', editId],
+    queryFn: () => responseformAPI(editId as number),
+    enabled: isEditMode && !!editId,
+  });
+
+  const {
+    mutate: editMutate,
+    isSuccess: editSuccess,
+    isError: editError,
+  } = useMutation({
+    mutationFn: editSurveyAPI,
+  });
+
   const [createSurvey, setCreateSurvey] = useState<EditableSurvey>({
     userId: userId as number,
     title: '',
@@ -75,20 +101,12 @@ function Create() {
     deadline: '',
     questions: [],
   });
-  const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [customColor, setCustomColor] = useState<string>('#640FF2');
-  const [mainImg, setMainImg] = useState<string | null>(null);
-  const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
-  const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
-  // 설문 수정 시 사용할 설문 ID
-  // const editId = Number(new URLSearchParams(location.search).get('userId'));
-
-  // const { data: editSurveyData } = useQuery({
-  //   queryKey: ['editSurvey', editId],
-  //   queryFn: () => responseformAPI(editId),
-  //   enabled: !!editId,
-  // });
+  useEffect(() => {
+    if (editSurveyData) {
+      setCreateSurvey(editSurveyData);
+    }
+  }, [editSurveyData]);
 
   // 설문 생성
   const { mutate, isSuccess, isError } = useMutation({
@@ -135,7 +153,7 @@ function Create() {
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (files && files[0]) {
       const file = files[0];
@@ -206,7 +224,6 @@ function Create() {
     const updatedQuestions = createSurvey.questions.map((question, index) =>
       index === questionId ? { ...question, ...updatedData } : question,
     );
-    console.log(questionId);
     setCreateSurvey({ ...createSurvey, questions: updatedQuestions });
   };
 
@@ -232,7 +249,7 @@ function Create() {
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (
-    index: number,
+    idx: number,
     data: EditableQuestions,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -244,8 +261,7 @@ function Create() {
       // S3에 이미지 업로드
       try {
         const uploadedUrl = await uploadS3(file);
-        console.log(index, uploadedUrl);
-        updateQuestion(index, { ...data, imageUrl: uploadedUrl });
+        updateQuestion(idx, { ...data, imageUrl: uploadedUrl });
       } catch (error) {
         console.error('이미지 업로드 실패:', error);
       }
@@ -254,14 +270,14 @@ function Create() {
 
   const renderQuestionComponent = (
     type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN',
-    index: number,
+    idx: number,
     data: EditableQuestions,
   ) => {
     switch (type) {
       case 'MULTIPLE_CHOICE': // 객관식 문항
         return (
           <MultipleChoice
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -272,7 +288,7 @@ function Create() {
       case 'CHECKBOX': // 체크박스 문항
         return (
           <Checkbox
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -283,7 +299,7 @@ function Create() {
       case 'DROPDOWN': // 드롭다운 문항
         return (
           <DropDown
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -294,7 +310,7 @@ function Create() {
       case 'SUBJECTIVE_QUESTION': // 주관식 문항
         return (
           <Subjective
-            index={index}
+            idx={idx}
             data={data as EditableSubjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -307,11 +323,22 @@ function Create() {
     }
   };
 
+  // 설문 수정
+  const handleEditSubmit = () => {
+    if (userId === null) return;
+
+    const surveyDataWithUserId = {
+      ...createSurvey,
+      userId,
+    };
+
+    editMutate({ surveyId: editId, editSurveyData: surveyDataWithUserId });
+  };
+
+  // 설문 생성
   const handleSubmit = () => {
     mutate(createSurvey);
   };
-
-  console.log(createSurvey);
 
   return (
     <div className="pt-9">
@@ -542,7 +569,7 @@ function Create() {
                 <input
                   id="imageInput"
                   type="file"
-                  onChange={handleImageChange}
+                  onChange={handleMainImageChange}
                   style={{ display: 'none' }}
                   accept="image/jpg, image/png, image/jpeg"
                 />
@@ -557,7 +584,7 @@ function Create() {
                 <input
                   name="date"
                   type="date"
-                  value={createSurvey.deadline}
+                  value={formatDeadlineDate(createSurvey.deadline)}
                   onChange={(e) => setCreateSurvey({ ...createSurvey, deadline: e.target.value })}
                   required
                 />
@@ -644,20 +671,32 @@ function Create() {
             </div>
             {createSurvey.questions.length > 0 && (
               <div className="flex items-center justify-center pt-2">
-                <TextButton text="저장하기" onClick={handleSubmit} />
+                {isEditMode ? (
+                  <TextButton text="수정하기" onClick={handleEditSubmit} />
+                ) : (
+                  <TextButton text="저장하기" onClick={handleSubmit} />
+                )}
               </div>
             )}
-
-            {isError && <Alert type="error" message="설문 생성에 실패했습니다." buttonText="확인" />}
-            {isSuccess && (
-              <Alert
-                type="success"
-                message="설문이 생성되었습니다."
-                buttonText="확인"
-                buttonClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')}
-              />
-            )}
           </Scrollbars>
+          {isError && <Alert type="error" message="설문 생성에 실패했습니다." buttonText="확인" />}
+          {isSuccess && (
+            <Alert
+              type="success"
+              message="설문이 생성되었습니다."
+              buttonText="확인"
+              buttonClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')}
+            />
+          )}
+          {editError && <Alert type="error" message="설문 수정에 실패했습니다." buttonText="확인" />}
+          {editSuccess && (
+            <Alert
+              type="success"
+              message="설문이 수정되었습니다."
+              buttonText="확인"
+              buttonClick={() => navigate('/myform')}
+            />
+          )}
         </div>
       )}
     </div>
