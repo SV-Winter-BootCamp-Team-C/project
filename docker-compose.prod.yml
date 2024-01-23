@@ -1,0 +1,69 @@
+#Docker 컨테이너를 정의하고 관리하기 위해 구성 파일
+#여러 컨테이너와 한 곳에 정리 할 수 있게 해줌
+#파일 버전
+version: "3"
+#services를 컨테이너를 정의
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      #PGDATA: /var/lib/postgresql/data/pqdata
+      TZ: Asia/Seoul
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
+      - NODE_ENV=development
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    command: ["nodemon", "-L", "server/index.js"] # 컨테이너가 시작될 때 실행할 명령
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/:/frontend
+      - build_folder:/frontend/dist
+    command: ["npm", "run", "build"]
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - build_folder:/var/www/frontend
+volumes:
+  build_folder:
