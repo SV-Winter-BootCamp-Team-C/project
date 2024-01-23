@@ -9,6 +9,7 @@ const getUserSurveys = async (req, res) => {
     const title = req.query.title;
 
     if (!title) {
+      const preResult = [];
       const surveys = await Survey.findAll({
         where: { userId: userId },
         attributes: [
@@ -24,38 +25,43 @@ const getUserSurveys = async (req, res) => {
       });
 
       // 각 설문조사에 대한 attended_count 계산
-      const modifiedSurveys = await Promise.all(
-        surveys.map(async (survey) => {
-          const attendedCount = await Answer.count({
-            distinct: true,
-            col: 'userId',
-            include: [
-              {
-                model: Question,
-                attributes: [],
-                where: { surveyId: survey.id },
-              },
-            ],
-          });
+      for (const survey of surveys) {
+        const attendedCount = await Answer.count({
+          distinct: true,
+          col: 'userId',
+          include: [
+            {
+              model: Question,
+              attributes: [],
+              where: { surveyId: survey.id },
+            },
+          ],
+        });
 
-          return {
-            surveyId: survey.id,
-            title: survey.title,
-            open: survey.open,
-            mainImageUrl: survey.mainImageUrl || null,
-            createdAt: survey.createdAt,
-            deadline: survey.deadline,
-            attendCount: attendedCount,
-          };
-        }),
-      );
+        preResult.push({
+          surveyId: survey.id,
+          title: survey.title,
+          open: survey.open,
+          mainImageUrl: survey.mainImageUrl || null,
+          createdAt: survey.createdAt,
+          updatedAt: survey.updatedAt,
+          deadline: survey.deadline,
+          attendCount: attendedCount,
+        });
+      }
+
+      if ('attendCount' in req.query) {
+        preResult.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        preResult.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        preResult.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
 
       const totalCount = await Survey.count({ where: { userId: userId } });
+      const tp = Math.ceil(totalCount / pageLimit);
 
-      res.json({
-        surveys: modifiedSurveys,
-        totalPages: Math.ceil(totalCount / pageLimit),
-      });
+      res.status(200).json({ surveys: preResult, totalPages: tp });
     } else {
       const selectSurveys = await Survey.findAll({
         where: { userId: userId },
@@ -130,6 +136,15 @@ const getUserSurveys = async (req, res) => {
           attendCount: userCount,
         });
       }
+
+      if ('attendCount' in req.query) {
+        sortedList.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        sortedList.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        sortedList.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
+
       res.status(200).json({ sortedList, totalPages: tp });
     }
   } catch (error) {

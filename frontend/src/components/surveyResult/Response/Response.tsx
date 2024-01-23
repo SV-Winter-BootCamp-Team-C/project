@@ -5,6 +5,7 @@ import { getExcelDownloadAPI } from '../../../api/getResult';
 import Alert from '../../common/Alert';
 import Loading from '../../common/Loading';
 import { ListData } from '../../../types/answerData';
+import { formatDeadlineDate } from '../../../utils/formatDeadlineDate';
 
 interface ResponseProps {
   title: string;
@@ -35,7 +36,7 @@ function Response({ title, list }: ResponseProps) {
   });
 
   const rows = list.rows.map((row, index) => {
-    const newRow: Row = { id: index + 1, 날짜: row.createdAt };
+    const newRow: Row = { id: index + 1, 날짜: formatDeadlineDate(row.createdAt) };
 
     row.responses.forEach((response, i) => {
       newRow[`Q${i + 1}`] = response;
@@ -61,7 +62,6 @@ function Response({ title, list }: ResponseProps) {
         window.URL.revokeObjectURL(url);
       }, 60000);
       link.remove();
-      console.log(response);
     } catch (err) {
       setError(true);
     } finally {

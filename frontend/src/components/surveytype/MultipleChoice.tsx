@@ -6,32 +6,42 @@ import deleteIcon from '../../assets/delete.svg';
 import imageaddIcon from '../../assets/imageadd.svg';
 import trashcanIcon from '../../assets/trashcan.svg';
 import { EditableObjectiveQuestion } from '../../types/editableSurvey';
-import { uploadS3 } from '../../utils/s3ImgUpload';
 import ImageSearchModal from '../common/ImageSearchModal';
 import pexelIcon from '../../assets/pexel.svg';
 
 interface MultipleChoiceProps {
-  index: number;
+  idx: number;
   data: EditableObjectiveQuestion;
-  updateQuestion: (index: number, data: EditableObjectiveQuestion) => void;
-  copyQuestion: (index: number) => void;
-  deleteQuestion: (index: number) => void;
+  handleImageUpload: (
+    idx: number,
+    data: EditableObjectiveQuestion,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => Promise<void>;
+  updateQuestion: (idx: number, data: EditableObjectiveQuestion) => void;
+  copyQuestion: (idx: number) => void;
+  deleteQuestion: (idx: number) => void;
 }
 
-function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuestion }: MultipleChoiceProps) {
-  const [image, setImage] = useState<string | null>(null);
+function MultipleChoice({
+  idx,
+  data,
+  handleImageUpload,
+  updateQuestion,
+  copyQuestion,
+  deleteQuestion,
+}: MultipleChoiceProps) {
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   // 새 선택지를 추가하는 함수
   const addChoice = () => {
     const newChoices = [...data.choices, { option: '' }];
-    updateQuestion(index, { ...data, choices: newChoices });
+    updateQuestion(idx, { ...data, choices: newChoices });
   };
 
   // 선택지 삭제 함수
   const deleteChoice = (choiceIndex: number) => {
     const newChoices = data.choices.filter((_, i) => i !== choiceIndex);
-    updateQuestion(index, { ...data, choices: newChoices });
+    updateQuestion(idx, { ...data, choices: newChoices });
   };
 
   const handleImageSearchClick = () => {
@@ -39,35 +49,12 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
   };
 
   const handleSelectImage = (imageUrl: string) => {
-    setImage(imageUrl);
-    updateQuestion(index, { ...data, imageUrl });
+    updateQuestion(idx, { ...data, imageUrl });
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
-  // // 이미지 업로드 핸들러
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files && files[0]) {
-      const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-
-      // S3에 이미지 업로드
-      try {
-        const uploadedUrl = await uploadS3(file);
-        updateQuestion(index, { ...data, imageUrl: uploadedUrl });
-      } catch (error) {
-        console.error('이미지 업로드 실패:', error);
-      }
-    }
-  };
-
   const handleDeleteImage = () => {
-    setImage(null);
-    updateQuestion(index, { ...data, imageUrl: '' });
+    updateQuestion(idx, { ...data, imageUrl: '' });
   };
 
   // 선택지 변경 핸들러
@@ -76,7 +63,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
       i === choiceIndex ? { ...choice, option: newValue } : choice,
     );
 
-    updateQuestion(index, { ...data, choices: updatedChoices });
+    updateQuestion(idx, { ...data, choices: updatedChoices });
   };
 
   return (
@@ -95,7 +82,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => copyQuestion(index)}
+            onClick={() => copyQuestion(idx)}
           >
             <img src={copyIcon} alt="Copy" className="w-full h-full" />
           </button>
@@ -103,7 +90,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => deleteQuestion(index)}
+            onClick={() => deleteQuestion(idx)}
           >
             <img src={trashcanIcon} alt="Trashcan" className="w-full h-full" />
           </button>
@@ -111,7 +98,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index + 1}.</span>
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{idx + 1}.</span>
       </div>
 
       <div className="relative flex items-center justify-center w-full mb-4">
@@ -120,20 +107,20 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
             type="text"
             required
             value={data.content}
-            onChange={(e) => updateQuestion(index, { ...data, content: e.target.value })}
+            onChange={(e) => updateQuestion(idx, { ...data, content: e.target.value })}
             placeholder="질문을 입력해주세요."
             className="w-full h-full text-[1rem] text-center text-black rounded-[0.625rem] border border-gray"
           />
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="checkbox-image-upload"
+            id={`checkbox-image-upload-${idx}`}
             type="file"
             accept="image/*"
-            onChange={handleImageUpload}
+            onChange={(event) => handleImageUpload(idx, data, event)}
             style={{ display: 'none' }}
           />
-          <label htmlFor="checkbox-image-upload" className="image-upload-label">
+          <label htmlFor={`checkbox-image-upload-${idx}`} className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5 cursor-pointer" />
           </label>
@@ -156,7 +143,7 @@ function MultipleChoice({ index, data, updateQuestion, copyQuestion, deleteQuest
         </div>
       </div>
 
-      {image && (
+      {data.imageUrl && (
         <div className="mb-4">
           <button
             type="button"

@@ -62,7 +62,7 @@ const showAllSurveys = async (req, res) => {
           surveyId: survey.id,
           title: survey.title,
           open: survey.open,
-          mainImageUrl: survey.mainImageUrl,
+          mainImageUrl: survey.mainImageUrl || null,
           createdAt: survey.createdAt,
           updatedAt: survey.updatedAt,
           deadline: survey.deadline,
@@ -70,6 +70,14 @@ const showAllSurveys = async (req, res) => {
           attendCount: userCount,
         });
       }
+      if ('attendCount' in req.query) {
+        preResult.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        preResult.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        preResult.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
+
       res.status(200).json({ surveys: preResult, totalPages: totalPages });
     } else {
       const selectSurveys = await Survey.findAll({
@@ -137,7 +145,7 @@ const showAllSurveys = async (req, res) => {
           surveyId: survey.dataValues.id,
           title: survey.dataValues.title,
           open: survey.dataValues.open,
-          mainImageUrl: survey.dataValues.mainImageUrl,
+          mainImageUrl: survey.dataValues.mainImageUrl || null,
           createdAt: survey.dataValues.createdAt,
           updatedAt: survey.dataValues.updatedAt,
           deadline: survey.dataValues.deadline,
@@ -145,6 +153,15 @@ const showAllSurveys = async (req, res) => {
           attendCount: userCount,
         });
       }
+
+      if ('attendCount' in req.query) {
+        sortedList.sort((a, b) => b.attendCount - a.attendCount);
+      } else if ('deadline' in req.query) {
+        sortedList.sort((a, b) => a.deadline - b.deadline);
+      } else {
+        sortedList.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+      }
+
       res.status(200).json({ sortedList, totalPages: tp });
     }
   } catch (error) {

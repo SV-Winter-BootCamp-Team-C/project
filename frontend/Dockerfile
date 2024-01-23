@@ -1,10 +1,7 @@
-FROM node
-USER root
+FROM node:18.19.0-alpine
 
 WORKDIR /frontend
 COPY . ./
+RUN npm cache clean --force
 RUN npm install
-
-EXPOSE 3001
-
-CMD [ "npm", "run", "dev" ]
+RUN npm run build

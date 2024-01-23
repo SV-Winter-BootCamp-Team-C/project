@@ -1,6 +1,6 @@
 #이미지를 어셈블하기 위해 호출할 수 있는 명령이 포함된 간단한 텍스트 파일
 #이미지 빌드
-FROM node:18-alpine
+FROM node:18.19.0-alpine
 # 작업 디렉토리 설정
 WORKDIR /app
 
@@ -17,5 +17,5 @@ COPY . /app
 EXPOSE 8000
 
 #CMD ["npm", "start"]
-CMD ["nodemon", "-L", "server/index.js"]
+CMD ["nodemon", "server/index.js", "-L"]
 

@@ -26,6 +26,14 @@ function ResponseForm() {
     questions: [],
   });
 
+  const fontClasses: { [key: string]: string } = {
+    pretendard: 'font-pretendardFont',
+    tmoney: 'font-tMoney',
+    nps: 'font-npsFont',
+    omyu: 'font-omyuFont',
+    seolleim: 'font-seolleimFont',
+  };
+
   const {
     data: surveyData,
     isLoading,
@@ -70,7 +78,6 @@ function ResponseForm() {
     if (isEveryQuestionAnswered) {
       // 모든 질문이 적절히 답변되었을 경우
       await mutation.mutateAsync(responseSubmit);
-      console.log(responseSubmit);
     } else {
       // 하나라도 답변되지 않은 질문이 있을 경우
       setShowError(true);
@@ -157,12 +164,7 @@ function ResponseForm() {
   };
 
   return (
-    <div
-      className="relative flex mt-[2.25rem] ml-[0.1rem]"
-      style={{
-        fontFamily: `${surveyData.font}`,
-      }}
-    >
+    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}>
       <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
         <div className="flex flex-col px-[8.75rem]">
           {surveyData.mainImageUrl && (

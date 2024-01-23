@@ -1,0 +1,58 @@
+name: Node.js CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types:
+      - closed
+    branches: [main]
+  workflow_run:
+    workflows: ["Node.js CI"]
+    types:
+      - completed
+
+jobs:
+  cd:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x" # 여기서 사용할 Node.js 버전을 설정
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Setting .env
+        run: |
+          echo "${{ secrets.ENV }}" >> .env
+
+      - name: Build docker images
+        run: |
+          docker-compose -f docker-compose.prod.yml build
+          docker images
+
+      - name: Push docker images
+        run: |
+          docker-compose -f docker-compose.prod.yml push
+
+      - name: Execute remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/project
+            git pull
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.prod.yml up --detach
