@@ -32,6 +32,7 @@ import { getClient } from '../queryClient';
 import { responseformAPI } from '../api/responseform';
 import { editSurveyAPI } from '../api/editSurvey';
 import { formatDeadlineDate } from '../utils/formatDeadlineDate';
+import ChatButton from '../components/common/ChatButton';
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -204,6 +205,20 @@ function Create() {
     setAddQuestionDropdown(false);
   };
 
+  const addChatQuestion = (chatData: EditableObjectiveQuestion) => {
+    const newChatQuestion: EditableObjectiveQuestion = {
+      type: chatData.type,
+      content: chatData.content,
+      imageUrl: chatData.imageUrl,
+      choices: chatData.choices,
+    };
+    setCreateSurvey((prev) => ({
+      ...prev,
+      questions: [...prev.questions, newChatQuestion],
+    }));
+    setAddQuestionDropdown(false);
+  };
+
   // 문항 내용 업데이트
   const updateQuestion = (questionId: number, updatedData: EditableQuestions) => {
     const updatedQuestions = createSurvey.questions.map((question, index) =>
@@ -346,7 +361,7 @@ function Create() {
             onClick={() => handlePageClick('problem')}
           >
             <div className="flex">
-              <span className="text-[1.25rem] text-center text-black font-semibold">문제</span>
+              <span className="text-[1.25rem] text-center text-black font-semibold">문항</span>
             </div>
           </div>
         </div>
@@ -362,7 +377,7 @@ function Create() {
           <div className="flex flex-col ml-14">
             <div className="flex items-center">
               <div className="flex">
-                <span className="text-[2rem] font-semibold">제목 :</span>
+                <span className="text-[2rem] font-semibold">제목</span>
               </div>
               <div className="flex items-center w-[16.25rem] h-[3.125rem] rounded-[0.625rem] ml-[0.63rem] border-solid border-[0.00625rem] border-[#B4B4B4] hover:border-[0.125rem] hover:border-darkGray">
                 <input
@@ -626,9 +641,9 @@ function Create() {
         </Scrollbars>
       ) : (
         // 문제 생성
-        <div className="relative flex flex-col h-full px-[8.75rem] ">
+        <div className="relative flex h-full px-[8.75rem] ">
           <div className="flex items-center justify-start gap-6 mt-6">
-            <p className="text-[2rem] font-semibold text-black">문제</p>
+            <p className="text-[2rem] font-semibold text-black">문항</p>
             <AddButton
               text="추가"
               onClick={() => {
@@ -636,6 +651,9 @@ function Create() {
               }}
             />
             {addQuestionDropdown && <CreateQuestionMenu onSelect={addQuestion} />}
+          </div>
+          <div className="absolute right-[8.75rem] top-[1.375rem] z-50">
+            <ChatButton onAddData={addChatQuestion} />
           </div>
           <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1080, height: 680 }}>
             <div className="flex flex-col items-center justify-center pt-4">
@@ -651,7 +669,6 @@ function Create() {
                 })
               )}
             </div>
-
             {createSurvey.questions.length > 0 && (
               <div className="flex items-center justify-center pt-2">
                 {isEditMode ? (

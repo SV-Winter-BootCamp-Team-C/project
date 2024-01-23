@@ -58,3 +58,10 @@ export type ResponseSubmit = {
     subContent?: string;
   }[];
 };
+
+export type ChatData = {
+  type: 'MULTIPLE_CHOICE' | 'CHECKBOX' | 'DROPDOWN' | null;
+  content: string;
+  imageUrl: string;
+  choices: { option: string }[];
+};
