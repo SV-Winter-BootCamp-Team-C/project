@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 // import arrowRight from '../assets/arrowRight.svg';
+import Lottie from 'react-lottie';
 import iconStart from '../assets/iconStart.svg';
 import newIdea from '../assets/newIdea.png';
 import teamWork from '../assets/teamWork.png';
@@ -25,10 +26,24 @@ import survey from '../assets/survey.svg';
 import CarouselMain from '../components/common/CarouselMain';
 import CarouselDesOne from '../components/common/CarouselDesOne';
 import CarouselDesTwo from '../components/common/CarouselDesTwo';
+import LottieData from '../assets/toggleSwitch.json';
 
 function Start() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isOn, setIsOn] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOn(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggleSwitch = () => {
+    setIsOn(!isOn);
+  };
 
   const features = [
     {
@@ -102,9 +117,19 @@ function Start() {
           {/* title */}
           <div className="flex relative z-10 flex-col mt-[4.12rem]">
             {/* centerText */}
-            <div className="flex relative z-30 flex-row justify-center items-center w-[31.75rem] h-[4.625rem] mx-[26.88rem] ">
+            <div className="flex flex-row relative z-30  justify-center items-center w-[31.75rem] h-[4.625rem] mx-[26.88rem] ">
               <span className="text-6xl font-semibold text-black ">Create</span>
-              <img src={iconStart} alt="iconStart" className="w-[7.25rem] h-12 mx-2" />
+              <div className="flex justify-center items-center h-screen">
+                <label htmlFor="toggle" className="flex items-center cursor-pointer mx-2 mt-2">
+                  <div className="relative">
+                    <input type="checkbox" id="toggle" className="sr-only " onChange={toggleSwitch} />
+                    <div className="block  w-16 h-10 rounded-full border-solid border-black border-[0.2rem] bg-[#F9F8FC]" />
+                    <div
+                      className={`dot absolute left-2 top-2 bg-black w-6 h-6 rounded-full transition-transform duration-500 ${isOn ? 'transform translate-x-6' : ''}`}
+                    />
+                  </div>
+                </label>
+              </div>
               <span className="text-6xl font-semibold text-black">Share</span>
             </div>
             <div className="flex relative z-30 justify-center items-center w-[38rem] h-[5.125rem] mx-[23.75rem]">
@@ -280,7 +305,7 @@ function Start() {
       </div>
 
       {/* Footer */}
-      <div className="flex justify-center w-[100%] h-[33.75rem]">
+      {/* <div className="flex justify-center w-[100%] h-[33.75rem]">
         <div className="flex w-[82.5rem] h-[12.5rem] mt-[10rem] mr-[3.75rem]">
           <div className="flex flex-row px-[3.75rem]">
             <div className="flex mr-16   w-[12rem] h-[2.875rem] justify-start">
@@ -402,7 +427,7 @@ function Start() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* End */}
     </div>
