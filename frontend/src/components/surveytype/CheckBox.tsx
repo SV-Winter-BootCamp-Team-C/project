@@ -165,7 +165,7 @@ function CheckBox({ index, data, handleImageUpload, updateQuestion, copyQuestion
             <div className="relative flex w-[25rem] h-10 bg-lightGray rounded-[1.25rem]">
               <label
                 htmlFor={`checkbox-${choiceIndex}`}
-                className="absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md  bg-white border border-gray-300"
+                className="absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md  bg-white"
               >
                 <input
                   type="checkbox"
