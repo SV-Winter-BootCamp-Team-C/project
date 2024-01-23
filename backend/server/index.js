@@ -42,7 +42,10 @@ sequelize
 
     app.get('/api/gpt-prompt', async (req, res) => {
       try {
-        console.log(req);
+        console.log(req.body.title, req.body.description, req.body.type);
+        console.assert(req.body.title != undefined, 'error: title is undefined.');
+        console.assert(req.body.description != undefined, 'error: description is undefined.');
+        console.assert(req.body.type != undefined, 'error: type is undefined.');
         //make prompt
         let prompt = req.body.title + '라는 제목의 설문지를 만들려고 하는 데,';
         //제목 + type
@@ -54,7 +57,7 @@ sequelize
           '(이 문구랑은 최대한 다르고 비슷하게)라는 내용을 묻는';
         switch (req.body.type) {
           case 'MULTIPLE_CHOICE':
-            prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘';
+            prompt += '객관식 (선택지가 4개 있어) 문항을 한 개만 만들어줘';
             break;
           //서술형은 안 넣기로 함.
           /*
@@ -64,19 +67,20 @@ sequelize
           */
           case 'CHECKBOX':
             prompt +=
-              '객관식(선택지가 4개 있어) 문항을 하나 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
+              '객관식(선택지가 4개 있어) 문항을 한 개만 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
             break;
           case 'DROPDOWN':
             //to do: 드롭다운 뭘 해야 되는지 고민해 보기 (객관식이랑 똑같은 듯?)
             prompt +=
-              '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘. 길이는 상관없어';
+              '객관식 (선택지가 4개 있어) 문항을 한 개만 만들어줘. 길이는 상관없어';
             break;
           default:
             console.assert(false, 'error: undefined type');
             break;
         }
         prompt +=
-          '너의 답을 (문항: output\n선택지1: output\n선택지2: output\n선택지3: output\n선택지4: output) 이 양식에 맞추고, output 위치에 답을 넣어서 보내줘.';
+          '너의 답을 (문항: output\n선택지1: output\n선택지2: output\n선택지3: output\n선택지4: output) 이 양식에 맞추고, output 위치에 답을 넣어서 보내줘. 그리고 선지의 기호는 반드시 : 로 해줘. 마지막으로, 문항과 선지 외에는 응답에 넣지마.';
+        prompt += '예를 들어줄 게, 문항:어떤 음식을 주로 먹으시나요?\n선택지1:밥\n선택지2:스파게티\n선택지3:빵\n선택지4:죽'
         console.log(prompt);
         const response = await callChatGPT(prompt);
         console.log(response);
@@ -121,12 +125,11 @@ sequelize
           }
           ++i;
         }
-        //choice option으로 변환하는 코드
+        
         const choices = new Array(4);
         for (i = 0; i < 4; ++i) {
           choices[i] = { option: options[i] };
         }
-        console.log(choices);
         res.status(200).json({ content: question, choices: choices });
       } catch (error) {
         console.error(error);

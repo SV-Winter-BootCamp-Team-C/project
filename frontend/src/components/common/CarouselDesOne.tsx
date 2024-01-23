@@ -1,14 +1,12 @@
-import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 interface CustomSliderProps {
-  activeIndex: number;
   setActiveIndex: (index: number) => void;
 }
 
-function CarouselDesOne({ activeIndex, setActiveIndex }: CustomSliderProps) {
+function CarouselDesOne({ setActiveIndex }: CustomSliderProps) {
   const settings = {
     dots: true,
     infinite: true,
@@ -17,7 +15,7 @@ function CarouselDesOne({ activeIndex, setActiveIndex }: CustomSliderProps) {
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: false,
-    beforeChange: (current, next) => setActiveIndex(next),
+    beforeChange: (_: number, next: number) => setActiveIndex(next),
   };
 
   return (

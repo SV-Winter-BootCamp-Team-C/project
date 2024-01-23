@@ -44,6 +44,7 @@ module.exports = {
         labelAttributes: ['htmlFor'],
       },
     ],
+    'react/jsx-props-no-spreading': 'off',
     'no-console': 'off',
     'no-alert': 'off',
     'import/extensions': [
