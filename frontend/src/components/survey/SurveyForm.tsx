@@ -12,6 +12,8 @@ interface SurvayFormProps {
   onPageChange: (page: number) => void;
   searchTerm: string; // 현재 검색어 상태
   setSearchTerm: (searchTerm: string) => void; // 검색어 상태를 업데이트하는 함수
+  sort: string;
+  onSortChange: (sort: string) => void;
 }
 
 function SurveyForm({
@@ -21,6 +23,8 @@ function SurveyForm({
   onPageChange,
   searchTerm,
   setSearchTerm,
+  sort,
+  onSortChange,
 }: SurvayFormProps) {
   const location = useLocation();
 
@@ -40,28 +44,25 @@ function SurveyForm({
         </div>
       </div>
       <div className="flex items-center justify-between w-full items-centers px-[3.75rem]">
-        <div className="flex gap-6">
-          <div>
-            <select name="filter" className="focus:outline-none">
-              <option value="all">모든 설문</option>
-              <option value="view">조회한 설문</option>
-              <option value="like">좋아요한 설문</option>
-            </select>
-          </div>
-          <div>
-            <select name="sort" className="focus:outline-none">
-              <option value="latest">최신 순</option>
-              <option value="views">조회수 순</option>
-              <option value="likes">좋아요 순</option>
-            </select>
-          </div>
+        <div>
+          <select
+            name="sort"
+            className="focus:outline-none"
+            value={sort}
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            <option value="latest">최신 순</option>
+            <option value="attendCount">참여자 순</option>
+            <option value="deadline">마감일 순</option>
+          </select>
         </div>
+
         <div>
           {location.pathname !== '/myresponses' && <AddButton text="추가" onClick={onClickAddButton as () => void} />}
         </div>
       </div>
       {/* 구분선 */}
-      <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
+      <div className="w-[67.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
 
       {surveyData.surveys && surveyData?.surveys.length > 0 ? (
         <div className="grid grid-cols-3 pt-6 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">

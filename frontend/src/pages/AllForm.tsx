@@ -5,7 +5,8 @@ import usePaginationSurveyList from '../hooks/usePaginationSurveyList';
 function AllForm() {
   const navigate = useNavigate();
 
-  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm } = usePaginationSurveyList('allForm');
+  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm, sort, handleSortChange } =
+    usePaginationSurveyList('allForm');
 
   return (
     <SurveyForm
@@ -15,6 +16,8 @@ function AllForm() {
       onPageChange={handlePageChange}
       searchTerm={searchTerm} // 검색어 상태 전달
       setSearchTerm={setSearchTerm} // 검색 핸들러 전달
+      sort={sort}
+      onSortChange={handleSortChange}
     />
   );
 }
