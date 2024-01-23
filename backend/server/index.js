@@ -38,7 +38,7 @@ sequelize
 
     app.get('/api/surveys/downloadExcel/:surveyId', createAndDownloadExcel);
 
-    app.get('/api/images/search/거:query', getImageByAPI);
+    app.get('/api/images/search/:query', getImageByAPI);
 
     app.post('/api/gpt-prompt', async (req, res) => {
       try {

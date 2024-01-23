@@ -12,7 +12,17 @@ export default defineConfig({
     host: true,
   },
   define: {
-    global: 'window',
+    ...(process.env.NODE_ENV === 'development' ? { global: 'window' } : {}),
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+    commonjsOptions: {
+      include: [/node_modules/],
+      extensions: ['.js', '.cjs'],
+      strictRequires: true,
+      transformMixedEsModules: true,
+    },
   },
   resolve: {
     alias: {

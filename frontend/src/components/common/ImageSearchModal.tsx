@@ -129,7 +129,7 @@ function ImageSearchModal({ isVisible, onClose: providedOnClose, onSelectImage }
                   />
                 ))
               ) : (
-                <div className="absolute left-[35%] pt-2">
+                <div className={`absolute left-[35%] pt-2 ${queryTerm.length > 0 ? '' : 'hidden'}`}>
                   <p className="text-base text-gray">검색 결과가 없습니다.</p>
                 </div>
               )}
