@@ -58,7 +58,7 @@ function Navbar({ children }: NavbarProps) {
   };
 
   return (
-    <div className="relative flex justify-end w-[82rem] h-[56rem] shadow-lg rounded-[2.5rem] bg-neutral-100">
+    <div className="relative flex justify-end w-[90rem] h-[56rem] shadow-lg rounded-[2.5rem] bg-neutral-100">
       {/* Navbar */}
       <div className="flex flex-col justify-between w-60 py-[3.75rem]">
         <div>
@@ -110,7 +110,7 @@ function Navbar({ children }: NavbarProps) {
       </div>
 
       {/* Content */}
-      <div className="w-[67.5rem] h-[56rem] rounded-[2.5rem] shadow-xl bg-white">{children}</div>
+      <div className="w-[75rem] h-[56rem] rounded-[2.5rem] shadow-xl bg-white">{children}</div>
     </div>
   );
 }
