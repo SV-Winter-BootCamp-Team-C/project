@@ -42,37 +42,84 @@ sequelize
 
     app.post('/api/gpt-prompt', async (req, res) => {
       try {
-        const userPrompt = req.body.prompt;
-
-        let modifiedPrompt = userPrompt;
-
-        if (userPrompt.includes('질문지 제목')) {
-          // 질문지 제목에 대한 요청 처리
-          modifiedPrompt += ' 3개의 버전의 질문지 제목을 만들어 주세요.';
-        } else if (userPrompt.includes('질문지 보기')) {
-          // 질문지 보기에 대한 요청 처리
-          (modifiedPrompt +=
-            ' 최대 4개의 질문지 보기를 만들어 주세요. 글 나오지 않고 내용만 나오게 해줘.'),
-            '질문지 보기는 한줄씩 나왔으면 좋겠어';
+        console.log(req);
+        //make prompt
+        let prompt = req.body.title + '라는 제목의 설문지를 만들려고 하는 데,';
+        //제목 + type
+        prompt += req.body.description + '이건 설문지의 설명이야. 설명은 응답할 때는 넣지 말아줘.';
+        prompt += (req.body.content + '라는 내용을 묻는');
+        switch (req.body.type) {
+          case 'MULTIPLE_CHOICE':
+            prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘';
+            break;
+          //서술형은 안 넣기로 함.
+          /*
+          case 'SUBJECTIVE_QUESTION':
+            prompt += '서술형(응답자가 직접 답을 기입함) 문항을 하나 만들어줘';
+            break;
+          */
+          case 'CHECKBOX':
+            prompt += '객관식(선택지가 4개 있어) 문항을 하나 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
+            break;
+          case 'DROPDOWN':
+            //to do: 드롭다운 뭘 해야 되는지 고민해 보기 (객관식이랑 똑같은 듯?)
+            prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘. 길이는 상관없어';
+            break;
+          default:
+            assert(false, 'error: undefined type');
+            break;
         }
+        prompt += 
+        '니가 만든 문항을 (문항: output\n선지1: output\n선지2: output\n선지3: output\n선지4: output) 이 양식에 맞추고, output 위치에 니가 만든 값을 넣어서 보내줘.';
+        const response = await callChatGPT(prompt);
+        console.log(response);
 
-        const response = await callChatGPT(modifiedPrompt);
+        console.assert(response != null, 'error: response is null');
+        // GPT 모델로부터의 응답 처리 (일단 문항 + option으로)
+        console.log(response.choices[0].message);
+        const lines = response.choices[0].message.content.split('\n');
+        console.log(lines);
+        //string에서 한글도 문자 한개라 가정
+        //첫째 줄은 무조건 제목인 듯?   
+        var questIndex = 0;
+        for (i = 0; i < lines.length; ++i) {
+          if (lines[i].indexOf('문항:') != -1) {
+            break;
+          }
+          questIndex++;
+        }
+        const question = lines[questIndex].substring(lines[questIndex].indexOf(' ') + 1, lines[questIndex].length).trimStart();
+        console.log(question);
 
-        // GPT 모델로부터의 응답 처리
-        const questions = response.choices[0].message.content
-          .split('\n')
-          .map((question) => question.trim())
-          .filter((question) => question.length > 0);
-
-        // 배열 형태로 응답 반환
-        res.json({ responses: questions });
+        const options = new Array(4);
+        var zeroLengthCount = 0;
+        var i = questIndex + 1;
+        var count = 0;
+        //느린 코드임 (조건문을 되도록이면 빼게 프롬포트를 바꿔보자)
+        while (count < 4 && i < lines.length) {
+          console.log(lines[i]);
+          if (lines[i] != undefined && lines[i].length != 0) {
+            var index = lines[i].indexOf(':');
+            if (index != -1) {
+              options[count] = lines[i].substring(index + 1,  lines[i].length).trimStart();
+              ++count;
+            }
+          }
+          ++i;
+        }
+        //choice option으로 변환하는 코드
+        const choices = new Array(4);
+        for (i = 0; i < 4; ++i) {
+          choices[i] = ({ option: options[i]});
+        }
+        console.log(choices);
+        res.status(200).json({ question: question, choices: choices});
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
       }
     });
 
-    //callChatGPT();
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
