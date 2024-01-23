@@ -47,7 +47,7 @@ sequelize
         let prompt = req.body.title + '라는 제목의 설문지를 만들려고 하는 데,';
         //제목 + type
         prompt += req.body.description + '이건 설문지의 설명이야. 설명은 응답할 때는 넣지 말아줘.';
-        prompt += (req.body.content + '라는 내용을 묻는');
+        prompt += (req.body.content + '(이 문구랑은 최대한 다르고 비슷하게)라는 내용을 묻는');
         switch (req.body.type) {
           case 'MULTIPLE_CHOICE':
             prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘';
@@ -70,7 +70,8 @@ sequelize
             break;
         }
         prompt += 
-        '니가 만든 문항을 (문항: output\n선지1: output\n선지2: output\n선지3: output\n선지4: output) 이 양식에 맞추고, output 위치에 니가 만든 값을 넣어서 보내줘.';
+        '너의 답을 (문항: output\n선택지1: output\n선택지2: output\n선택지3: output\n선택지4: output) 이 양식에 맞추고, output 위치에 답을 넣어서 보내줘.';
+        console.log(prompt);
         const response = await callChatGPT(prompt);
         console.log(response);
 
@@ -113,7 +114,7 @@ sequelize
           choices[i] = ({ option: options[i]});
         }
         console.log(choices);
-        res.status(200).json({ question: question, choices: choices});
+        res.status(200).json({ content: question, choices: choices});
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
