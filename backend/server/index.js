@@ -69,7 +69,7 @@ sequelize
             assert(false, 'error: undefined type');
             break;
         }
-        prompt += 
+        prompt +=
         '니가 만든 문항을 (문항: output\n선지1: output\n선지2: output\n선지3: output\n선지4: output) 이 양식에 맞추고, output 위치에 니가 만든 값을 넣어서 보내줘.';
         const response = await callChatGPT(prompt);
         console.log(response);
@@ -80,7 +80,7 @@ sequelize
         const lines = response.choices[0].message.content.split('\n');
         console.log(lines);
         //string에서 한글도 문자 한개라 가정
-        //첫째 줄은 무조건 제목인 듯?   
+        //첫째 줄은 무조건 제목인 듯?
         var questIndex = 0;
         for (i = 0; i < lines.length; ++i) {
           if (lines[i].indexOf('문항:') != -1) {
