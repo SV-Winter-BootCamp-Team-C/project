@@ -73,7 +73,7 @@ function Create() {
 
   // 설문 수정 시 사용할 설문 ID
   const editId = Number(new URLSearchParams(location.search).get('id'));
-  const isEditMode = editId !== null && !Number.isNaN(editId); // 편집 모드인지 확인
+  const isEditMode = editId !== null && !Number.isNaN(editId) && location.pathname.includes('/edit'); // 편집 모드인지 확인
 
   const { data: editSurveyData } = useQuery({
     queryKey: ['editSurvey', editId],
@@ -653,7 +653,7 @@ function Create() {
             {addQuestionDropdown && <CreateQuestionMenu onSelect={addQuestion} />}
           </div>
           <div className="absolute right-[8.75rem] top-[1.375rem] z-50">
-            <ChatButton onAddData={addChatQuestion} />
+            <ChatButton title={createSurvey.title} description={createSurvey.description} onAddData={addChatQuestion} />
           </div>
           <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1080, height: 680 }}>
             <div className="flex flex-col items-center justify-center pt-4">
