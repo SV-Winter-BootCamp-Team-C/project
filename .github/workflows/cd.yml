@@ -35,10 +35,13 @@ jobs:
         run: |
           echo "${{ secrets.ENV }}" >> .env
 
-      - name: Build and Push docker images
+          - name: Build docker images
+          run: |
+            docker-compose -f docker-compose.prod.yml build
+            docker images
+
+      - name: Push docker images
         run: |
-          docker-compose -f docker-compose.prod.yml up --build
-          docker images
           docker-compose -f docker-compose.prod.yml push
 
       - name: Execute remote ssh commands to deploy
@@ -52,4 +55,4 @@ jobs:
             git pull
             docker-compose -f docker-compose.prod.yml down
             docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml up --build
+            docker-compose -f docker-compose.prod.yml up --detach
