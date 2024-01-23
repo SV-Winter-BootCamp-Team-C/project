@@ -164,9 +164,9 @@ function ResponseForm() {
   };
 
   return (
-    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}>
-      <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
-        <div className="flex flex-col px-[8.75rem]">
+    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem]`}>
+      <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1200, height: 820 }}>
+        <div className="flex flex-col px-[12.5rem]">
           {surveyData.mainImageUrl && (
             <img
               src={surveyData.mainImageUrl}

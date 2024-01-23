@@ -342,39 +342,41 @@ function Create() {
 
   return (
     <div className="pt-9">
-      <div
-        className="relative flex w-[18.75rem] h-[3.75rem] mx-[24.38rem] rounded-[1.25rem] bg-white"
-        style={{ boxShadow: '4px 4px 4px 0 rgba(0,0,0,0.25)' }}
-      >
-        <div className="flex flex-row justify-center gap-3 mx-6 my-4">
-          <div
-            className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
-            onClick={() => handlePageClick('style')}
-          >
-            <div className="flex">
-              <span className="text-[1.25rem] text-center text-black font-semibold">스타일</span>
-            </div>
-          </div>
-
-          <div
-            className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
-            onClick={() => handlePageClick('problem')}
-          >
-            <div className="flex">
-              <span className="text-[1.25rem] text-center text-black font-semibold">문항</span>
-            </div>
-          </div>
-        </div>
+      <div className="flex items-center justify-center">
         <div
-          className="absolute bottom-3 h-1 bg-[#918DCA] transition-all duration-300 ease-in-out"
-          style={{ width: '6.25rem', left: activePage === 'style' ? '10%' : '55%' }}
-        />
+          className="relative flex w-[18.75rem] h-[3.75rem] rounded-[1.25rem] bg-white"
+          style={{ boxShadow: '4px 4px 4px 0 rgba(0,0,0,0.25)' }}
+        >
+          <div className="flex flex-row justify-center gap-3 mx-6 my-4">
+            <div
+              className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
+              onClick={() => handlePageClick('style')}
+            >
+              <div className="flex">
+                <span className="text-[1.25rem] text-center text-black font-semibold">스타일</span>
+              </div>
+            </div>
+
+            <div
+              className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
+              onClick={() => handlePageClick('problem')}
+            >
+              <div className="flex">
+                <span className="text-[1.25rem] text-center text-black font-semibold">문항</span>
+              </div>
+            </div>
+          </div>
+          <div
+            className="absolute bottom-3 h-1 bg-[#918DCA] transition-all duration-300 ease-in-out"
+            style={{ width: '6.25rem', left: activePage === 'style' ? '10%' : '55%' }}
+          />
+        </div>
       </div>
 
       {/* 스타일 선택 */}
       {activePage === 'style' ? (
-        <Scrollbars style={{ position: 'absolute', top: '9rem', right: '0.1rem', width: 1080, height: 700 }}>
-          <div className="flex flex-col ml-14">
+        <Scrollbars style={{ position: 'absolute', top: '9rem', right: '0.1rem', width: 1200, height: 700 }}>
+          <div className="flex flex-col px-[6rem]">
             <div className="flex items-center">
               <div className="flex">
                 <span className="text-[2rem] font-semibold">제목</span>
@@ -558,7 +560,7 @@ function Create() {
                 </button>
               )}
               <div
-                className="flex justify-center items-center w-[18.75rem] h-[12.5rem] cursor-pointer border-dashed border-[0.06rem] border-[#b4b4b4]"
+                className="flex justify-center items-center w-[21.5rem] h-[12.5rem] cursor-pointer border-dashed border-[0.06rem] border-[#b4b4b4]"
                 onClick={() => document.getElementById('imageInput')?.click()}
               >
                 {mainImg ? (
@@ -641,7 +643,7 @@ function Create() {
         </Scrollbars>
       ) : (
         // 문제 생성
-        <div className="relative flex h-full px-[8.75rem] ">
+        <div className="relative flex h-full px-[6rem] ">
           <div className="flex items-center justify-start gap-6 mt-6">
             <p className="text-[2rem] font-semibold text-black">문항</p>
             <AddButton
@@ -652,10 +654,10 @@ function Create() {
             />
             {addQuestionDropdown && <CreateQuestionMenu onSelect={addQuestion} />}
           </div>
-          <div className="absolute right-[8.75rem] top-[1.375rem] z-50">
+          <div className="absolute right-[6rem] top-[1.375rem] z-50">
             <ChatButton title={createSurvey.title} description={createSurvey.description} onAddData={addChatQuestion} />
           </div>
-          <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1080, height: 680 }}>
+          <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1200, height: 680 }}>
             <div className="flex flex-col items-center justify-center pt-4">
               {createSurvey.questions.length === 0 ? (
                 <p className="text-gray">설문 문항을 등록하세요.</p>

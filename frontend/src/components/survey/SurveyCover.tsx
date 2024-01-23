@@ -42,13 +42,13 @@ function SurveyCover({
   return (
     <div className="relative cursor-pointer ">
       <div
-        className="flex items-center justify-center w-80 h-[11.25rem] border-2 border-solid border-darkGray rounded-[0.625rem] overflow-hidden"
+        className="flex items-center justify-center w-[21.5rem] h-[11.25rem] border-2 border-solid border-darkGray rounded-[0.625rem] overflow-hidden"
         onClick={handleNavigateToSurvey}
       >
         <img
           src={mainImageUrl || noImage}
           alt="survey"
-          className="block object-cover w-80 h-[11.25rem] rounded-[0.625rem]"
+          className="block object-cover w-[21.5rem] h-[11.25rem] rounded-[0.625rem]"
         />
       </div>
 
