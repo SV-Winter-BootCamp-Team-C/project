@@ -154,7 +154,7 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
           <div className="flex items-center justify-center w-full" />
         </div>
       )}
-      <div className="relative flex items-center w-[20rem] h-[2rem] border bg-lightGray rounded-t-[0.625rem] border-solid border-lightGray ">
+      <div className="relative flex items-center w-[20rem] h-[2rem] border bg-lightGray rounded-t-[0.625rem] border-solid border-gray ">
         <span className="ml-2 font-medium text-left text-darkGray">드롭다운 선택지</span>
         <div className="absolute flex justify-center items-center w-[1.25rem] h-[1.25rem] bg-ligthGray top-[0.375rem] right-[0.625rem]">
           <img src={dropIcon} alt="Drop" className="w-[0.75rem] h-[0.5rem]" />
