@@ -40,14 +40,18 @@ sequelize
 
     app.get('/api/images/search/:query', getImageByAPI);
 
-    app.post('/api/gpt-prompt', async (req, res) => {
+    app.get('/api/gpt-prompt', async (req, res) => {
       try {
         console.log(req);
         //make prompt
         let prompt = req.body.title + '라는 제목의 설문지를 만들려고 하는 데,';
         //제목 + type
-        prompt += req.body.description + '이건 설문지의 설명이야. 설명은 응답할 때는 넣지 말아줘.';
-        prompt += (req.body.content + '(이 문구랑은 최대한 다르고 비슷하게)라는 내용을 묻는');
+        prompt +=
+          req.body.description +
+          '이건 설문지의 설명이야. 설명은 응답할 때는 넣지 말아줘.';
+        prompt +=
+          req.body.content +
+          '(이 문구랑은 최대한 다르고 비슷하게)라는 내용을 묻는';
         switch (req.body.type) {
           case 'MULTIPLE_CHOICE':
             prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘';
@@ -59,18 +63,20 @@ sequelize
             break;
           */
           case 'CHECKBOX':
-            prompt += '객관식(선택지가 4개 있어) 문항을 하나 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
+            prompt +=
+              '객관식(선택지가 4개 있어) 문항을 하나 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
             break;
           case 'DROPDOWN':
             //to do: 드롭다운 뭘 해야 되는지 고민해 보기 (객관식이랑 똑같은 듯?)
-            prompt += '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘. 길이는 상관없어';
+            prompt +=
+              '객관식 (선택지가 4개 있어) 문항을 하나 만들어줘. 길이는 상관없어';
             break;
           default:
-            assert(false, 'error: undefined type');
+            console.assert(false, 'error: undefined type');
             break;
         }
-        prompt += 
-        '너의 답을 (문항: output\n선택지1: output\n선택지2: output\n선택지3: output\n선택지4: output) 이 양식에 맞추고, output 위치에 답을 넣어서 보내줘.';
+        prompt +=
+          '너의 답을 (문항: output\n선택지1: output\n선택지2: output\n선택지3: output\n선택지4: output) 이 양식에 맞추고, output 위치에 답을 넣어서 보내줘.';
         console.log(prompt);
         const response = await callChatGPT(prompt);
         console.log(response);
@@ -81,7 +87,7 @@ sequelize
         const lines = response.choices[0].message.content.split('\n');
         console.log(lines);
         //string에서 한글도 문자 한개라 가정
-        //첫째 줄은 무조건 제목인 듯?   
+        //첫째 줄은 무조건 제목인 듯?
         var questIndex = 0;
         for (i = 0; i < lines.length; ++i) {
           if (lines[i].indexOf('문항:') != -1) {
@@ -89,7 +95,12 @@ sequelize
           }
           questIndex++;
         }
-        const question = lines[questIndex].substring(lines[questIndex].indexOf(' ') + 1, lines[questIndex].length).trimStart();
+        const question = lines[questIndex]
+          .substring(
+            lines[questIndex].indexOf(' ') + 1,
+            lines[questIndex].length,
+          )
+          .trimStart();
         console.log(question);
 
         const options = new Array(4);
@@ -102,7 +113,9 @@ sequelize
           if (lines[i] != undefined && lines[i].length != 0) {
             var index = lines[i].indexOf(':');
             if (index != -1) {
-              options[count] = lines[i].substring(index + 1,  lines[i].length).trimStart();
+              options[count] = lines[i]
+                .substring(index + 1, lines[i].length)
+                .trimStart();
               ++count;
             }
           }
@@ -111,16 +124,15 @@ sequelize
         //choice option으로 변환하는 코드
         const choices = new Array(4);
         for (i = 0; i < 4; ++i) {
-          choices[i] = ({ option: options[i]});
+          choices[i] = { option: options[i] };
         }
         console.log(choices);
-        res.status(200).json({ content: question, choices: choices});
+        res.status(200).json({ content: question, choices: choices });
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
       }
     });
-
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
