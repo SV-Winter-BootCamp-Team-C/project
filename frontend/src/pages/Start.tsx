@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 // import arrowRight from '../assets/arrowRight.svg';
 import iconStart from '../assets/iconStart.svg';
 import newIdea from '../assets/newIdea.png';
 import teamWork from '../assets/teamWork.png';
-import rectangle from '../assets/rectangle.svg';
+// import rectangle from '../assets/rectangle.svg';
 // import plus from '../assets/plus.svg';
 // import graph1 from '../assets/graph1.svg';
 // import graph2 from '../assets/graph2.svg';
@@ -117,7 +117,7 @@ function Start() {
             </div>
 
             {/* centerImage, centerButton */}
-            <div className="flex relative z-30 flex-row items-start justify-center gap-1 mt-7">
+            <div className="relative z-30 flex flex-row items-start justify-center gap-1 mt-7">
               <img src={newIdea} alt="newIdea" className="w-[23.5rem] h-[20.25rem]" />
               <a
                 href="/signup"
@@ -231,7 +231,7 @@ function Start() {
                   FormFlex를 사용하면 직접 폼을 만들고 설문조사 분석을 경험하고 해당 내용에 대하여 공유할 수 있습니다.
                 </span>
               </div>
-              <CarouselDesOne activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+              <CarouselDesOne setActiveIndex={setActiveIndex} />
             </div>
           </div>
           <div className="flex flex-col w-[33.75rem] h-[31.25rem] ml-[7.37rem]">
@@ -246,7 +246,7 @@ function Start() {
                 <div className="flex flex-col w-[30.5rem] h-[5.625rem] justify-center mt-[1.87rem] pl-4">
                   <div className="flex flex-row items-center gap-2">
                     <img src={feature.image} alt={feature.title} className="w-7 h-7" />
-                    <span className="font-semibold text-2xl select-none">{feature.title}</span>
+                    <span className="text-2xl font-semibold select-none">{feature.title}</span>
                   </div>
                   <p className="mt-2 text-lg select-none">{feature.description}</p>
                 </div>
@@ -286,7 +286,7 @@ function Start() {
             <div className="flex mr-16   w-[12rem] h-[2.875rem] justify-start">
               <div className="flex flex-col">
                 <div className=" flex w-[12rem] h-[2.875rem] justify-center">
-                  <span className="flex font-semibold text-4xl select-none">Form : Flex</span>
+                  <span className="flex text-4xl font-semibold select-none">Form : Flex</span>
                 </div>
                 <div className="w-[18.25rem] h-[6rem] justify-center mt-6 ">
                   <span className="font-normal text-[0.75rem] leading-normal select-none">
@@ -305,27 +305,27 @@ function Start() {
               <span className="text-[1.5rem] font-semibold select-none">Company</span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Home
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 How it works
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Pricing Plan
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Features
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 About us
               </span>
             </div>
@@ -335,22 +335,22 @@ function Start() {
               <span className="text-[1.5rem] font-semibold select-none">Useful Links</span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Licenses
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Privacy Policy
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Terms & Conditions
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Security Updates
               </span>
             </div>
@@ -360,17 +360,17 @@ function Start() {
               <span className="text-[1.5rem] font-semibold select-none">Support</span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Contact Us
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Help Center
               </span>
             </div>
             <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle hover:scale-110 hover:-translate-y-1 transition-transform cursor-pointer">
+              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
                 Support Ticket
               </span>
             </div>
@@ -380,13 +380,13 @@ function Start() {
               <span className="text-[1.5rem] font-semibold select-none">Subscribe To Our Newsletter</span>
             </div>
             <div className="flex text-[1rem] font-medium mt-6">
-              <span className="flex w-74 h-16 font-medium align-middle leading-normal select-none">
+              <span className="flex h-16 font-medium leading-normal align-middle select-none w-74">
                 최신 뉴스, 제안 및 업데이트를 보려면
                 <br />
                 뉴스레터에 가입하십시오.
               </span>
             </div>
-            <div className="flex  flex-row items-center justify-start align-middle">
+            <div className="flex flex-row items-center justify-start align-middle">
               <div className="flex flex-row items-center justify-center">
                 <div className="flex w-[13.125rem] h-[3rem] border-solid border-[0.063rem] border-black rounded-[0.625rem] bg-white justify-center items-center py-3 pl-4">
                   <input
