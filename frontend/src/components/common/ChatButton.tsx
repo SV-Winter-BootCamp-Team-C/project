@@ -39,6 +39,7 @@ function ChatButton({ title, description, onAddData }: ChatButtonProps) {
     queryKey: ['gptResponse', gptRequest.content],
     queryFn: () => addGptResponseAPI(gptRequest),
     enabled: false,
+    retry: 10,
   });
 
   const toggleInput = () => {
