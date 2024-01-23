@@ -1,10 +1,7 @@
-FROM node:latest
-USER root
+FROM node:18.19.0-alpine
 
 WORKDIR /frontend
 COPY . ./
-RUN npm install -g typescript
-
-EXPOSE 3001
-
-# CMD [ "npm", "run", "dev" ]
+RUN npm cache clean --force
+RUN npm install
+RUN npm run build
