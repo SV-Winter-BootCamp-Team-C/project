@@ -25,32 +25,31 @@ const getUserSurveys = async (req, res) => {
       });
 
       // 각 설문조사에 대한 attended_count 계산
-      const modifiedSurveys = await Promise.all(
-        surveys.map(async (survey) => {
-          const attendedCount = await Answer.count({
-            distinct: true,
-            col: 'userId',
-            include: [
-              {
-                model: Question,
-                attributes: [],
-                where: { surveyId: survey.id },
-              },
-            ],
-          });
+      surveys.map(async (survey) => {
+        const attendedCount = await Answer.count({
+          distinct: true,
+          col: 'userId',
+          include: [
+            {
+              model: Question,
+              attributes: [],
+              where: { surveyId: survey.id },
+            },
+          ],
+        });
 
-          preResult.push({
-            surveyId: survey.id,
-            title: survey.title,
-            open: survey.open,
-            mainImageUrl: survey.mainImageUrl || null,
-            createdAt: survey.createdAt,
-            updatedAt: survey.updatedAt,
-            deadline: survey.deadline,
-            attendCount: attendedCount,
-          });
-        }),
-      );
+        preResult.push({
+          surveyId: survey.id,
+          title: survey.title,
+          open: survey.open,
+          mainImageUrl: survey.mainImageUrl || null,
+          createdAt: survey.createdAt,
+          updatedAt: survey.updatedAt,
+          deadline: survey.deadline,
+          attendCount: attendedCount,
+        });
+      });
+
       if ('attendCount' in req.query) {
         preResult.sort((a, b) => b.attendCount - a.attendCount);
       } else if ('deadline' in req.query) {
@@ -60,11 +59,9 @@ const getUserSurveys = async (req, res) => {
       }
 
       const totalCount = await Survey.count({ where: { userId: userId } });
+      const tp = Math.ceil(totalCount / pageLimit);
 
-      res.json({
-        surveys: modifiedSurveys,
-        totalPages: Math.ceil(totalCount / pageLimit),
-      });
+      res.status(200).json({ surveys: preResult, totalPages: tp });
     } else {
       const selectSurveys = await Survey.findAll({
         where: { userId: userId },
@@ -131,7 +128,7 @@ const getUserSurveys = async (req, res) => {
           surveyId: survey.dataValues.id,
           title: survey.dataValues.title,
           open: survey.dataValues.open,
-          mainImageUrl: survey.dataValues.mainImageUrl || null,
+          mainImageUrl: survey.dataValues.mainImageUrl,
           createdAt: survey.dataValues.createdAt,
           updatedAt: survey.dataValues.updatedAt,
           deadline: survey.dataValues.deadline,

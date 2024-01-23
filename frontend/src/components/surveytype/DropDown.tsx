@@ -11,31 +11,31 @@ import ImageSearchModal from '../common/ImageSearchModal';
 import pexelIcon from '../../assets/pexel.svg';
 
 interface DropDownProps {
-  index: number;
+  idx: number;
   data: EditableObjectiveQuestion;
   handleImageUpload: (
-    index: number,
+    idx: number,
     data: EditableObjectiveQuestion,
     event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  updateQuestion: (index: number, data: EditableObjectiveQuestion) => void;
-  copyQuestion: (index: number) => void;
-  deleteQuestion: (index: number) => void;
+  ) => Promise<void>;
+  updateQuestion: (idx: number, data: EditableObjectiveQuestion) => void;
+  copyQuestion: (idx: number) => void;
+  deleteQuestion: (idx: number) => void;
 }
 
-function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion, deleteQuestion }: DropDownProps) {
+function DropDown({ idx, data, handleImageUpload, updateQuestion, copyQuestion, deleteQuestion }: DropDownProps) {
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   // 새 선택지를 추가하는 함수
   const addChoice = () => {
     const newChoices = [...data.choices, { option: '' }];
-    updateQuestion(index, { ...data, choices: newChoices });
+    updateQuestion(idx, { ...data, choices: newChoices });
   };
 
   // 선택지 삭제 함수
   const deleteChoice = (choiceIndex: number) => {
     const newChoices = data.choices.filter((_, i) => i !== choiceIndex);
-    updateQuestion(index, { ...data, choices: newChoices });
+    updateQuestion(idx, { ...data, choices: newChoices });
   };
 
   const handleImageSearchClick = () => {
@@ -43,12 +43,12 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
   };
 
   const handleSelectImage = (imageUrl: string) => {
-    updateQuestion(index, { ...data, imageUrl });
+    updateQuestion(idx, { ...data, imageUrl });
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
   const handleDeleteImage = () => {
-    updateQuestion(index, { ...data, imageUrl: '' });
+    updateQuestion(idx, { ...data, imageUrl: '' });
   };
 
   // 선택지 변경 핸들러
@@ -57,7 +57,7 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
       i === choiceIndex ? { ...choice, option: newValue } : choice,
     );
 
-    updateQuestion(index, { ...data, choices: updatedChoices });
+    updateQuestion(idx, { ...data, choices: updatedChoices });
   };
 
   return (
@@ -76,7 +76,7 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => copyQuestion(index)}
+            onClick={() => copyQuestion(idx)}
           >
             <img src={copyIcon} alt="Copy" className="w-full h-full" />
           </button>
@@ -84,7 +84,7 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => deleteQuestion(index)}
+            onClick={() => deleteQuestion(idx)}
           >
             <img src={trashcanIcon} alt="Trashcan" className="w-full h-full" />
           </button>
@@ -92,7 +92,7 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index + 1}.</span>
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{idx + 1}.</span>
       </div>
 
       <div className="relative flex items-center justify-center w-full mb-4">
@@ -101,20 +101,20 @@ function DropDown({ index, data, handleImageUpload, updateQuestion, copyQuestion
             type="text"
             required
             value={data.content}
-            onChange={(e) => updateQuestion(index, { ...data, content: e.target.value })}
+            onChange={(e) => updateQuestion(idx, { ...data, content: e.target.value })}
             placeholder="질문을 입력해주세요."
             className="w-full h-full text-[1rem] text-center text-black rounded-[0.625rem] border border-gray"
           />
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="checkbox-image-upload"
+            id={`checkbox-image-upload-${idx}`}
             type="file"
             accept="image/*"
-            onChange={(event) => handleImageUpload(index, data, event)}
+            onChange={(event) => handleImageUpload(idx, data, event)}
             style={{ display: 'none' }}
           />
-          <label htmlFor="checkbox-image-upload" className="image-upload-label">
+          <label htmlFor={`checkbox-image-upload-${idx}`} className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5 cursor-pointer" />
           </label>

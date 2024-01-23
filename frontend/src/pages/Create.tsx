@@ -209,7 +209,6 @@ function Create() {
     const updatedQuestions = createSurvey.questions.map((question, index) =>
       index === questionId ? { ...question, ...updatedData } : question,
     );
-    console.log(questionId);
     setCreateSurvey({ ...createSurvey, questions: updatedQuestions });
   };
 
@@ -235,7 +234,7 @@ function Create() {
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (
-    index: number,
+    idx: number,
     data: EditableQuestions,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -247,8 +246,7 @@ function Create() {
       // S3에 이미지 업로드
       try {
         const uploadedUrl = await uploadS3(file);
-        console.log(index, uploadedUrl);
-        updateQuestion(index, { ...data, imageUrl: uploadedUrl });
+        updateQuestion(idx, { ...data, imageUrl: uploadedUrl });
       } catch (error) {
         console.error('이미지 업로드 실패:', error);
       }
@@ -257,14 +255,14 @@ function Create() {
 
   const renderQuestionComponent = (
     type: 'MULTIPLE_CHOICE' | 'SUBJECTIVE_QUESTION' | 'CHECKBOX' | 'DROPDOWN',
-    index: number,
+    idx: number,
     data: EditableQuestions,
   ) => {
     switch (type) {
       case 'MULTIPLE_CHOICE': // 객관식 문항
         return (
           <MultipleChoice
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -275,7 +273,7 @@ function Create() {
       case 'CHECKBOX': // 체크박스 문항
         return (
           <Checkbox
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -286,7 +284,7 @@ function Create() {
       case 'DROPDOWN': // 드롭다운 문항
         return (
           <DropDown
-            index={index}
+            idx={idx}
             data={data as EditableObjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -297,7 +295,7 @@ function Create() {
       case 'SUBJECTIVE_QUESTION': // 주관식 문항
         return (
           <Subjective
-            index={index}
+            idx={idx}
             data={data as EditableSubjectiveQuestion}
             handleImageUpload={handleImageUpload}
             updateQuestion={updateQuestion}
@@ -326,8 +324,6 @@ function Create() {
   const handleSubmit = () => {
     mutate(createSurvey);
   };
-
-  console.log(createSurvey);
 
   return (
     <div className="pt-9">

@@ -9,19 +9,19 @@ import ImageSearchModal from '../common/ImageSearchModal';
 import pexelIcon from '../../assets/pexel.svg';
 
 interface SubjectiveProps {
-  index: number;
+  idx: number;
   data: EditableSubjectiveQuestion;
   handleImageUpload: (
-    index: number,
+    idx: number,
     data: EditableSubjectiveQuestion,
     event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  updateQuestion: (index: number, data: EditableSubjectiveQuestion) => void;
-  copyQuestion: (index: number) => void;
-  deleteQuestion: (index: number) => void;
+  ) => Promise<void>;
+  updateQuestion: (idx: number, data: EditableSubjectiveQuestion) => void;
+  copyQuestion: (idx: number) => void;
+  deleteQuestion: (idx: number) => void;
 }
 
-function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuestion, deleteQuestion }: SubjectiveProps) {
+function Subjective({ idx, data, handleImageUpload, updateQuestion, copyQuestion, deleteQuestion }: SubjectiveProps) {
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
 
   const handleImageSearchClick = () => {
@@ -29,12 +29,12 @@ function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuesti
   };
 
   const handleSelectImage = (imageUrl: string) => {
-    updateQuestion(index, { ...data, imageUrl });
+    updateQuestion(idx, { ...data, imageUrl });
     setImageSearchModalVisible(false); // 이미지 검색 모달을 닫음
   };
 
   const handleDeleteImage = () => {
-    updateQuestion(index, { ...data, imageUrl: '' });
+    updateQuestion(idx, { ...data, imageUrl: '' });
   };
 
   return (
@@ -53,7 +53,7 @@ function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuesti
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => copyQuestion(index)}
+            onClick={() => copyQuestion(idx)}
           >
             <img src={copyIcon} alt="Copy" className="w-full h-full" />
           </button>
@@ -61,7 +61,7 @@ function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuesti
           <button
             type="button"
             className="items-center w-5 h-5 mr-2 focus:outline-none"
-            onClick={() => deleteQuestion(index)}
+            onClick={() => deleteQuestion(idx)}
           >
             <img src={trashcanIcon} alt="Trashcan" className="w-full h-full" />
           </button>
@@ -69,7 +69,7 @@ function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuesti
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index + 1}.</span>
+        <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{idx + 1}.</span>
       </div>
 
       <div className="relative flex items-center justify-center w-full mb-4">
@@ -78,20 +78,20 @@ function Subjective({ index, data, handleImageUpload, updateQuestion, copyQuesti
             type="text"
             required
             value={data.content}
-            onChange={(e) => updateQuestion(index, { ...data, content: e.target.value })}
+            onChange={(e) => updateQuestion(idx, { ...data, content: e.target.value })}
             placeholder="질문을 입력해주세요."
             className="w-full h-full text-[1rem] text-center text-black rounded-[0.625rem] border border-gray"
           />
         </div>
         <div className="absolute right-[15.625rem]">
           <input
-            id="checkbox-image-upload"
+            id={`checkbox-image-upload-${idx}`}
             type="file"
             accept="image/*"
-            onChange={(event) => handleImageUpload(index, data, event)}
+            onChange={(event) => handleImageUpload(idx, data, event)}
             style={{ display: 'none' }}
           />
-          <label htmlFor="checkbox-image-upload" className="image-upload-label">
+          <label htmlFor={`checkbox-image-upload-${idx}`} className="image-upload-label">
             {/* 이미지 업로드 버튼 */}
             <img src={imageaddIcon} alt="Upload" className="w-5 h-5 cursor-pointer" />
           </label>
