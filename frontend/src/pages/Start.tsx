@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import arrowRight from '../assets/arrowRight.svg';
-import Lottie from 'react-lottie';
-import iconStart from '../assets/iconStart.svg';
+// import Lottie from 'react-lottie';
 import newIdea from '../assets/newIdea.png';
 import teamWork from '../assets/teamWork.png';
 // import rectangle from '../assets/rectangle.svg';
@@ -15,7 +14,7 @@ import star3 from '../assets/star3.svg';
 import star4 from '../assets/star4.svg';
 import star5 from '../assets/star5.svg';
 import flexLine from '../assets/flexLine.svg';
-import directMessage from '../assets/directMessage.svg';
+// import directMessage from '../assets/directMessage.svg';
 import editPencil from '../assets/editPencil.svg';
 // import palette from '../assets/palette.svg';
 import palette1 from '../assets/palette1.svg';
@@ -26,7 +25,7 @@ import survey from '../assets/survey.svg';
 import CarouselMain from '../components/common/CarouselMain';
 import CarouselDesOne from '../components/common/CarouselDesOne';
 import CarouselDesTwo from '../components/common/CarouselDesTwo';
-import LottieData from '../assets/toggleSwitch.json';
+// import LottieData from '../assets/toggleSwitch.json';
 
 function Start() {
   const navigate = useNavigate();
