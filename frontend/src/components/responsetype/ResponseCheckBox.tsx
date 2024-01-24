@@ -69,10 +69,11 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
         {question.choices?.map((choice) => (
           <div key={choice.choiceId} className="flex items-center justify-center w-full mb-2">
             <div
-              className={`relative flex justify-center items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
+              className={`relative flex justify-center cursor-pointer items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
               style={{
                 backgroundColor: selectedOptions.includes(choice.choiceId) ? `gray` : `${color}`,
               }}
+              onClick={() => handleOptionSelect(choice.choiceId)}
             >
               <label
                 htmlFor={`checkbox-${choice.choiceId}`}
@@ -94,21 +95,6 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
           </div>
         ))}
       </div>
-      {selectedOptions.length > 0 && (
-        <div className="flex justify-center mb-4">
-          <p>You selected:</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {selectedOptions.map((selectedChoiceId) => {
-              const selectedChoice = question.choices?.find((choice) => choice.choiceId === selectedChoiceId);
-              return (
-                <span key={selectedChoiceId} style={{ marginLeft: '0.25rem' }}>
-                  {selectedChoice?.option}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
