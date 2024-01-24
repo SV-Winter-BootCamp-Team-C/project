@@ -13,6 +13,7 @@ import { QuestionDataForm, ResponseSubmit } from '../types/questionData';
 import { responseformAPI, responseSubmitAPI } from '../api/responseform';
 import { useAuthStore } from '../store/AuthStore';
 import Loading from '../components/common/Loading';
+import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 
 function ResponseForm() {
   const navigate = useNavigate();
@@ -190,9 +191,9 @@ function ResponseForm() {
               <div className="text-[1rem] test-start text-darkGray ml-8 whitespace-pre-line">
                 생성자 : {surveyData.userName}
                 <br />
-                생성일 : {surveyData.createdAt}
+                생성일 : {formatDeadlineDate(surveyData.createdAt)}
                 <br />
-                마감일 : {surveyData.deadline}
+                마감일 : {formatDeadlineDate(surveyData.deadline)}
               </div>
             </div>
           </div>

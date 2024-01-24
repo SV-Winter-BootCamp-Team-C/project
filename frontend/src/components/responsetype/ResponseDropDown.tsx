@@ -50,7 +50,7 @@ function ResponseDropDown({ question, color, index, onOptionSelect }: ResponseDr
         <select
           value={selectedOption ?? ''}
           onChange={handleOptionSelect}
-          className="border border-gray-300 rounded-md"
+          className="border border-gray-300 rounded-md cursor-pointer"
           style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
         >
           <option value="">선택...</option>
@@ -61,11 +61,6 @@ function ResponseDropDown({ question, color, index, onOptionSelect }: ResponseDr
           ))}
         </select>
       </div>
-      {selectedOption !== null && (
-        <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choiceId === selectedOption)?.option}</p>
-        </div>
-      )}
     </div>
   );
 }
