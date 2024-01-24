@@ -84,6 +84,10 @@ function Signup() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isCheckedEamil) {
+      setIsCheckEmailErrorMessage('이메일 중복 확인이 필요합니다.');
+      return;
+    }
     signupMutation(signupInfo);
   };
 

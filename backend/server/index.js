@@ -8,7 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
 );
-const http = require('http');
+// const http = require('http');
 const { sequelize } = require('../models');
 const { createAndDownloadExcel } = require('../excel/excelGengerate');
 const { getGptReponse } = require('../gpt/gptAPI');
@@ -22,13 +22,18 @@ const cors = require('cors');
 //   credential: true, // 사용자 인증이 필요한 리소스(쿠키 등) 접근
 // };
 
-app.use(cors({
-  origin: 'http://formflex.site', // 클라이언트의 URL을 정확하게 지정
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  allowedHeaders: 'Content-Type, Accept, X-Requested-With, remember-me',
-}));
-
+app.use(
+  cors({
+    origin: [
+      'http://formflex.site',
+      'http://localhost:8000/api',
+      'http://localhost:3001',
+    ], // 클라이언트의 URL을 정확하게 지정
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    allowedHeaders: 'Content-Type, Accept, X-Requested-With, remember-me',
+  }),
+);
 
 //app.use(cors(corsOptions));
 
