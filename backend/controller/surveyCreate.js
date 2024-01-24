@@ -38,7 +38,7 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     const surveyId = survey.id;
-    const updatedSurveyUrl = `http://yourwebsite.com/survey/${surveyId}`;
+    const updatedSurveyUrl = `http://formflex.site/responseform?id=${surveyId}`;
 
     await Survey.update(
       { url: updatedSurveyUrl },
