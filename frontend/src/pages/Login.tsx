@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { LoginForm } from '../types/auth';
@@ -13,19 +13,38 @@ import passwordIcon from '../assets/password.svg';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUserId, setLoginStatus } = useAuthStore();
   const [loginInfo, setLoginInfo] = useState<LoginForm>({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const {
-    mutate: loginMutation,
-    isError,
-    isSuccess,
-  } = useMutation({
+  const saveRedirectPath = () => {
+    const fullPath = location.state.from.pathname + location.state.from.search; // 기본 경로 + 쿼리 스트링
+    localStorage.setItem('redirectPath', fullPath);
+  };
+
+  if (location.state?.from) {
+    saveRedirectPath();
+  }
+
+  const handleLoginSuccess = () => {
+    const from = localStorage.getItem('redirectPath') || '/all';
+    navigate(from, { replace: true });
+  };
+
+  // 로그인 페이지가 언마운트 될 때 redirectPath를 삭제
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('redirectPath');
+    };
+  }, []);
+
+  const { mutate: loginMutation, isError } = useMutation({
     mutationFn: loginAPI,
     onSuccess: (data) => {
       setUserId(data.id);
       setLoginStatus(true);
+      handleLoginSuccess();
     },
     onError: (error: AxiosError) => {
       const err = error as AxiosError<ApiResponseError>;
@@ -107,14 +126,6 @@ function Login() {
               >
                 회원가입
               </button>
-              {isSuccess && (
-                <Alert
-                  type="success"
-                  message="로그인이 완료되었습니다."
-                  buttonText="확인"
-                  buttonClick={() => navigate('/all', { replace: true })}
-                />
-              )}
               {isError && <Alert type="error" message={errorMessage} buttonText="확인" />}
             </div>
           </div>

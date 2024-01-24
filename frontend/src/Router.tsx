@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, useNavigate } from 'react-router-dom';
+import { createBrowserRouter, useLocation, useNavigate } from 'react-router-dom';
 import Start from './pages/Start';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -38,6 +38,7 @@ const routerData: RouterElement[] = [
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const location = useLocation();
   const navigate = useNavigate();
 
   if (!isLoggedIn) {
@@ -46,7 +47,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
         type="error"
         message="로그인이 필요한 페이지입니다."
         buttonText="확인"
-        buttonClick={() => navigate('/login')}
+        buttonClick={() => navigate('/login', { state: { from: location }, replace: true })}
       />
     );
   }
