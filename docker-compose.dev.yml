@@ -59,61 +59,140 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
       - frontend
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - build_folder:/var/www/frontend
+      - ./nginx/log:/var/log/nginx
+      # - ./ssl:/etc/nginx/ssl
 
-  prometheus:
-    image: prom/prometheus
-    restart: always
-    volumes:
-      - prometheus_data:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+  # prometheus:
+  #   image: prom/prometheus
+  #   restart: always
+  #   volumes:
+  #     - prometheus_data:/prometheus
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
-    container_name: cadvisor
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
+  #   container_name: cadvisor
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   devices:
+  #     - /dev/kmsg
+  #   ports:
+  #     - 8080:8080
+  #   privileged: true
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - prometheus
+
+  # grafana:
+  #   image: grafana/grafana
+  #   restart: always
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - prometheus
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+
+  # node-exporter:
+  #   image: quay.io/prometheus/node-exporter:v1.5.0
+  #   container_name: node_exporter
+  #   command: "--path.rootfs=/host"
+  #   pid: host
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /:/host:ro,rslave
+
+  elasticsearch:
+    build:
+      context: elk/elasticsearch
+      args:
+        ELASTIC_VERSION: 8.5.2
     volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - elasticsearch:/usr/share/elasticsearch/data:Z
     ports:
-      - 8080:8080
-    privileged: true
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
     restart: unless-stopped
-    depends_on:
-      - prometheus
 
-  grafana:
-    image: grafana/grafana
-    restart: always
-    container_name: grafana
+  logstash:
+    build:
+      context: elk/logstash
+      args:
+        ELASTIC_VERSION: 8.5.2
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
     ports:
-      - "3000:3000"
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: changeme
     depends_on:
-      - prometheus
-    volumes:
-      - grafana-data:/var/lib/grafana
-
-  node-exporter:
-    image: quay.io/prometheus/node-exporter:v1.5.0
-    container_name: node_exporter
-    command: "--path.rootfs=/host"
-    pid: host
+      - elasticsearch
     restart: unless-stopped
+
+  kibana:
+    build:
+      context: elk/kibana
+      args:
+        ELASTIC_VERSION: 8.5.2
     volumes:
-      - /:/host:ro,rslave
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: changeme
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  filebeat:
+    build:
+      context: elk/filebeat
+      args:
+        ELASTIC_VERSION: 8.5.2
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["filebeat modules enable nginx && filebeat -e -strict.perms=false"]
+    volumes:
+      - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./elk/filebeat/config/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
+      - ./nginx/log:/var/log/nginx
+      - ./start.sh:/start.sh
+    depends_on:
+      - logstash
+      - elasticsearch
+      - kibana
 
 volumes:
-  prometheus_data:
-  grafana-data:
+  # prometheus_data:
+  # grafana-data:
   build_folder: null
+  elasticsearch:
