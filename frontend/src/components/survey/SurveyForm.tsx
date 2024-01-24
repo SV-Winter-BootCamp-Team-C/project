@@ -17,7 +17,7 @@ interface SurvayFormProps {
   onPageChange: (page: number) => void;
   searchTerm: string; // 현재 검색어 상태
   setSearchTerm: (searchTerm: string) => void; // 검색어 상태를 업데이트하는 함수
-  // sort: string;
+  sort: string;
   onSortChange: (sort: string) => void;
 }
 
@@ -102,7 +102,7 @@ function SurveyForm({
   onPageChange,
   searchTerm,
   setSearchTerm,
-  // sort,
+  sort,
   onSortChange,
 }: SurvayFormProps) {
   const location = useLocation();
@@ -125,11 +125,13 @@ function SurveyForm({
       </div>
       <div className="flex items-center justify-between w-full items-centers px-[3.75rem]">
         {/* (최신순, 인기순, 마감일순) 드롭다운  */}
-        <motion.div animate={open ? 'open' : 'closed'} className="relative z-10">
+        <motion.div animate={open ? 'open' : 'closed'} className="relative z-10 ">
           <button
             type="button"
+            name="sort"
+            value={sort}
             onClick={() => setOpen((pv) => !pv)}
-            className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 bg-[#918DCA] hover:bg-[#918DCA ] transition-colors"
+            className="flex justify-center items-center w-24 h-9 gap-2 rounded-md text-indigo-50 bg-[#918DCA] hover:bg-[#918DCA ] transition-colors"
           >
             <span className="leading-4 text-base">정렬</span>
             <motion.span variants={iconVariants}>
@@ -141,7 +143,7 @@ function SurveyForm({
             initial={wrapperVariants.closed}
             variants={wrapperVariants}
             style={{ originY: 'top', translateX: '-50%' }}
-            className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden"
+            className="flex flex-col rounded-lg bg-white shadow-xl absolute top-[100%] left-[50%]  w-24 h-30 overflow-hidden"
           >
             <Option setOpen={setOpen} Icon={BiTime} sortValue="latest" onSortChange={onSortChange} text="최신 순" />
             <Option

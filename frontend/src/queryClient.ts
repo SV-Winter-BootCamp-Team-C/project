@@ -24,8 +24,7 @@ export const getClient = new QueryClient({
 });
 
 // const { VITE_BASE_URL } = import.meta.env;
-// const BASE_URL = import.meta.env.DEV ? '/api' : 'test';
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.DEV ? 'http://localhost:8000/api' : '/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,
