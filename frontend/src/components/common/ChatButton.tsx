@@ -85,8 +85,6 @@ function ChatButton({ title, description, onAddData }: ChatButtonProps) {
     }
   };
 
-  console.log(gptRequest);
-
   return (
     <div className="flex flex-col items-end">
       <button
