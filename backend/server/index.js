@@ -23,9 +23,12 @@ const cors = require('cors');
 // };
 
 app.use(cors({
-  origin: '*',
-  credential: true,
+  origin: 'http://formflex.site', // 클라이언트의 URL을 정확하게 지정
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type, Accept, X-Requested-With, remember-me',
 }));
+
 
 //app.use(cors(corsOptions));
 
