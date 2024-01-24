@@ -56,7 +56,7 @@ const usePaginationSurveyList = (path: PathType) => {
     isPending,
     searchTerm,
     setSearchTerm,
-    sort,
+    // sort,
     handleSortChange,
   };
 };

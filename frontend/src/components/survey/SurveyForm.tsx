@@ -17,7 +17,6 @@ interface SurvayFormProps {
   onPageChange: (page: number) => void;
   searchTerm: string; // 현재 검색어 상태
   setSearchTerm: (searchTerm: string) => void; // 검색어 상태를 업데이트하는 함수
-  // sort: string;
   onSortChange: (sort: string) => void;
 }
 
@@ -102,7 +101,6 @@ function SurveyForm({
   onPageChange,
   searchTerm,
   setSearchTerm,
-  // sort,
   onSortChange,
 }: SurvayFormProps) {
   const location = useLocation();
@@ -131,7 +129,7 @@ function SurveyForm({
             onClick={() => setOpen((pv) => !pv)}
             className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 bg-[#918DCA] hover:bg-[#918DCA ] transition-colors"
           >
-            <span className="leading-4 text-base">정렬</span>
+            <span className="text-base leading-4">정렬</span>
             <motion.span variants={iconVariants}>
               <FiChevronDown />
             </motion.span>
@@ -160,19 +158,6 @@ function SurveyForm({
             />
           </motion.ul>
         </motion.div>
-        {/* <div>
-          <select
-            name="sort"
-            className="focus:outline-none bg-white text-gray-700 border border-gray-300 rounded-md shadow-sm px-4 py-2 hover:border-gray-400 transition-colors"
-            value={sort}
-            onChange={(e) => onSortChange(e.target.value)}
-          >
-            <option value="latest">최신 순</option>
-            <option value="attendCount">참여자 순</option>
-            <option value="deadline">마감일 순</option>
-          </select>
-        </div> */}
-
         <div>
           {location.pathname !== '/myresponses' && <AddButton text="추가" onClick={onClickAddButton as () => void} />}
         </div>
