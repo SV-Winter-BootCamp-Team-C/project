@@ -23,7 +23,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     restart: always
     environment:
       - TZ=Asia/Seoul
@@ -49,13 +49,13 @@ services:
     volumes:
       - ./frontend/:/frontend
       - build_folder:/frontend/dist
-    command: ["npm", "run", "build"]
+    tty: true
 
   nginx:
     container_name: nginx
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     restart: always
     ports:
       - "80:80"
@@ -116,4 +116,4 @@ services:
 volumes:
   prometheus_data:
   grafana-data:
-  build_folder:
+  build_folder: null

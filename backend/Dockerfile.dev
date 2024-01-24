@@ -14,8 +14,6 @@ RUN npm install -g nodemon
 # package.json과 package-lock.json 파일을 /usr/src/app 디렉토리로 복사
 COPY . /app
 
-EXPOSE 8000
-
 #CMD ["npm", "start"]
 CMD ["nodemon", "server/index.js", "-L"]
 
