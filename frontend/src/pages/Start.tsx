@@ -35,7 +35,7 @@ function Start() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOn(true);
-    }, 2000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -102,11 +102,11 @@ function Start() {
               <span className="text-4xl font-semibold text-black">Form:Flex</span>
             </div>
             <div
-              className="flex cursor-pointer items-center justify-center flex-shrink-0  w-[6.5rem] h-[2.875rem] rounded-[1.875rem] bg-white"
-              style={{
-                boxShadow:
-                  '0px 0px 1px 0 rgba(0,0,0,0.3), 0px 1px 4px 0 rgba(0,0,0,0.05), 0px 1px 2px 0.5px rgba(0,0,0,0.1)',
-              }}
+              className="flex cursor-pointer items-center justify-center flex-shrink-0  w-[6.5rem] h-[2.875rem] rounded-2xl border-2 border-solid border-black bg-white transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
+              // style={{
+              //   boxShadow:
+              //     '0px 0px 1px 0 rgba(0,0,0,0.3), 0px 1px 4px 0 rgba(0,0,0,0.05), 0px 1px 2px 0.5px rgba(0,0,0,0.1)',
+              // }}
               onClick={() => navigate('/login')}
             >
               <span className="text-base font-medium leading-4 text-center text-black">Login</span>
@@ -145,9 +145,9 @@ function Start() {
               <img src={newIdea} alt="newIdea" className="w-[23.5rem] h-[20.25rem]" />
               <a
                 href="/signup"
-                className="relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-[#918DCA] transition duration-300 ease-out border-2 border-[#918DCA] border-solid rounded-full shadow-md group"
+                className="relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-black bg-white transition duration-300 ease-out border-2 border-black border-solid rounded-full shadow-md group"
               >
-                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-[#918DCA] group-hover:translate-x-0 ease">
+                <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-black group-hover:translate-x-0 ease">
                   <svg
                     className="w-6 h-6"
                     fill="none"
@@ -168,7 +168,7 @@ function Start() {
           </div>
           <div className="flex justify-center">
             <div className="flex justify-center items-center w-[74.25rem] h-[28.25rem] rounded-[1.875rem] bg-white border-solid border-[0.065rem] border-slate-950">
-              <div className="w-[67.25rem] h-[25rem] bg-gray">
+              <div className="w-[67.25rem] h-[25rem] ">
                 <CarouselMain />
               </div>
             </div>
