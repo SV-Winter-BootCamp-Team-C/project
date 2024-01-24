@@ -40,7 +40,7 @@ sequelize
 
     app.get('/api/images/search/:query', getImageByAPI);
 
-    app.get('/api/gpt-prompt', getGptReponse);
+    app.post('/api/gpt-prompt', getGptReponse);
 
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
