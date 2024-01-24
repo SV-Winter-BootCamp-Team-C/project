@@ -86,6 +86,7 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
                   id={`checkbox-${choice.choiceId}`}
                   className="absolute opacity-0"
                   checked={selectedOptions.includes(choice.choiceId)}
+                  onChange={() => handleOptionSelect(choice.choiceId)}
                 />
                 {selectedOptions.includes(choice.choiceId) && <img src={checkIcon} alt="Checked" className="w-4 h-4" />}
               </label>
