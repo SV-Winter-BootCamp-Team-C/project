@@ -59,6 +59,17 @@ services:
       - frontend
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - build_folder:/var/www/frontend
+      - build_folder:/var/www/
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # RabbitMQ AMQP 포트
+      - "15672:15672" # RabbitMQ 관리자 포트
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    restart: always
 volumes:
   build_folder: null
