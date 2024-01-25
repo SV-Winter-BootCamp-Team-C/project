@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import Lottie from 'react-lottie';
 import close from '../../assets/closebtn.svg';
-import alertSuccess from '../../assets/alertSuccess.svg';
-import alertError from '../../assets/alertError.svg';
+// import alertSuccess from '../../assets/alertSuccess.svg';
+// import alertError from '../../assets/alertError.svg';
+import successAnimation from '../../assets/successAnimation.json';
+import errorAnimation from '../../assets/errorAnimation.json';
 
 interface AlertProps {
   type?: 'success' | 'error';
@@ -23,14 +26,40 @@ function Alert({ type, message, buttonText, buttonClick }: AlertProps) {
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-20">
       <div className="relative h-40 w-80 flex flex-col items-center justify-center bg-white shadow-md rounded-[1.25rem]">
         <div className="absolute right-2 top-2">
-          <div className="flex items-center justify-center w-6 h-6 cursor-pointer" onClick={closeAlert}>
+          <div className="flex  items-center justify-center w-6 h-6 cursor-pointer" onClick={closeAlert}>
             <img src={close} alt="close" className="w-2 h-2" />
           </div>
         </div>
         {type === 'success' ? (
-          <img src={alertSuccess} alt="success" className="w-8 h-8 mb-4" />
+          // <img src={alertSuccess} alt="success" className="w-8 h-8 mb-4" />
+          <Lottie
+            options={{
+              loop: false,
+              autoplay: true,
+              animationData: successAnimation,
+              rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice',
+              },
+            }}
+            height={35}
+            width={35}
+            style={{ margin: '0.5rem' }}
+          />
         ) : (
-          <img src={alertError} alt="error" className="w-8 h-8 mb-4" />
+          // <img src={alertError} alt="error" className="w-8 h-8 mb-4" />
+          <Lottie
+            options={{
+              loop: false,
+              autoplay: true,
+              animationData: errorAnimation,
+              rendererSettings: {
+                preserveAspectRatio: 'xMidYMid slice',
+              },
+            }}
+            height={35}
+            width={35}
+            style={{ margin: '0.5rem' }}
+          />
         )}
         <p className="text-[0.875rem]">{message}</p>
         <button

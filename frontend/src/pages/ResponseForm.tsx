@@ -13,6 +13,7 @@ import { QuestionDataForm, ResponseSubmit } from '../types/questionData';
 import { responseformAPI, responseSubmitAPI } from '../api/responseform';
 import { useAuthStore } from '../store/AuthStore';
 import Loading from '../components/common/Loading';
+import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 
 function ResponseForm() {
   const navigate = useNavigate();
@@ -164,9 +165,9 @@ function ResponseForm() {
   };
 
   return (
-    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem] ml-[0.1rem]`}>
-      <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1080, height: 820 }}>
-        <div className="flex flex-col px-[8.75rem]">
+    <div className={`${fontClasses[surveyData.font] || fontClasses.pretendard} relative flex mt-[2.25rem]`}>
+      <Scrollbars style={{ position: 'absolute', right: '0.1rem', width: 1200, height: 820 }}>
+        <div className="flex flex-col px-[12.5rem]">
           {surveyData.mainImageUrl && (
             <img
               src={surveyData.mainImageUrl}
@@ -190,9 +191,9 @@ function ResponseForm() {
               <div className="text-[1rem] test-start text-darkGray ml-8 whitespace-pre-line">
                 생성자 : {surveyData.userName}
                 <br />
-                생성일 : {surveyData.createdAt}
+                생성일 : {formatDeadlineDate(surveyData.createdAt)}
                 <br />
-                마감일 : {surveyData.deadline}
+                마감일 : {formatDeadlineDate(surveyData.deadline)}
               </div>
             </div>
           </div>

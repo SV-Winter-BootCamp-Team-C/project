@@ -2,14 +2,16 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import Lottie from 'react-lottie';
 import Alert from '../components/common/Alert';
 import { ApiResponseError } from '../types/apiResponseError';
 import { SignupForm } from '../types/auth';
 import { checkEmailAPI, singupAPI } from '../api/signup';
-import fileImage from '../assets/file.png';
+// import fileImage from '../assets/file.png';
 import usernameIcon from '../assets/username.svg';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
+import signUpAnimation from '../assets/signUpAnimation.json';
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,6 +19,14 @@ function Signup() {
   const [isCheckedEamil, setIsCheckedEmail] = useState<boolean>(false);
   const [isCheckEmailErrorMessage, setIsCheckEmailErrorMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const signUpOption = {
+    loop: true, // or false, depending on your requirement
+    autoplay: true, // or false
+    animationData: signUpAnimation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
 
   const { mutate: checkEmailMutation } = useMutation({
     mutationFn: checkEmailAPI,
@@ -74,6 +84,10 @@ function Signup() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isCheckedEamil) {
+      setIsCheckEmailErrorMessage('이메일 중복 확인이 필요합니다.');
+      return;
+    }
     signupMutation(signupInfo);
   };
 
@@ -87,8 +101,9 @@ function Signup() {
         <div className="flex flex-col items-center justify-center w-full">
           <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
         </div>
-        <div className="absolute bottom-[4.75rem] left-[3.5rem]">
-          <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" />
+        <div className="absolute bottom-[4.75rem] left-[-1em]">
+          {/* <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" /> */}
+          <Lottie options={signUpOption} height={450} width={400} />
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex justify-end w-full">

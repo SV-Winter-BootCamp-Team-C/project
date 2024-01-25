@@ -1,5 +1,10 @@
 import { Pagination } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { FiChevronDown } from 'react-icons/fi';
+import { BiTime, BiHappyAlt, BiStopwatch } from 'react-icons/bi';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { IconType } from 'react-icons';
 import { SurveyCoverType } from '../../types/survey';
 import search from '../../assets/search.svg';
 import { AddButton } from '../common/Button';
@@ -12,6 +17,81 @@ interface SurvayFormProps {
   onPageChange: (page: number) => void;
   searchTerm: string; // 현재 검색어 상태
   setSearchTerm: (searchTerm: string) => void; // 검색어 상태를 업데이트하는 함수
+  onSortChange: (sort: string) => void;
+}
+
+const wrapperVariants = {
+  open: {
+    scaleY: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+    },
+  },
+  closed: {
+    scaleY: 0,
+    transition: {
+      when: 'afterChildren',
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const iconVariants = {
+  open: { rotate: 180 },
+  closed: { rotate: 0 },
+};
+
+const itemVariants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      when: 'beforeChildren',
+    },
+  },
+  closed: {
+    opacity: 0,
+    y: -15,
+    transition: {
+      when: 'afterChildren',
+    },
+  },
+};
+
+const actionIconVariants = {
+  open: { scale: 1, y: 0 },
+  closed: { scale: 0, y: -7 },
+};
+
+interface OptionProps {
+  text: string;
+  Icon: IconType;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  sortValue?: string; // 추가된 prop
+  onSortChange?: (sort: string) => void; // 추가된 prop
+}
+
+function Option({ text, Icon, setOpen, sortValue, onSortChange }: OptionProps) {
+  const handleOptionClick = () => {
+    setOpen(false);
+    if (sortValue && onSortChange) {
+      onSortChange(sortValue);
+    }
+  };
+
+  return (
+    <motion.li
+      variants={itemVariants}
+      onClick={handleOptionClick}
+      className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-[#918DCA] transition-colors cursor-pointer"
+    >
+      <motion.span variants={actionIconVariants}>
+        <Icon />
+      </motion.span>
+      <span>{text}</span>
+    </motion.li>
+  );
 }
 
 function SurveyForm({
@@ -21,8 +101,10 @@ function SurveyForm({
   onPageChange,
   searchTerm,
   setSearchTerm,
+  onSortChange,
 }: SurvayFormProps) {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col items-center pt-6">
@@ -40,28 +122,50 @@ function SurveyForm({
         </div>
       </div>
       <div className="flex items-center justify-between w-full items-centers px-[3.75rem]">
-        <div className="flex gap-6">
-          <div>
-            <select name="filter" className="focus:outline-none">
-              <option value="all">모든 설문</option>
-              <option value="view">조회한 설문</option>
-              <option value="like">좋아요한 설문</option>
-            </select>
-          </div>
-          <div>
-            <select name="sort" className="focus:outline-none">
-              <option value="latest">최신 순</option>
-              <option value="views">조회수 순</option>
-              <option value="likes">좋아요 순</option>
-            </select>
-          </div>
-        </div>
+        {/* (최신순, 인기순, 마감일순) 드롭다운  */}
+        <motion.div animate={open ? 'open' : 'closed'} className="relative z-10 ">
+          <button
+            type="button"
+            name="sort"
+            onClick={() => setOpen((pv) => !pv)}
+            className="flex justify-center items-center w-24 h-9 gap-2 rounded-md text-black bg-transparent transition-colors"
+          >
+            <span className="text-base leading-4">정렬</span>
+            <motion.span variants={iconVariants}>
+              <FiChevronDown />
+            </motion.span>
+          </button>
+
+          <motion.ul
+            initial={wrapperVariants.closed}
+            variants={wrapperVariants}
+            style={{ originY: 'top', translateX: '-50%' }}
+            className="flex flex-col rounded-lg bg-white shadow-xl absolute top-[100%] left-[50%]  w-24 h-30 overflow-hidden"
+          >
+            <Option setOpen={setOpen} Icon={BiTime} sortValue="latest" onSortChange={onSortChange} text="최신 순" />
+            <Option
+              setOpen={setOpen}
+              Icon={BiHappyAlt}
+              sortValue="attendCount"
+              onSortChange={onSortChange}
+              text="참여자 순"
+            />
+            <Option
+              setOpen={setOpen}
+              Icon={BiStopwatch}
+              sortValue="deadline"
+              onSortChange={onSortChange}
+              text="마감일 순"
+            />
+          </motion.ul>
+        </motion.div>
         <div>
           {location.pathname !== '/myresponses' && <AddButton text="추가" onClick={onClickAddButton as () => void} />}
         </div>
       </div>
+
       {/* 구분선 */}
-      <div className="w-[63.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
+      <div className="w-[67.5rem] mt-3 mx-8 h-[1px] bg-darkGray" />
 
       {surveyData.surveys && surveyData?.surveys.length > 0 ? (
         <div className="grid grid-cols-3 pt-6 lg:grid-cols-3 px-9 gap-y-4 gap-x-6">

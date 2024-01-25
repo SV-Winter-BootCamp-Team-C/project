@@ -35,11 +35,14 @@ jobs:
         run: |
           echo "${{ secrets.ENV }}" >> .env
 
-      - name: Build and Push docker images
+      - name: Build docker images
         run: |
-          docker-compose -f docker-compose.yml build
+          docker-compose -f docker-compose.prod.yml --build
           docker images
-          docker-compose -f docker-compose.yml push
+
+      - name: Push docker images
+        run: |
+          docker-compose -f docker-compose.prod.yml push
 
       - name: Execute remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -49,7 +52,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/project
-            git pull
-            docker-compose -f docker-compose.yml down
-            docker-compose -f docker-compose.yml pull
-            docker-compose -f docker-compose.yml up -d
+            git pull origin main
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.prod.yml up --build

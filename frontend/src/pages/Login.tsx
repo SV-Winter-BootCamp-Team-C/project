@@ -1,31 +1,61 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import Lottie from 'react-lottie';
 import { LoginForm } from '../types/auth';
 import { useAuthStore } from '../store/AuthStore';
 import { ApiResponseError } from '../types/apiResponseError';
 import Alert from '../components/common/Alert';
 import { loginAPI } from '../api/login';
-import fileImage from '../assets/file.png';
+// import fileImage from '../assets/file.png';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
+// import CarouselDesTwo from '../components/common/CarouselDesTwo';
+import surveyAnimation from '../assets/surveyAnimationBlue.json';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUserId, setLoginStatus } = useAuthStore();
   const [loginInfo, setLoginInfo] = useState<LoginForm>({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const surveyOptions = {
+    loop: true, // or false, depending on your requirement
+    autoplay: true, // or false
+    animationData: surveyAnimation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
 
-  const {
-    mutate: loginMutation,
-    isError,
-    isSuccess,
-  } = useMutation({
+  const saveRedirectPath = () => {
+    const fullPath = location.state.from.pathname + location.state.from.search; // 기본 경로 + 쿼리 스트링
+    localStorage.setItem('redirectPath', fullPath);
+  };
+
+  if (location.state?.from) {
+    saveRedirectPath();
+  }
+
+  const handleLoginSuccess = () => {
+    const from = localStorage.getItem('redirectPath') || '/all';
+    navigate(from, { replace: true });
+  };
+
+  // 로그인 페이지가 언마운트 될 때 redirectPath를 삭제
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('redirectPath');
+    };
+  }, []);
+
+  const { mutate: loginMutation, isError } = useMutation({
     mutationFn: loginAPI,
     onSuccess: (data) => {
       setUserId(data.id);
       setLoginStatus(true);
+      handleLoginSuccess();
     },
     onError: (error: AxiosError) => {
       const err = error as AxiosError<ApiResponseError>;
@@ -52,8 +82,9 @@ function Login() {
         <div className="flex flex-col items-center justify-center w-full">
           <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
         </div>
-        <div className="absolute bottom-[4.75rem] left-[3.5rem]">
-          <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" />
+        <div className="absolute bottom-[8rem] left-[-3em]">
+          {/* <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" /> */}
+          <Lottie options={surveyOptions} height={450} width={400} />
         </div>
         <form onSubmit={handleSubmit}>
           <div className="flex justify-center w-full">
@@ -107,14 +138,6 @@ function Login() {
               >
                 회원가입
               </button>
-              {isSuccess && (
-                <Alert
-                  type="success"
-                  message="로그인이 완료되었습니다."
-                  buttonText="확인"
-                  buttonClick={() => navigate('/all', { replace: true })}
-                />
-              )}
               {isError && <Alert type="error" message={errorMessage} buttonText="확인" />}
             </div>
           </div>

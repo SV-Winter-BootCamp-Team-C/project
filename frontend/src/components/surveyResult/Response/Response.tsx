@@ -18,7 +18,7 @@ interface Row {
   [key: string]: string | number;
 }
 
-function Response({ title, list }: ResponseProps) {
+function Response({  list }: ResponseProps) {
   const [searchParams] = useSearchParams();
   const surveyId = Number(searchParams.get('id'));
 
@@ -56,7 +56,8 @@ function Response({ title, list }: ResponseProps) {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${title}.xlsx`);
+      link.setAttribute('download', `survey_answers_${surveyId}.xlsx`);
+
       link.click();
       setTimeout(() => {
         window.URL.revokeObjectURL(url);

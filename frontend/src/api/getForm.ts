@@ -7,9 +7,19 @@ interface AllSurveyResponse {
   currentPage: number;
 }
 
-export const getAllSurveyAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+export const getAllSurveyAPI = async ({
+  userId,
+  currentPage,
+  title,
+  sort,
+}: AllSurveyResponse & { title?: string; sort?: string }) => {
   const params: any = { page: currentPage, limit: LIMIT };
   if (title) params.title = title;
+  if (sort === 'attendCount') {
+    params.attendCount = true; // 참여자 순 정렬
+  } else if (sort === 'deadline') {
+    params.deadline = true; // 마감일 순 정렬
+  }
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/all`,
@@ -18,9 +28,19 @@ export const getAllSurveyAPI = async ({ userId, currentPage, title }: AllSurveyR
   return response;
 };
 
-export const getMySurveyAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+export const getMySurveyAPI = async ({
+  userId,
+  currentPage,
+  title,
+  sort,
+}: AllSurveyResponse & { title?: string; sort?: string }) => {
   const params: any = { page: currentPage, limit: LIMIT };
   if (title) params.title = title;
+  if (sort === 'attendCount') {
+    params.attendCount = true; // 참여자 순 정렬
+  } else if (sort === 'deadline') {
+    params.deadline = true; // 마감일 순 정렬
+  }
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/forms`,
@@ -29,9 +49,19 @@ export const getMySurveyAPI = async ({ userId, currentPage, title }: AllSurveyRe
   return response;
 };
 
-export const getMyResponseAPI = async ({ userId, currentPage, title }: AllSurveyResponse & { title?: string }) => {
+export const getMyResponseAPI = async ({
+  userId,
+  currentPage,
+  title,
+  sort,
+}: AllSurveyResponse & { title?: string; sort?: string }) => {
   const params: any = { page: currentPage, limit: LIMIT };
   if (title) params.title = title;
+  if (sort === 'attendCount') {
+    params.attendCount = true; // 참여자 순 정렬
+  } else if (sort === 'deadline') {
+    params.deadline = true; // 마감일 순 정렬
+  }
   const response = await restFetcher({
     method: 'GET',
     path: `/surveys/${userId}/join`,

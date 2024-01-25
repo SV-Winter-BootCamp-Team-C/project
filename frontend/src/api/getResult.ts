@@ -18,7 +18,7 @@ export const getAnswerResultAPI = async (surveyId: number) => {
 };
 
 export const getExcelDownloadAPI = async (surveyId: number) => {
-  const response = await axios.get(`http://localhost:8000/api/surveys/downloadExcel/${surveyId}`, {
+  const response = await axios.get(`http://www.formflex.site/api/surveys/downloadExcel/${surveyId}`, {
     responseType: 'blob',
   });
   return response;

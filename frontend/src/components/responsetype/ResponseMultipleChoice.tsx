@@ -63,11 +63,6 @@ function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionS
           </button>
         ))}
       </div>
-      {selectedOption !== null && (
-        <div className="mb-4">
-          <p>You selected: {question.choices?.find((choice) => choice.choiceId === selectedOption)?.option}</p>
-        </div>
-      )}
     </div>
   );
 }

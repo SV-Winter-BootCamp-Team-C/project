@@ -25,7 +25,7 @@ const getUserSurveys = async (req, res) => {
       });
 
       // 각 설문조사에 대한 attended_count 계산
-      surveys.map(async (survey) => {
+      for (const survey of surveys) {
         const attendedCount = await Answer.count({
           distinct: true,
           col: 'userId',
@@ -48,7 +48,7 @@ const getUserSurveys = async (req, res) => {
           deadline: survey.deadline,
           attendCount: attendedCount,
         });
-      });
+      }
 
       if ('attendCount' in req.query) {
         preResult.sort((a, b) => b.attendCount - a.attendCount);
