@@ -22,20 +22,22 @@ import circleAnalytics from '../assets/circleAnalytics.svg';
 import roundShare from '../assets/roundShare.svg';
 import survey from '../assets/survey.svg';
 // import imacFront from '../assets/imacFront.svg';
-import CarouselMain from '../components/common/CarouselMain';
+// import CarouselMain from '../components/common/CarouselMain';
 import CarouselDesOne from '../components/common/CarouselDesOne';
 import CarouselDesTwo from '../components/common/CarouselDesTwo';
 // import LottieData from '../assets/toggleSwitch.json';
+import macbookBackground from '../assets/macbookBackground.svg';
 
 function Start() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isOn, setIsOn] = useState(false);
 
+  // 새로고침하고 3초 후, toggle switch가 on으로 변경되는 useEffect
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOn(true);
-    }, 10000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -61,6 +63,15 @@ function Start() {
       image: roundShare,
     },
   ];
+
+  // 10초마다 슬라이드를 변경하는 useEffect
+  useEffect(() => {
+    const slideTimer = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % features.length);
+    }, 10000);
+
+    return () => clearInterval(slideTimer);
+  });
 
   return (
     <div className="relative flex flex-col m-0 bg-white">
@@ -167,10 +178,10 @@ function Start() {
             </div>
           </div>
           <div className="flex justify-center">
-            <div className="flex justify-center items-center w-[74.25rem] h-[28.25rem] rounded-[1.875rem] bg-white border-solid border-[0.065rem] border-slate-950">
-              <div className="w-[67.25rem] h-[25rem] ">
-                <CarouselMain />
-              </div>
+            {/* <div className="absolute z-20  w-[60rem] h-[30rem]   top-[40rem] left-[13.5rem] bg-gray"> */}
+            <div className="flex justify-center items-center z-20 w-[65rem] h-[28.25rem] ">
+              {/* <div className="w-[67.25rem] h-[25rem] "> */}
+              <img src={macbookBackground} alt="macbookBackground" className="" />
             </div>
           </div>
         </div>
@@ -302,131 +313,6 @@ function Start() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      {/* <div className="flex justify-center w-[100%] h-[33.75rem]">
-        <div className="flex w-[82.5rem] h-[12.5rem] mt-[10rem] mr-[3.75rem]">
-          <div className="flex flex-row px-[3.75rem]">
-            <div className="flex mr-16   w-[12rem] h-[2.875rem] justify-start">
-              <div className="flex flex-col">
-                <div className=" flex w-[12rem] h-[2.875rem] justify-center">
-                  <span className="flex text-4xl font-semibold select-none">Form : Flex</span>
-                </div>
-                <div className="w-[18.25rem] h-[6rem] justify-center mt-6 ">
-                  <span className="font-normal text-[0.75rem] leading-normal select-none">
-                    FormFlex를 사용하면 비즈니스에
-                    <br />
-                    적합한 강력한 도구를 대시보드 내부에서
-                    <br />
-                    완벽한 커스터마이징을 경험할 수 있습니다.
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col mr-14">
-            <div className="flex">
-              <span className="text-[1.5rem] font-semibold select-none">Company</span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Home
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                How it works
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Pricing Plan
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Features
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                About us
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col mr-14">
-            <div className="flex">
-              <span className="text-[1.5rem] font-semibold select-none">Useful Links</span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Licenses
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Privacy Policy
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Terms & Conditions
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Security Updates
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col mr-14">
-            <div className="flex">
-              <span className="text-[1.5rem] font-semibold select-none">Support</span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-6">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Contact Us
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Help Center
-              </span>
-            </div>
-            <div className="flex text-[1.25rem] font-medium mt-4">
-              <span className="flex font-medium align-middle transition-transform cursor-pointer hover:scale-110 hover:-translate-y-1">
-                Support Ticket
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex">
-              <span className="text-[1.5rem] font-semibold select-none">Subscribe To Our Newsletter</span>
-            </div>
-            <div className="flex text-[1rem] font-medium mt-6">
-              <span className="flex h-16 font-medium leading-normal align-middle select-none w-74">
-                최신 뉴스, 제안 및 업데이트를 보려면
-                <br />
-                뉴스레터에 가입하십시오.
-              </span>
-            </div>
-            <div className="flex flex-row items-center justify-start align-middle">
-              <div className="flex flex-row items-center justify-center">
-                <div className="flex w-[13.125rem] h-[3rem] border-solid border-[0.063rem] border-black rounded-[0.625rem] bg-white justify-center items-center py-3 pl-4">
-                  <input
-                    type="text"
-                    placeholder="Enter your email"
-                    className="flex w-[11.125rem] h-[1.5rem]  text-start align-center text-[1rem] leading-normal font-normal"
-                  />
-                </div>
-                <div className="flex cursor-pointer w-12 h-12 rounded-[0.625rem] mx-2 justify-center items-center bg-[#918dca]">
-                  <img src={directMessage} alt="directMessage" className="w-6 h-6" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       {/* End */}
     </div>
