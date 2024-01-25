@@ -6,16 +6,12 @@ const showAllSurveys = async (req, res) => {
     // Request로부터 Parameter 값들 가져오기
     const userId = req.params.id;
     const pageLimit = req.query.limit;
-    const pageOffset = (req.query.page - 1) * pageLimit;
+    const page = req.query.page;
+    const startIndex = (page - 1) * pageLimit;
     const title = req.query.title;
 
     if (!title) {
-      const totalSurveys = await Survey.count({
-        where: { open: true },
-      });
-
-      const totalPages = Math.ceil(totalSurveys / pageLimit);
-
+      // 전체 설문에 대해 attended_count 계산
       const surveys = await Survey.findAll({
         where: { open: true },
         attributes: [
@@ -27,8 +23,6 @@ const showAllSurveys = async (req, res) => {
           'updatedAt',
           'deadline',
         ],
-        limit: pageLimit,
-        offset: pageOffset,
       });
 
       if (!surveys.length) {
@@ -70,15 +64,23 @@ const showAllSurveys = async (req, res) => {
           attendCount: userCount,
         });
       }
+
+      // 정렬
       if ('attendCount' in req.query) {
         preResult.sort((a, b) => b.attendCount - a.attendCount);
       } else if ('deadline' in req.query) {
         preResult.sort((a, b) => a.deadline - b.deadline);
       } else {
-        preResult.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+        preResult.sort((a, b) => b.createdAt - a.createdAt);
       }
 
-      res.status(200).json({ surveys: preResult, totalPages: totalPages });
+      // 페이지에 해당하는 데이터 추출
+      const pagedSurveys = preResult.slice(startIndex, startIndex + pageLimit);
+
+      res.status(200).json({
+        surveys: pagedSurveys,
+        totalPages: Math.ceil(preResult.length / pageLimit),
+      });
     } else {
       const selectSurveys = await Survey.findAll({
         where: { open: true },
@@ -89,26 +91,23 @@ const showAllSurveys = async (req, res) => {
         return res.status(204).json({ message: '작성된 설문지가 없습니다.' });
       }
 
-      const titleList = [];
-      for (const survey of selectSurveys) {
-        titleList.push({
-          surveyId: survey.id,
-          surveyTitle: survey.title,
-        });
-      }
+      const titleList = selectSurveys.map((survey) => ({
+        surveyId: survey.id,
+        surveyTitle: survey.title,
+      }));
+
       const searchList = { surveys: titleList, title: title };
       const resultList = surveyTitleSearch(searchList);
       const len = resultList.surveys.length;
-      const tp = Math.ceil(len / pageLimit);
 
-      if (len == 0) {
+      if (len === 0) {
         return res.status(208).json({ message: '검색된 설문지가 없습니다.' });
       }
 
       const sortedList = [];
-      for (let i = 0; i < len && i < pageLimit; i++) {
+      for (const surveyId of resultList.surveys) {
         const survey = await Survey.findOne({
-          where: { id: resultList.surveys[pageOffset + i] },
+          where: { id: surveyId },
           attributes: [
             'id',
             'title',
@@ -154,15 +153,26 @@ const showAllSurveys = async (req, res) => {
         });
       }
 
+      // 정렬
       if ('attendCount' in req.query) {
         sortedList.sort((a, b) => b.attendCount - a.attendCount);
       } else if ('deadline' in req.query) {
         sortedList.sort((a, b) => a.deadline - b.deadline);
       } else {
-        sortedList.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+        sortedList.sort((a, b) => b.createdAt - a.createdAt);
       }
 
-      res.status(200).json({ sortedList, totalPages: tp });
+      // 페이지에 해당하는 데이터 추출
+      const startIndex = (page - 1) * pageLimit;
+      const endIndex = startIndex + pageLimit;
+      const pagedSortedList = sortedList.slice(startIndex, endIndex);
+
+      res
+        .status(200)
+        .json({
+          sortedList: pagedSortedList,
+          totalPages: Math.ceil(len / pageLimit),
+        });
     }
   } catch (error) {
     console.log(error);

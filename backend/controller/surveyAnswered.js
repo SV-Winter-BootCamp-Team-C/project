@@ -3,7 +3,11 @@ const { surveyTitleSearch } = require('./surveyTitleSearch');
 
 const surveyAnswered = async (req, res) => {
   const userId = req.params.id;
-  const { page, limit, title } = req.query;
+  const pageLimit = req.query.limit;
+  const page = req.query.page;
+  const startIndex = (page - 1) * pageLimit;
+  const endIndex = startIndex + pageLimit;
+  const title = req.query.title;
 
   try {
     const user = await User.findByPk(userId);
@@ -11,8 +15,6 @@ const surveyAnswered = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: '유저를 찾을 수 없습니다.' });
     }
-
-    const offset = (page - 1) * limit;
 
     const answered = await Answer.findAll({
       where: { userId: userId },
@@ -37,8 +39,6 @@ const surveyAnswered = async (req, res) => {
     if (!title) {
       const surveys = await Survey.findAll({
         where: { id: surveyIds },
-        limit: limit, // 반환할 결과의 최대 수
-        offset: offset,
         attributes: [
           'id',
           'title',
@@ -49,6 +49,7 @@ const surveyAnswered = async (req, res) => {
           'deadline',
         ],
       });
+
       const preResult = [];
       // 각 설문지에 대해 참여자 수 계산
       for (const survey of surveys) {
@@ -94,8 +95,10 @@ const surveyAnswered = async (req, res) => {
       });
 
       // 총 페이지 수 계산
-      const totalPages = Math.ceil(total / limit);
+      const totalPages = Math.ceil(total / pageLimit);
 
+      // 페이징
+      // 정렬
       if ('attendCount' in req.query) {
         preResult.sort((a, b) => b.attendCount - a.attendCount);
       } else if ('deadline' in req.query) {
@@ -104,7 +107,9 @@ const surveyAnswered = async (req, res) => {
         preResult.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
       }
 
-      res.json({ surveys: preResult, totalPages });
+      const paginatedSurveys = preResult.slice(startIndex, endIndex);
+
+      res.json({ surveys: paginatedSurveys, totalPages });
     } else {
       const surveys = await Survey.findAll({
         where: {
@@ -125,16 +130,16 @@ const surveyAnswered = async (req, res) => {
       const searchList = { surveys: surveyed, title };
       const resultList = surveyTitleSearch(searchList);
       const len = resultList.surveys.length;
-      const tp = Math.ceil(len / limit);
+      const tp = Math.ceil(len / pageLimit);
 
       if (len == 0) {
         return res.status(208).json({ message: '검색된 설문지가 없습니다.' });
       }
 
       const sortedList = [];
-      for (let i = 0; i < len && i < limit; i++) {
+      for (const surveyId of resultList.surveys) {
         const survey = await Survey.findOne({
-          where: { id: resultList.surveys[offset + i] },
+          where: { id: surveyId },
           attributes: [
             'id',
             'title',
