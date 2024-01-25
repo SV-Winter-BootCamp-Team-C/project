@@ -59,7 +59,7 @@ services:
       - frontend
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - build_folder:/var/www/
+      - build_folder:/var/www/frontend
 
   rabbitmq:
     image: "rabbitmq:3-management"
