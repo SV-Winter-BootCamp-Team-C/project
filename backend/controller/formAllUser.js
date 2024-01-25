@@ -5,7 +5,9 @@ const getUserSurveys = async (req, res) => {
   try {
     const userId = req.params.id;
     const pageLimit = req.query.limit;
-    const pageOffset = (req.query.page - 1) * pageLimit;
+    const page = req.query.page;
+    const startIndex = (page - 1) * pageLimit;
+    const endIndex = startIndex + pageLimit;
     const title = req.query.title;
 
     if (!title) {
@@ -20,8 +22,6 @@ const getUserSurveys = async (req, res) => {
           'deadline',
           'open',
         ],
-        offset: pageOffset,
-        limit: pageLimit,
       });
 
       // 각 설문조사에 대한 attended_count 계산
@@ -59,9 +59,12 @@ const getUserSurveys = async (req, res) => {
       }
 
       const totalCount = await Survey.count({ where: { userId: userId } });
-      const tp = Math.ceil(totalCount / pageLimit);
+      const totalPages = Math.ceil(totalCount / pageLimit);
+      const currentPageData = preResult.slice(startIndex, endIndex);
 
-      res.status(200).json({ surveys: preResult, totalPages: tp });
+      res
+        .status(200)
+        .json({ surveys: currentPageData, totalPages: totalPages });
     } else {
       const selectSurveys = await Survey.findAll({
         where: { userId: userId },
@@ -79,6 +82,7 @@ const getUserSurveys = async (req, res) => {
           surveyTitle: survey.title,
         });
       }
+
       const searchList = { surveys: titleList, title: title };
       const resultList = surveyTitleSearch(searchList);
       const len = resultList.surveys.length;
@@ -89,9 +93,9 @@ const getUserSurveys = async (req, res) => {
       }
 
       const sortedList = [];
-      for (let i = 0; i < len && i < pageLimit; i++) {
+      for (let i = 0; i < len; i++) {
         const survey = await Survey.findOne({
-          where: { id: resultList.surveys[pageOffset + i] },
+          where: { id: resultList.surveys[i] },
           attributes: [
             'id',
             'title',
@@ -137,15 +141,20 @@ const getUserSurveys = async (req, res) => {
         });
       }
 
+      // 정렬된 결과와 전체 페이지 수를 반환합니다.
       if ('attendCount' in req.query) {
         sortedList.sort((a, b) => b.attendCount - a.attendCount);
       } else if ('deadline' in req.query) {
         sortedList.sort((a, b) => a.deadline - b.deadline);
       } else {
-        sortedList.sort((a, b) => b.createdAt - a.createdAt); // 아무 것도 없다면 만들어진 날짜로 내림차순을 디폴트로
+        sortedList.sort((a, b) => b.createdAt - a.createdAt);
       }
 
-      res.status(200).json({ sortedList, totalPages: tp });
+      const startIndex = (page - 1) * pageLimit;
+      const endIndex = startIndex + pageLimit;
+      const pagedSortedList = sortedList.slice(startIndex, endIndex);
+
+      res.status(200).json({ sortedList: pagedSortedList, totalPages: tp });
     }
   } catch (error) {
     console.error(error);
