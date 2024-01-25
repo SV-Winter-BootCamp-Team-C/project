@@ -13,6 +13,7 @@ import MyAnswer from './pages/MyAnswer';
 import ResponseForm from './pages/ResponseForm';
 import { useAuthStore } from './store/AuthStore';
 import Alert from './components/common/Alert';
+import RouteChangeTracker from './utils/RouteChangeTracker';
 
 interface RouterElement {
   id: number;
@@ -40,6 +41,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const location = useLocation();
   const navigate = useNavigate();
+
+  RouteChangeTracker();
 
   if (!isLoggedIn) {
     return (
