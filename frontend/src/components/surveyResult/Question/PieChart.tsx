@@ -23,25 +23,22 @@ function PieChart({ index, question }: PieChartProps) {
   const chartOptions = {
     chart: {
       type: 'donut',
+      width: 300,
+      height: 180.7,
+      background: 'transparent',
     },
     labels: question.choices?.map((choice) => choice.option),
     legend: {
+      show: true,
       position: 'right',
-    },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200,
-            height: 150,
-          },
-          legend: {
-            position: 'bottom',
-          },
-        },
+      horizontalAlign: 'center',
+      fontSize: '14px',
+      fontWeight: 'medium',
+      itemMargin: {
+        horizontal: 2,
+        vertical: 1,
       },
-    ],
+    },
     dataLabels: {
       enabled: true,
       style: {
@@ -52,8 +49,12 @@ function PieChart({ index, question }: PieChartProps) {
     },
     plotOptions: {
       pie: {
+        donut: {
+          size: '65%',
+        },
         stroke: {
           width: 0,
+          curve: 'smooth',
         },
       },
     },
@@ -93,9 +94,17 @@ function PieChart({ index, question }: PieChartProps) {
           </div>
         )}
 
-        <div className="py-9">
+        <div className="py-6">
           {chartSeries.length > 0 ? (
-            <Chart options={chartOptions as any} series={chartSeries as number[]} type="donut" />
+            <Chart
+              options={chartOptions as any}
+              series={chartSeries as number[]}
+              type="donut"
+              width={300}
+              height={180.7}
+              key={`chart-${index}`}
+              className="flex items-center justify-center w-[18.75rem] h-[180.7px]"
+            />
           ) : (
             <p className="text-base text-gray">설문 결과가 없습니다.</p>
           )}
