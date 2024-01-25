@@ -23,7 +23,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     restart: always
     environment:
       - TZ=Asia/Seoul
@@ -49,23 +49,106 @@ services:
     volumes:
       - ./frontend/:/frontend
       - build_folder:/frontend/dist
-    command: ["npm", "run", "build"]
+    tty: true
 
   nginx:
     container_name: nginx
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
       - frontend
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - build_folder:/var/www/frontend
+      - ./nginx/log:/var/log/nginx
+      # - ./ssl:/etc/nginx/ssl
 
+  elasticsearch:
+    build:
+      context: elk/elasticsearch
+      args:
+        ELASTIC_VERSION: 8.5.2
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    restart: unless-stopped
+
+  logstash:
+    build:
+      context: elk/logstash
+      args:
+        ELASTIC_VERSION: 8.5.2
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+    ports:
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
+    environment:
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: changeme
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build:
+      context: elk/kibana
+      args:
+        ELASTIC_VERSION: 8.5.2
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: changeme
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  filebeat:
+    build:
+      context: elk/filebeat
+      args:
+        ELASTIC_VERSION: 8.5.2
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["filebeat modules enable nginx && filebeat -e -strict.perms=false"]
+    volumes:
+      - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./elk/filebeat/config/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
+      - ./nginx/log:/var/log/nginx
+      - ./start.sh:/start.sh
+    depends_on:
+      - logstash
+      - elasticsearch
+      - kibana
+
+volumes:
+  build_folder: null
+  elasticsearch:
+  # prometheus_data:
+  # grafana-data:
 #   prometheus:
 #     image: prom/prometheus
 #     restart: always

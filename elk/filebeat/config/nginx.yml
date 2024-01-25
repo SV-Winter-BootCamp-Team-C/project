@@ -1,0 +1,9 @@
+- module: nginx
+  access:
+    enabled: true
+    var.paths: ["/var/log/nginx/*.log"]
+  error:
+    enabled: true
+    var.paths: ["/var/log/nginx/*.log"]
+  ingress_controller:
+    enabled: false
