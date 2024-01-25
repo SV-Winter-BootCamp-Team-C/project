@@ -483,6 +483,7 @@ function Create() {
                     })}
                   </div>
                 </div>
+
                 {/* 커스텀 컬러 선택 */}
                 {/* TODO: 투명도 변경 X */}
                 <div
@@ -532,6 +533,7 @@ function Create() {
               </div>
             </div>
 
+            {/* 이미지 업로드 */}
             <div className="flex flex-col mt-[2.63rem]">
               <div className="flex flex-row items-end  w-[20rem] h-[2.0315rem] gap-x-4 mb-[1.01rem]">
                 <span className="text-[2rem] font-semibold">커버 이미지</span>
@@ -578,6 +580,7 @@ function Create() {
               </div>
             </div>
 
+            {/* 마감일 설정 */}
             <div className="flex flex-row items-center mt-[2.63rem]">
               <div className="flex w-[6rem] h-[2.0315rem]  ">
                 <span className="text-[2rem] font-semibold">마감일</span>
