@@ -73,14 +73,32 @@ function Navbar({ children }: NavbarProps) {
           {/* nav item */}
           <div className="flex flex-col pl-6 space-y-9">
             {NAV_ITEMS.map((item) => {
+              const isActive = activeItem === item.id;
               return (
                 <div
                   key={item.id}
-                  className="flex items-center gap-5 cursor-pointer text-darkGray"
+                  className={`flex items-center gap-5 cursor-pointer ${isActive ? 'text-customPurple' : 'text-darkGray'}`}
                   onClick={() => handleClick(item.id)}
                 >
-                  <img src={item.icon} alt={item.text} className="w-6 h-6" />
-                  <p className="text-base font-semibold leading-4 text-darkGary">{item.text}</p>
+                  <img
+                    src={item.icon}
+                    alt={item.text}
+                    className="w-6 h-6"
+                    style={
+                      isActive
+                        ? {
+                            filter:
+                              'invert(38%) sepia(60%) saturate(382%) hue-rotate(205deg) brightness(91%) contrast(88%)',
+                          }
+                        : {}
+                    }
+                  />
+                  <p
+                    className={`text-base font-semibold leading-4 ${isActive ? 'text-customPurple' : 'text-darkGray'}`}
+                    style={isActive ? { color: '#66629f' } : {}}
+                  >
+                    {item.text}
+                  </p>
 
                   {activeItem === item.id && (
                     <div className="absolute left-0 w-2 h-[3rem] bg-darkPurple ">
