@@ -128,6 +128,8 @@ services:
       - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./elk/filebeat/config/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
       - ./nginx/log:/var/log/nginx
+      - /var/log/syslog:/var/log/syslog
+      - /var/log/auth.log:/var/log/auth.log
     depends_on:
       - logstash
       - elasticsearch
