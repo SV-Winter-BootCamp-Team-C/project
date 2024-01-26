@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IoMdMore } from 'react-icons/io';
 import participants from '../../assets/participants.svg';
 import { calculateRemainingDays } from '../../utils/calculateRemainingDays';
 import openIcon from '../../assets/open.svg';
@@ -27,8 +28,9 @@ function SurveyCover({
   const myId = useAuthStore((state) => state.userId);
 
   const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen((prevState) => !prevState);
   };
+
   const handleNavigateToSurvey = () => {
     if (location.pathname.includes('/all')) {
       navigate(`/responseform?id=${surveyId}`);
@@ -66,16 +68,20 @@ function SurveyCover({
             <img src={participants} alt="participants" className="w-[0.625rem] h-3 align-middle" />
             <span className="text-xs leading-3 text-darkGary">{attendCount}</span>
           </div>
-          <div className="w-4 cursor-pointer" onClick={handleMenuClick}>
-            <div className="flex flex-col items-center justify-center gap-[1px]">
-              <div className="w-1 h-1 border border-solid rounded border-darkGary" />
-              <div className="w-1 h-1 border border-solid rounded border-darkGary" />
-              <div className="w-1 h-1 border border-solid rounded border-darkGary" />
-            </div>
-          </div>
+          <button type="button" className="w-4 cursor-pointer" onClick={handleMenuClick} aria-label="More options">
+            <IoMdMore />
+          </button>
         </div>
       </div>
-      {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} attendCount={attendCount} />}
+      {isMenuOpen && (
+        <SurveyCoverMenu
+          surveyId={surveyId}
+          open={open}
+          attendCount={attendCount}
+          isDropdownOpen={isMenuOpen}
+          setIsDropdownOpen={setIsMenuOpen} // Pass down the state setter function
+        />
+      )}
     </div>
   );
 }
