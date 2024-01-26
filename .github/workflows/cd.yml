@@ -84,3 +84,18 @@ jobs:
         env:
           RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
           RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+
+      - name: Execute remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/ubuntu/project
+            git stash
+            git pull origin main
+            docker-compose -f docker-compose.prod.yml pull
+            docker-compose -f docker-compose.prod.yml down
+            # 환경 변수 적용을 위한 추가 명령어 필요
+            docker-compose -f docker-compose.prod.yml up -d
