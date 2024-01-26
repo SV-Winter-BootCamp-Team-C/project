@@ -41,7 +41,7 @@ const getGptReponse = async (req, res) => {
       '이건 어떤 내용의 설문지인지 알려주는 거야. 설명은 응답할 때는 넣지 마.';
     prompt +=
       req.body.content +
-      '라는 내용을 묻는 이 문구랑은 최대한 단어는 다르고 의미는 비슷한'
+      '라는 내용을 묻는'
     switch (req.body.type) {
       case 'MULTIPLE_CHOICE':
         prompt += '객관식 (선택지가 4개 있어) 문항을 딱 한 개만 만들어';
@@ -66,6 +66,7 @@ const getGptReponse = async (req, res) => {
     console.assert(response != null, 'error: response is null');
     // GPT 모델로부터의 응답 처리 (일단 문항 + option으로)
     const lines = response.choices[0].message.content.split('\n');
+    
     //string에서 한글도 문자 한개라 가정
     //첫째 줄은 무조건 제목인 듯?
     try {
