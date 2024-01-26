@@ -19,7 +19,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     restart: always
     environment:
       - TZ=Asia/Seoul
@@ -50,7 +50,7 @@ services:
     container_name: nginx
     build:
       context: ./nginx
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "80:80"
