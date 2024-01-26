@@ -98,4 +98,4 @@ jobs:
             docker-compose -f docker-compose.prod.yml pull
             docker-compose -f docker-compose.prod.yml down
             # 환경 변수 적용을 위한 추가 명령어 필요
-            docker-compose -f docker-compose.prod.yml up --build
+            docker-compose -f docker-compose.prod.yml up --build -d
