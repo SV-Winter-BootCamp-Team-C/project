@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction, useRef, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { motion } from 'framer-motion';
 import menuSee from '../../assets/menuSee.svg';
 import menuLink from '../../assets/menuLink.svg';
 import menuAnalysis from '../../assets/menuAnalysis.svg';
@@ -14,10 +15,50 @@ import { getClient } from '../../queryClient';
 import Alert from '../common/Alert';
 import { ApiResponseError } from '../../types/apiResponseError';
 
+const dropdownVariants = {
+  open: {
+    scaleY: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+      duration: 0.03,
+    },
+  },
+  closed: {
+    scaleY: 0,
+    transition: {
+      when: 'afterChildren',
+      staggerChildren: 0.1,
+      duration: 0.03,
+    },
+  },
+};
+
+const itemVariants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      when: 'beforeChildren',
+      duration: 0.1,
+    },
+  },
+  closed: {
+    opacity: 0,
+    y: -15,
+    transition: {
+      when: 'afterChildren',
+      duration: 0.1,
+    },
+  },
+};
+
 interface SurveyCoverMenuProps {
   surveyId: number;
-  open?: boolean;
+  open?: boolean; // You might already have this if you use it to represent something else.
   attendCount?: number;
+  isDropdownOpen: boolean; // Add this line
+  setIsDropdownOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 interface MenuItem {
@@ -45,7 +86,7 @@ const ITEM_ICON: ItemIcon[] = [
   { item: '삭제', icon: menuDel },
 ];
 
-function SurveyCoverMenu({ surveyId, open, attendCount }: SurveyCoverMenuProps) {
+function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDropdownOpen }: SurveyCoverMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const myId = useAuthStore((state) => state.userId) ?? 0;
@@ -53,6 +94,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount }: SurveyCoverMenuProps) 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [showEditAlert, setShowEditAlert] = useState<boolean>(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+  const dropdownRef = useRef<HTMLUListElement>(null);
 
   const {
     mutate,
@@ -114,25 +156,46 @@ function SurveyCoverMenu({ surveyId, open, attendCount }: SurveyCoverMenuProps) 
       handleDeleteSurvey();
     }
   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setIsDropdownOpen, dropdownRef]);
 
   return (
     <>
-      <div className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-40 min-h-[6.25rem] bg-white shadow-md rounded-[1.25rem] py-[0.625rem] z-[5]">
-        {items.map((itemName, index) => (
-          <div
-            key={index}
-            className="w-full hover:bg-lightGray py-[0.625rem] trasiton duration-300 ease-in-out"
-            onClick={() => handleItemClick(itemName, surveyId)}
-          >
-            <div className="flex items-center h-6 gap-2 pl-4 cursor-pointer">
+      {isDropdownOpen && (
+        <motion.ul
+          initial="closed"
+          animate="open"
+          exit="closed"
+          variants={dropdownVariants}
+          ref={dropdownRef}
+          className="absolute top-full left-3/4 transform -translate-x-1/2 flex flex-col w-24 min-h-fit bg-white shadow-md rounded-md z-[5] overflow-hidden"
+        >
+          {items.map((itemName, index) => (
+            <motion.li
+              key={index}
+              className="flex items-center justify-center gap-2 w-full p-3 whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-[#918DCA] transition-colors cursor-pointer"
+              onClick={() => handleItemClick(itemName, surveyId)}
+              variants={itemVariants}
+            >
               <img src={getIcon(itemName)} alt={itemName} className="w-4 h-4" />
-              <p className={`text-base leading-4 ${itemName === '삭제' ? 'text-[#D0021B]' : 'text-black'}`}>
+              <span className={`text-sm leading-4 ${itemName === '삭제' ? 'text-[#D0021B]' : 'text-black'}`}>
                 {itemName}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+              </span>
+            </motion.li>
+          ))}
+        </motion.ul>
+      )}
+
       {isShareModalVisible && (
         <ShareMailModal
           surveyId={surveyId}
