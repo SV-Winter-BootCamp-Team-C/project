@@ -44,13 +44,13 @@ const getGptReponse = async (req, res) => {
       '라는 내용을 묻는 이 문구랑은 최대한 단어는 다르고 의미는 비슷한'
     switch (req.body.type) {
       case 'MULTIPLE_CHOICE':
-        prompt += '객관식 (선택지가 4개 있어) 문항을 한 개만 만들어줘';
+        prompt += '객관식 (선택지가 4개 있어) 문항을 딱 한 개만 만들어';
         break;
       case 'CHECKBOX':
-        prompt += '객관식(선택지가 4개 있어) 문항을 한 개만 만들어줘. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
+        prompt += '객관식(선택지가 4개 있어) 문항을 딱 한 개만 만들어. 그리고 이 문항은 여러개의 선지를 고를 수 있어.';
         break;
       case 'DROPDOWN':
-        prompt += '객관식 (선택지가 4개 있어) 문항을 한 개만 만들어줘. 길이는 길어도 상관없어';
+        prompt += '객관식 (선택지가 4개 있어) 문항을 딱 한 개만 만들어. 길이는 길어도 상관없어';
         break;
       default:
         console.assert(false, 'error: undefined type');
