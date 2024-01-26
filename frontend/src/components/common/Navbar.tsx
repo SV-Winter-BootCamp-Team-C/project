@@ -8,6 +8,7 @@ import profile from '../../assets/profile.svg';
 import logout from '../../assets/logout.svg';
 import { useAuthStore } from '../../store/AuthStore';
 import MyProfileModal from './MyProfileModal';
+import logo from '../../assets/logo.svg';
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -60,10 +61,13 @@ function Navbar({ children }: NavbarProps) {
   return (
     <div className="relative flex justify-end w-[90rem] h-[56rem] shadow-lg rounded-[2.5rem] bg-neutral-100">
       {/* Navbar */}
-      <div className="flex flex-col justify-between w-60 py-[3.75rem]">
+      <div className="flex flex-col justify-between w-60  pt-8 pb-[3.75rem]">
         <div>
           <div className="flex justify-center mb-11">
-            <span className="text-2xl font-semibold text-black">Form:Flex</span>
+            <div className="flex flex-col items-center justify-center">
+              <img src={logo} alt="logo" className="w-12 h-14" />
+              <span className="text-2xl font-semibold text-black">Form:Flex</span>
+            </div>
           </div>
 
           {/* nav item */}

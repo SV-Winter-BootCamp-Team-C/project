@@ -12,6 +12,7 @@ import usernameIcon from '../assets/username.svg';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
 import signUpAnimation from '../assets/signUpAnimation.json';
+import logo from '../assets/logo.svg';
 
 function Signup() {
   const navigate = useNavigate();
@@ -99,7 +100,8 @@ function Signup() {
     <div className="flex items-center justify-center h-screen bg-custom-gradient">
       <div className="relative flex items-start w-[57.5rem] h-[45.25rem] rounded-[2.5rem] bg-custom-gradient-re shadow-lg">
         <div className="flex flex-col items-center justify-center w-full">
-          <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
+          <img src={logo} alt="logo" className="mt-[3rem] mb-[0.5rem] w-14 h-[3.75rem]" />
+          <span className="text-[2rem] font-semibold text-center text-white">Form : Flex</span>
         </div>
         <div className="absolute bottom-[4.75rem] left-[-1em]">
           {/* <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" /> */}

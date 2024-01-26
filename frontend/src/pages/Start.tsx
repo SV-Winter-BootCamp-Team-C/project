@@ -27,6 +27,7 @@ import CarouselDesOne from '../components/common/CarouselDesOne';
 import CarouselDesTwo from '../components/common/CarouselDesTwo';
 // import LottieData from '../assets/toggleSwitch.json';
 import macbookBackground from '../assets/macbookBackground.svg';
+import logo from '../assets/logo.svg';
 
 function Start() {
   const navigate = useNavigate();
@@ -109,7 +110,8 @@ function Start() {
 
           {/* topBar */}
           <div className="flex flex-row w-[74.25rem] h-[3rem] justify-between mx-[7.88rem] mt-9">
-            <div className="flex items-center  justify-center w-[10.5rem] h-12 ">
+            <div className="flex items-center justify-center w-[10.5rem] h-12 ">
+              <img src={logo} alt="logo" className="w-12 h-14 mr-[0.5rem]" />
               <span className="text-4xl font-semibold text-black">Form:Flex</span>
             </div>
             <div
