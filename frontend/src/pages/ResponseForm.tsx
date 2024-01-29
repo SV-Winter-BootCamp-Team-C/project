@@ -1,6 +1,6 @@
 import { useQuery, useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import Alert from '../components/common/Alert';
@@ -17,6 +17,8 @@ import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 
 function ResponseForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isViewPage = location.pathname.includes('/view');
   const [searchParams] = useSearchParams();
   const surveyId = Number(searchParams.get('id'));
   const myId = useAuthStore((state) => state.userId);
@@ -209,6 +211,7 @@ function ResponseForm() {
                       color={surveyData.color}
                       buttonStyle={surveyData.buttonStyle}
                       onOptionSelect={(choiceId) => handleOptionSelect(choiceId, question.questionId)}
+                      isViewPage={isViewPage}
                     />
                   </div>
                 );
@@ -220,6 +223,7 @@ function ResponseForm() {
                       question={question}
                       color={surveyData.color}
                       onSubChange={(response) => handleSubChange(response, question.questionId)}
+                      isViewPage={isViewPage}
                     />
                   </div>
                 );
@@ -234,6 +238,7 @@ function ResponseForm() {
                       onOptionSelect={(newSelectedOptions) =>
                         handleCheckBoxSelect(newSelectedOptions, question.questionId)
                       }
+                      isViewPage={isViewPage}
                     />
                   </div>
                 );
@@ -245,6 +250,7 @@ function ResponseForm() {
                       question={question}
                       color={surveyData.color}
                       onOptionSelect={(choiceId) => handleOptionSelect(choiceId, question.questionId)}
+                      isViewPage={isViewPage}
                     />
                   </div>
                 );
@@ -253,7 +259,7 @@ function ResponseForm() {
             }
           })}
           <div className="flex items-center justify-center gap-3 mt-3 mb-9">
-            <TextButton text="제출하기" onClick={handleSubmit} />
+            {!isViewPage && <TextButton text="제출하기" onClick={handleSubmit} />}
             <TextButton text="나가기" onClick={() => navigate('/all')} />
           </div>
         </div>

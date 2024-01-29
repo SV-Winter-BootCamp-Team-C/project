@@ -8,6 +8,7 @@ import { Survey } from '../../types/survey';
 import noImage from '../../assets/noImage.png';
 import { useAuthStore } from '../../store/AuthStore';
 import SurveyCoverMenu from './SurveyCoverMenu';
+import Alert from '../common/Alert';
 
 function SurveyCover({
   surveyId,
@@ -17,30 +18,41 @@ function SurveyCover({
   // createdAt,
   // updatedAt,
   deadline,
-  // isAttended,
+  isAttended,
   attendCount,
 }: Survey) {
   const navigate = useNavigate();
   const location = useLocation();
   const { textLabel, textColor } = calculateRemainingDays(deadline);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [errorMessages, setErrorMessages] = useState<string>('');
   const myId = useAuthStore((state) => state.userId);
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
   const handleNavigateToSurvey = () => {
     if (location.pathname.includes('/all')) {
+      if (textLabel === '마감') {
+        setErrorMessages('마감된 설문입니다.');
+        return;
+      }
+      if (isAttended) {
+        setErrorMessages('이미 참여한 설문입니다.');
+        return;
+      }
+
       navigate(`/responseform?id=${surveyId}`);
     } else if (location.pathname.includes('/myform')) {
-      navigate(`/responseform?id=${surveyId}`);
+      navigate(`/view?id=${surveyId}`);
     } else if (location.pathname.includes('/myresponses')) {
       navigate(`/myanswer?userId=${myId}&surveyId=${surveyId}`);
     }
   };
 
   return (
-    <div className="relative cursor-pointer ">
+    <div className="relative cursor-pointer">
       <div
         className="flex items-center justify-center w-[21.5rem] h-[11.25rem] border-2 border-solid border-darkGray rounded-[0.625rem] overflow-hidden"
         onClick={handleNavigateToSurvey}
@@ -76,6 +88,9 @@ function SurveyCover({
         </div>
       </div>
       {isMenuOpen && <SurveyCoverMenu surveyId={surveyId} open={open} attendCount={attendCount} />}
+      {errorMessages && (
+        <Alert type="error" message={errorMessages} buttonText="확인" buttonClick={() => setErrorMessages('')} />
+      )}
     </div>
   );
 }

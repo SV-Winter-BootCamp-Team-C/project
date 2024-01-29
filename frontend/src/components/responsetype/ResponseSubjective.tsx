@@ -7,9 +7,10 @@ interface ResponseSubjectiveProps {
   color: string;
   index: number;
   onSubChange: (response: string) => void;
+  isViewPage?: boolean;
 }
 
-function ResponseSubjective({ question, color, index, onSubChange }: ResponseSubjectiveProps) {
+function ResponseSubjective({ question, color, index, onSubChange, isViewPage }: ResponseSubjectiveProps) {
   const [userResponse, setUserResponse] = useState<string>(''); // 주관식 응답을 저장할 상태
 
   const handleUserResponseChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -47,14 +48,24 @@ function ResponseSubjective({ question, color, index, onSubChange }: ResponseSub
         />
       )}
       <div className="w-[25rem] my-4">
-        <textarea
-          value={userResponse}
-          onChange={handleUserResponseChange}
-          rows={4} // 원하는 행 수로 조절 가능
-          placeholder="여기에 주관식 답변을 입력하세요."
-          className="w-full p-2 rounded-md"
-          style={{ overflowY: 'auto', resize: 'vertical', border: `0.0625rem solid ${color}` }} // 세로 스크롤바를 표시하고, 세로 크기 조절을 허용
-        />
+        {isViewPage ? (
+          <textarea
+            rows={4}
+            readOnly
+            placeholder="이 페이지에서는 입력할 수 없습니다."
+            className="w-full p-2 rounded-md cursor-not-allowed focus:outline-none"
+            style={{ overflowY: 'auto', resize: 'none', border: `0.0625rem solid ${color}` }}
+          />
+        ) : (
+          <textarea
+            value={userResponse}
+            onChange={handleUserResponseChange}
+            rows={4} // 원하는 행 수로 조절 가능
+            placeholder="여기에 주관식 답변을 입력하세요."
+            className="w-full p-2 rounded-md"
+            style={{ overflowY: 'auto', resize: 'vertical', border: `0.0625rem solid ${color}` }} // 세로 스크롤바를 표시하고, 세로 크기 조절을 허용
+          />
+        )}
       </div>
     </div>
   );

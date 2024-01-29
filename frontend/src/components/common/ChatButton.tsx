@@ -130,7 +130,7 @@ function ChatButton({ title, description, onAddData }: ChatButtonProps) {
             </div>
           )}
 
-          {isLoading ? <Loading /> : ''}
+          {isLoading && <Loading />}
 
           {data && (
             <div className="flex flex-col items-center p-4 mt-4 bg-white border border-solid shadow rounded-xl border-green">

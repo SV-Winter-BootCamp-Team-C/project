@@ -3,6 +3,7 @@ import { SketchPicker } from 'react-color';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 import { AddButton, TextButton } from '../components/common/Button';
 import MultipleChoice from '../components/surveytype/MultipleChoice';
 import Checkbox from '../components/surveytype/CheckBox';
@@ -33,6 +34,8 @@ import { responseformAPI } from '../api/responseform';
 import { editSurveyAPI } from '../api/editSurvey';
 import { formatDeadlineDate } from '../utils/formatDeadlineDate';
 import ChatButton from '../components/common/ChatButton';
+import ResultTypeSwitch from '../components/common/ResultTypeSwitch';
+import { ApiResponseError } from '../types/apiResponseError';
 
 const BUTTON_ITEMS: ButtonItem[] = [
   { id: 'angled', label: '각지게' },
@@ -70,6 +73,8 @@ function Create() {
   const [mainImg, setMainImg] = useState<string | null>(null);
   const [addQuestionDropdown, setAddQuestionDropdown] = useState<boolean>(false);
   const [isImageSearchModalVisible, setImageSearchModalVisible] = useState(false);
+  const [createErrorMessage, setCreateErrorMessage] = useState<string>();
+  const [editErrorMessage, setEditErrorMessage] = useState<string>();
 
   // 설문 수정 시 사용할 설문 ID
   const editId = Number(new URLSearchParams(location.search).get('id'));
@@ -81,12 +86,12 @@ function Create() {
     enabled: isEditMode && !!editId,
   });
 
-  const {
-    mutate: editMutate,
-    isSuccess: editSuccess,
-    isError: editError,
-  } = useMutation({
+  const { mutate: editMutate, isSuccess: editSuccess } = useMutation({
     mutationFn: editSurveyAPI,
+    onError: (error) => {
+      const err = error as AxiosError<ApiResponseError>;
+      setEditErrorMessage(err.response?.data.message || '설문 수정에 실패했습니다.');
+    },
   });
 
   const [createSurvey, setCreateSurvey] = useState<EditableSurvey>({
@@ -109,7 +114,7 @@ function Create() {
   }, [editSurveyData]);
 
   // 설문 생성
-  const { mutate, isSuccess, isError } = useMutation({
+  const { mutate, isSuccess } = useMutation({
     mutationFn: createSurveyAPI,
     onSuccess: () => {
       if (createSurvey.open) {
@@ -119,10 +124,14 @@ function Create() {
       queryClient.invalidateQueries({ queryKey: ['myForm', userId] });
       queryClient.refetchQueries({ queryKey: ['myForm', userId] });
     },
+    onError: (error) => {
+      const err = error as AxiosError<ApiResponseError>;
+      setCreateErrorMessage(err.response?.data.message || '설문 생성에 실패했습니다.');
+    },
   });
 
-  const handlePageClick = (active: 'style' | 'problem') => {
-    setActivePage(active);
+  const handlePageClick = () => {
+    setActivePage((prev) => (prev === 'style' ? 'problem' : 'style'));
   };
 
   const changeButtonStyle = (style: 'angled' | 'smooth' | 'round') => {
@@ -343,39 +352,17 @@ function Create() {
   return (
     <div className="pt-9">
       <div className="flex items-center justify-center">
-        <div
-          className="relative flex w-[18.75rem] h-[3.75rem] rounded-[1.25rem] bg-white"
-          style={{ boxShadow: '4px 4px 4px 0 rgba(0,0,0,0.25)' }}
-        >
-          <div className="flex flex-row justify-center gap-3 mx-6 my-4">
-            <div
-              className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
-              onClick={() => handlePageClick('style')}
-            >
-              <div className="flex">
-                <span className="text-[1.25rem] text-center text-black font-semibold">스타일</span>
-              </div>
-            </div>
-
-            <div
-              className="flex flex-col items-center w-[7.5rem] h-7 cursor-pointer"
-              onClick={() => handlePageClick('problem')}
-            >
-              <div className="flex">
-                <span className="text-[1.25rem] text-center text-black font-semibold">문항</span>
-              </div>
-            </div>
-          </div>
-          <div
-            className="absolute bottom-3 h-1 bg-[#918DCA] transition-all duration-300 ease-in-out"
-            style={{ width: '6.25rem', left: activePage === 'style' ? '10%' : '55%' }}
-          />
-        </div>
+        <ResultTypeSwitch
+          switchType={['style', 'problem']}
+          currentState={activePage}
+          labels={['스타일', '문항']}
+          onChange={handlePageClick}
+        />
       </div>
 
       {/* 스타일 선택 */}
       {activePage === 'style' ? (
-        <Scrollbars style={{ position: 'absolute', top: '9rem', right: '0.1rem', width: 1200, height: 700 }}>
+        <Scrollbars style={{ position: 'absolute', top: '7rem', right: '0.1rem', width: 1200, height: 750 }}>
           <div className="flex flex-col px-[6rem]">
             <div className="flex items-center">
               <div className="flex">
@@ -646,8 +633,8 @@ function Create() {
         </Scrollbars>
       ) : (
         // 문제 생성
-        <div className="relative flex h-full px-[6rem] ">
-          <div className="flex items-center justify-start gap-6 mt-6">
+        <div className="relative flex items-center justify-between px-52">
+          <div className="flex items-center justify-center gap-6 mt-6">
             <p className="text-[2rem] font-semibold text-black">문항</p>
             <AddButton
               text="추가"
@@ -657,10 +644,10 @@ function Create() {
             />
             {addQuestionDropdown && <CreateQuestionMenu onSelect={addQuestion} />}
           </div>
-          <div className="absolute right-[6rem] top-[1.375rem] z-50">
+          <div className="absolute right-52 top-[1.375rem] z-50">
             <ChatButton title={createSurvey.title} description={createSurvey.description} onAddData={addChatQuestion} />
           </div>
-          <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1200, height: 680 }}>
+          <Scrollbars style={{ position: 'absolute', top: '5rem', right: '0.1rem', width: 1200, height: 660 }}>
             <div className="flex flex-col items-center justify-center pt-4">
               {createSurvey.questions.length === 0 ? (
                 <p className="text-gray">설문 문항을 등록하세요.</p>
@@ -674,17 +661,16 @@ function Create() {
                 })
               )}
             </div>
-            {createSurvey.questions.length > 0 && (
-              <div className="flex items-center justify-center pt-2">
-                {isEditMode ? (
-                  <TextButton text="수정하기" onClick={handleEditSubmit} />
-                ) : (
-                  <TextButton text="저장하기" onClick={handleSubmit} />
-                )}
-              </div>
-            )}
           </Scrollbars>
-          {isError && <Alert type="error" message="설문 생성에 실패했습니다." buttonText="확인" />}
+
+          {createErrorMessage && (
+            <Alert
+              type="error"
+              message="설문 생성에 실패했습니다."
+              buttonText="확인"
+              buttonClick={() => setCreateErrorMessage('')}
+            />
+          )}
           {isSuccess && (
             <Alert
               type="success"
@@ -693,7 +679,14 @@ function Create() {
               buttonClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')}
             />
           )}
-          {editError && <Alert type="error" message="설문 수정에 실패했습니다." buttonText="확인" />}
+          {editErrorMessage && (
+            <Alert
+              type="error"
+              message="설문 수정에 실패했습니다."
+              buttonText="확인"
+              buttonClick={() => setEditErrorMessage('')}
+            />
+          )}
           {editSuccess && (
             <Alert
               type="success"
@@ -701,6 +694,15 @@ function Create() {
               buttonText="확인"
               buttonClick={() => navigate('/myform')}
             />
+          )}
+        </div>
+      )}
+      {activePage === 'problem' && createSurvey.questions.length > 0 && (
+        <div className="absolute flex items-end justify-center left-[55%] bottom-4">
+          {isEditMode ? (
+            <TextButton text="수정하기" onClick={handleEditSubmit} />
+          ) : (
+            <TextButton text="저장하기" onClick={handleSubmit} />
           )}
         </div>
       )}

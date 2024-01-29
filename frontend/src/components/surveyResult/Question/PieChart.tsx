@@ -19,6 +19,7 @@ function PieChart({ index, question }: PieChartProps) {
   };
 
   const chartSeries = question.choices?.map((choice) => choice.count) || [];
+  const total: number = chartSeries.reduce((acc, cur) => (acc as number) + (cur as number), 0) || 0;
 
   const chartOptions = {
     chart: {
@@ -95,7 +96,7 @@ function PieChart({ index, question }: PieChartProps) {
         )}
 
         <div className="py-6">
-          {chartSeries.length > 0 ? (
+          {chartSeries && total > 0 && chartSeries.length > 0 ? (
             <Chart
               options={chartOptions as any}
               series={chartSeries as number[]}

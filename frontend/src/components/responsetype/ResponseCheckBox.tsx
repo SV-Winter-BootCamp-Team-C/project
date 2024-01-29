@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
 import typeIcon from '../../assets/type.svg';
 import checkIcon from '../../assets/check.svg';
 import { QuestionData } from '../../types/questionData';
@@ -10,9 +11,10 @@ interface ResponseCheckBoxProps {
   buttonStyle: 'angled' | 'smooth' | 'round';
   index: number;
   onOptionSelect: (newSelectedOptions: number[]) => void;
+  isViewPage?: boolean;
 }
 
-function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect }: ResponseCheckBoxProps) {
+function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect, isViewPage }: ResponseCheckBoxProps) {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]); // 선택된 옵션을 배열로 관리
 
   const handleOptionSelect = (choiceId: number) => {
@@ -66,34 +68,56 @@ function ResponseCheckBox({ question, color, buttonStyle, index, onOptionSelect 
       )}
 
       <div className="mt-4">
-        {question.choices?.map((choice) => (
-          <div key={choice.choiceId} className="flex items-center justify-center w-full mb-2">
-            <div
-              className={`relative flex justify-center cursor-pointer items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
-              style={{
-                backgroundColor: selectedOptions.includes(choice.choiceId) ? `gray` : `${color}`,
-              }}
-              onClick={() => handleOptionSelect(choice.choiceId)}
-            >
-              <label
-                htmlFor={`checkbox-${choice.choiceId}`}
-                className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
-                  selectedOptions.includes(choice.choiceId) ? 'bg-blue-500' : 'bg-white'
-                } border border-gray-300`}
+        {question.choices?.map((choice) =>
+          isViewPage ? (
+            <Tooltip key={choice.choiceId} title="이 페이지에서는 선택할 수 없습니다." arrow>
+              <div className="flex items-center justify-center w-full mb-2 ">
+                <div
+                  className={`relative flex justify-center cursor-not-allowed items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
+                  style={{
+                    backgroundColor: `${color}`,
+                  }}
+                >
+                  <label
+                    htmlFor={`checkbox-${choice.choiceId}`}
+                    className="absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md bg-white
+                    border border-gray-300"
+                  />
+                  <span className="w-60 text-[1rem] text-base text-center text-black">{choice.option}</span>
+                </div>
+              </div>
+            </Tooltip>
+          ) : (
+            <div key={choice.choiceId} className="flex items-center justify-center w-full mb-2">
+              <div
+                className={`relative flex justify-center cursor-pointer items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
+                style={{
+                  backgroundColor: selectedOptions.includes(choice.choiceId) ? `gray` : `${color}`,
+                }}
+                onClick={() => handleOptionSelect(choice.choiceId)}
               >
-                <input
-                  type="checkbox"
-                  id={`checkbox-${choice.choiceId}`}
-                  className="absolute opacity-0"
-                  checked={selectedOptions.includes(choice.choiceId)}
-                  onChange={() => handleOptionSelect(choice.choiceId)}
-                />
-                {selectedOptions.includes(choice.choiceId) && <img src={checkIcon} alt="Checked" className="w-4 h-4" />}
-              </label>
-              <span className="w-60 text-[1rem] text-base text-center text-black">{choice.option}</span>
+                <label
+                  htmlFor={`checkbox-${choice.choiceId}`}
+                  className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
+                    selectedOptions.includes(choice.choiceId) ? 'bg-blue-500' : 'bg-white'
+                  } border border-gray-300`}
+                >
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${choice.choiceId}`}
+                    className="absolute opacity-0"
+                    checked={selectedOptions.includes(choice.choiceId)}
+                    onChange={() => handleOptionSelect(choice.choiceId)}
+                  />
+                  {selectedOptions.includes(choice.choiceId) && (
+                    <img src={checkIcon} alt="Checked" className="w-4 h-4" />
+                  )}
+                </label>
+                <span className="w-60 text-[1rem] text-base text-center text-black">{choice.option}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );

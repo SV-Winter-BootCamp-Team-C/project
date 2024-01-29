@@ -7,7 +7,6 @@ import Alert from '../components/common/Alert';
 import { ApiResponseError } from '../types/apiResponseError';
 import { SignupForm } from '../types/auth';
 import { checkEmailAPI, singupAPI } from '../api/signup';
-// import fileImage from '../assets/file.png';
 import usernameIcon from '../assets/username.svg';
 import emailIcon from '../assets/email.svg';
 import passwordIcon from '../assets/password.svg';
@@ -102,7 +101,6 @@ function Signup() {
           <span className="text-[2rem] pt-[5rem] font-semibold text-center text-white">Form : Flex</span>
         </div>
         <div className="absolute bottom-[4.75rem] left-[-1em]">
-          {/* <img src={fileImage} alt="File" className="w-[21.25rem] h-[26.25rem]" /> */}
           <Lottie options={signUpOption} height={450} width={400} />
         </div>
         <form onSubmit={handleSubmit}>

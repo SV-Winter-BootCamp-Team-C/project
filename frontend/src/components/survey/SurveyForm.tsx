@@ -128,7 +128,7 @@ function SurveyForm({
             type="button"
             name="sort"
             onClick={() => setOpen((pv) => !pv)}
-            className="flex justify-center items-center w-24 h-9 gap-2 rounded-md text-black bg-transparent transition-colors"
+            className="flex items-center justify-center w-24 gap-2 text-black transition-colors bg-transparent rounded-md h-9"
           >
             <span className="text-base leading-4">정렬</span>
             <motion.span variants={iconVariants}>
