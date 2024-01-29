@@ -75,9 +75,7 @@ services:
   redis:
     container_name: redis
     build:
-      context: ./redis_stack
+      context: ./redis
       dockerfile: Dockerfile
-    ports:
-      - "6379:6379"
 volumes:
   build_folder: null
