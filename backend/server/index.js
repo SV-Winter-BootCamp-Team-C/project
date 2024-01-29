@@ -4,6 +4,9 @@ const app = express();
 const port = process.env.NODE_DOCKER_PORT || 8000;
 const YAML = require('js-yaml');
 const fs = require('fs');
+const Redis = require('redis');
+const redisClient = new Redis.createClient();
+const DEFAULT_EXPIRATION = 3600;
 const swaggerUi = require('swagger-ui-express');
 const specs = YAML.load(
   fs.readFileSync('./swagger/swaggerconfig.yaml', 'utf8'),
