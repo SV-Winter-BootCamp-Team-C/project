@@ -139,7 +139,9 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
     return open === false && attendCount === 0;
   };
 
-  const handleItemClick = (itemName: string, sId: number) => {
+  const handleItemClick = (itemName: string, sId: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+
     if (itemName === '보기') {
       navigate(`/responseform?id=${sId}`);
     } else if (itemName === '편집') {
@@ -156,10 +158,13 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
       handleDeleteSurvey();
     }
   };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
+        if (!isShareModalVisible) {
+          setIsDropdownOpen(false);
+        }
       }
     };
 
@@ -167,7 +172,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [setIsDropdownOpen, dropdownRef]);
+  }, [setIsDropdownOpen, dropdownRef, isShareModalVisible]);
 
   return (
     <>
@@ -183,8 +188,8 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
           {items.map((itemName, index) => (
             <motion.li
               key={index}
-              className="flex items-center justify-center gap-2 w-full p-3 whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-[#918DCA] transition-colors cursor-pointer"
-              onClick={() => handleItemClick(itemName, surveyId)}
+              className="flex items-center justify-center gap-2 w-full p-3 whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-[#918DCA] transition-colors"
+              onClick={(event) => handleItemClick(itemName, surveyId, event)} // 이벤트 객체 전달
               variants={itemVariants}
             >
               <img src={getIcon(itemName)} alt={itemName} className="w-4 h-4" />
@@ -200,7 +205,10 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
         <ShareMailModal
           surveyId={surveyId}
           isVisible={isShareModalVisible}
-          onClose={() => setIsShareModalVisible(false)}
+          onClose={() => {
+            setIsShareModalVisible(false);
+            setIsDropdownOpen(false);
+          }}
         />
       )}
       {deleteSuccess && <Alert type="success" message="삭제되었습니다." buttonText="확인" />}
