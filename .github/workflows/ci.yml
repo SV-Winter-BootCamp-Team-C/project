@@ -27,6 +27,14 @@ jobs:
       AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
       OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
+      RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+      RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+      VITE_APP_GOOGLE_ANALYTICS: ${{ secrets.VITE_APP_GOOGLE_ANALYTICS }}
+      VITE_APP_BUCKET_NAME: ${{ secrets.VITE_APP_BUCKET_NAME }}
+      VITE_APP_SECRET_ACCESS_KEY_ID: ${{ secrets.VITE_APP_SECRET_ACCESS_KEY_ID }}
+      VITE_APP_ACCESS_KEY_ID: ${{ secrets.VITE_APP_ACCESS_KEY_ID }}
+      VITE_APP_REGION: ${{ secrets.VITE_APP_REGION }}
+      
 
     strategy:
       matrix:
@@ -44,5 +52,5 @@ jobs:
       - name: Docker build and push
         run: |
           echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-          docker build -f ./backend/Dockerfile.dev --platform linux/amd64 -t ssjojung/myrepo:${GITHUB_SHA::7} ./backend
+          docker build -f ./backend/Dockerfile --platform linux/amd64 -t ssjojung/myrepo:${GITHUB_SHA::7} ./backend
           docker push ssjojung/myrepo:${GITHUB_SHA::7}

@@ -7,15 +7,12 @@ filebeat.inputs:
     enabled: true
     paths:
       - /var/log/nginx/*.log
+      - /var/log/syslog
+      - /var/log/auth.log
 
 output.logstash:
   enabled: true
   hosts: ["logstash:5044"]
-
-setup.kibana:
-  host: "http://kibana:5601"
-  username: "elastic"
-  password: "changeme"
 
 filebeat.modules:
   - module: nginx
@@ -25,5 +22,3 @@ filebeat.modules:
       enabled: true
 
 logging.level: debug
-# output.elasticsearch:
-#   hosts: ["http://elasticsearch:9200"]

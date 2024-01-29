@@ -3,14 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { FiChevronDown } from 'react-icons/fi';
 import { BiTime, BiHappyAlt, BiStopwatch } from 'react-icons/bi';
 import { motion } from 'framer-motion';
-import { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
 import { IconType } from 'react-icons';
 import { SurveyCoverType } from '../../types/survey';
 import search from '../../assets/search.svg';
 import { AddButton } from '../common/Button';
 import SurveyCover from './SurveyCover';
 
-interface SurvayFormProps {
+interface SurveyFormProps {
   surveyData: SurveyCoverType;
   currentPage: number;
   onClickAddButton?: () => void;
@@ -26,6 +26,7 @@ const wrapperVariants = {
     transition: {
       when: 'beforeChildren',
       staggerChildren: 0.1,
+      duration: 0.1,
     },
   },
   closed: {
@@ -33,6 +34,7 @@ const wrapperVariants = {
     transition: {
       when: 'afterChildren',
       staggerChildren: 0.1,
+      duration: 0.05,
     },
   },
 };
@@ -48,6 +50,7 @@ const itemVariants = {
     y: 0,
     transition: {
       when: 'beforeChildren',
+      duration: 0.1,
     },
   },
   closed: {
@@ -55,6 +58,7 @@ const itemVariants = {
     y: -15,
     transition: {
       when: 'afterChildren',
+      duration: 0.05,
     },
   },
 };
@@ -68,23 +72,24 @@ interface OptionProps {
   text: string;
   Icon: IconType;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  sortValue?: string; // 추가된 prop
-  onSortChange?: (sort: string) => void; // 추가된 prop
+  sortValue?: string;
+  onSortChange?: (sort: string) => void;
 }
 
 function Option({ text, Icon, setOpen, sortValue, onSortChange }: OptionProps) {
-  const handleOptionClick = () => {
-    setOpen(false);
+  const handleOptionClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
     if (sortValue && onSortChange) {
       onSortChange(sortValue);
     }
+    setOpen(false);
   };
 
   return (
     <motion.li
       variants={itemVariants}
       onClick={handleOptionClick}
-      className="flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-[#918DCA] transition-colors cursor-pointer"
+      className="flex items-center gap-2 w-full p-3 text-[0.85rem] font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700  transition-colors cursor-pointer"
     >
       <motion.span variants={actionIconVariants}>
         <Icon />
@@ -102,9 +107,23 @@ function SurveyForm({
   searchTerm,
   setSearchTerm,
   onSortChange,
-}: SurvayFormProps) {
+}: SurveyFormProps) {
   const location = useLocation();
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center pt-6">
@@ -123,7 +142,7 @@ function SurveyForm({
       </div>
       <div className="flex items-center justify-between w-full items-centers px-[3.75rem]">
         {/* (최신순, 인기순, 마감일순) 드롭다운  */}
-        <motion.div animate={open ? 'open' : 'closed'} className="relative z-10 ">
+        <motion.div ref={dropdownRef} animate={open ? 'open' : 'closed'} className="relative z-10 ">
           <button
             type="button"
             name="sort"
@@ -140,7 +159,7 @@ function SurveyForm({
             initial={wrapperVariants.closed}
             variants={wrapperVariants}
             style={{ originY: 'top', translateX: '-50%' }}
-            className="flex flex-col rounded-lg bg-white shadow-xl absolute top-[100%] left-[50%]  w-24 h-30 overflow-hidden"
+            className="flex flex-col rounded-lg bg-white shadow-xl absolute top-[100%] left-[50%]  w-28 h-30 overflow-hidden"
           >
             <Option setOpen={setOpen} Icon={BiTime} sortValue="latest" onSortChange={onSortChange} text="최신 순" />
             <Option

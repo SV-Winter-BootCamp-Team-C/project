@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -636,13 +636,14 @@ function Create() {
         <div className="relative flex items-center justify-between px-52">
           <div className="flex items-center justify-center gap-6 mt-6">
             <p className="text-[2rem] font-semibold text-black">문항</p>
-            <AddButton
-              text="추가"
-              onClick={() => {
-                handleAddQuestion();
-              }}
-            />
-            {addQuestionDropdown && <CreateQuestionMenu onSelect={addQuestion} />}
+            <AddButton text="추가" onClick={handleAddQuestion} />
+            {addQuestionDropdown && (
+              <CreateQuestionMenu
+                onSelect={addQuestion}
+                isOpen={addQuestionDropdown}
+                onClose={() => setAddQuestionDropdown(false)} // onClose prop을 추가합니다.
+              />
+            )}
           </div>
           <div className="absolute right-52 top-[1.375rem] z-50">
             <ChatButton title={createSurvey.title} description={createSurvey.description} onAddData={addChatQuestion} />

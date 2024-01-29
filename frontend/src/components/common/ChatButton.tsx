@@ -161,7 +161,7 @@ function ChatButton({ title, description, onAddData }: ChatButtonProps) {
                 <div className="flex flex-col items-center justify-center w-full max-w-[45rem]">
                   <div className="relative flex items-center w-full h-8 border bg-lightGray rounded-t-[0.625rem] border-solid border-gray">
                     <p className="ml-2 text-darkGray">드롭다운 선택지</p>
-                    <div className="absolute flex justify-center items-center w-[1.25rem] h-[1.25rem] bg-ligthGray top-[0.375rem] right-[0.625rem]">
+                    <div className="absolute flex justify-center items-center w-[1.25rem] h-[1.25rem] bg-lightGray top-[0.375rem] right-[0.625rem]">
                       <img src={dropIcon} alt="Drop" className="w-[0.75rem] h-[0.5rem]" />
                     </div>
                   </div>
