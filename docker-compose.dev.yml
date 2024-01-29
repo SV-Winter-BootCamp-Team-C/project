@@ -129,70 +129,68 @@ services:
       - ./elk/filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./elk/filebeat/config/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
       - ./nginx/log:/var/log/nginx
-      - /var/log/syslog:/var/log/syslog
-      - /var/log/auth.log:/var/log/auth.log
     depends_on:
       - logstash
       - elasticsearch
       - kibana
 
-  prometheus:
-    image: prom/prometheus
-    restart: always
-    volumes:
-      - prometheus_data:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
+  # prometheus:
+  #   image: prom/prometheus
+  #   restart: always
+  #   volumes:
+  #     - prometheus_data:/prometheus
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
-    container_name: cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg
-    ports:
-      - 8080:8080
-    privileged: true
-    restart: unless-stopped
-    depends_on:
-      - prometheus
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
+  #   container_name: cadvisor
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   devices:
+  #     - /dev/kmsg
+  #   ports:
+  #     - 8080:8080
+  #   privileged: true
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - prometheus
 
-  grafana:
-    image: grafana/grafana
-    restart: always
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
-    volumes:
-      - grafana-data:/var/lib/grafana
+  # grafana:
+  #   image: grafana/grafana
+  #   restart: always
+  #   container_name: grafana
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - prometheus
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
 
-  node-exporter:
-    image: quay.io/prometheus/node-exporter:v1.5.0
-    container_name: node_exporter
-    command: "--path.rootfs=/host"
-    pid: host
-    restart: unless-stopped
-    volumes:
-      - /:/host:ro,rslave
+  # node-exporter:
+  #   image: quay.io/prometheus/node-exporter:v1.5.0
+  #   container_name: node_exporter
+  #   command: "--path.rootfs=/host"
+  #   pid: host
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /:/host:ro,rslave
 
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    container_name: rabbitmq
-    ports:
-      - "5672:5672" # RabbitMQ AMQP 포트
-      - "15672:15672" # RabbitMQ 관리자 포트
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-    restart: always
+  # rabbitmq:
+  #   image: "rabbitmq:3-management"
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672" # RabbitMQ AMQP 포트
+  #     - "15672:15672" # RabbitMQ 관리자 포트
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+  #     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+  #   restart: always
 
   redis:
     container_name: redis
@@ -204,5 +202,5 @@ services:
 volumes:
   build_folder: null
   elasticsearch:
-  prometheus_data:
-  grafana-data:
+  # prometheus_data:
+  # grafana-data:
