@@ -93,10 +93,12 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/project
+            git stash
             git pull origin main
             docker-compose -f docker-compose.prod.yml pull
             docker-compose -f docker-compose.prod.yml down
             docker system prune -af
             docker volume prune -f
             docker-compose -f docker-compose.prod.yml up --build -d
+            git stash pop
 
