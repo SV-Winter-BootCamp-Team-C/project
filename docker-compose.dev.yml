@@ -194,6 +194,13 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     restart: always
 
+  redis:
+    container_name: redis
+    build:
+      context: /redis_stack
+      dockerfile: Dockerfile
+    ports:
+      - "6379:6379"
 volumes:
   build_folder: null
   elasticsearch:
