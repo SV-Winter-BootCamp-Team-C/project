@@ -75,7 +75,7 @@ function ImageSearchModal({ isVisible, onClose: providedOnClose, onSelectImage }
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-20">
       <div
-        className="relative w-[30rem] min-h-40 flex flex-col pt-9 bg-white shadow-md rounded-[1.25rem]"
+        className="relative w-[30rem] min-h-52 flex flex-col pt-9 bg-white shadow-md rounded-[1.25rem]"
         style={{ height: `(${totalModalHeight}/16t)rem` }}
       >
         <div className="absolute right-2 top-2">

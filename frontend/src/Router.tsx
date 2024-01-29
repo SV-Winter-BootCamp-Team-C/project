@@ -32,9 +32,10 @@ const routerData: RouterElement[] = [
   { id: 6, path: '/myresponses', element: <MyResponse />, withAuth: true, isNavbar: true },
   { id: 7, path: '/create', element: <Create />, withAuth: true, isNavbar: true },
   { id: 8, path: '/result', element: <ResultPage />, withAuth: true, isNavbar: true }, // 설문 id
-  { id: 9, path: '/responseform', element: <ResponseForm />, withAuth: true, isNavbar: true }, // 설문 id
+  { id: 9, path: '/responseform', element: <ResponseForm />, withAuth: true, isNavbar: true }, // 설문 하기
   { id: 10, path: '/myanswer', element: <MyAnswer />, withAuth: true, isNavbar: true },
   { id: 11, path: '/edit', element: <Create />, withAuth: true, isNavbar: true }, // 설문 편집
+  { id: 12, path: '/view', element: <ResponseForm />, withAuth: true, isNavbar: true }, // 설문 보기
 ];
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {

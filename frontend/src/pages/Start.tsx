@@ -1,31 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-// import arrowRight from '../assets/arrowRight.svg';
-// import Lottie from 'react-lottie';
 import newIdea from '../assets/newIdea.png';
 import teamWork from '../assets/teamWork.png';
-// import rectangle from '../assets/rectangle.svg';
-// import plus from '../assets/plus.svg';
-// import graph1 from '../assets/graph1.svg';
-// import graph2 from '../assets/graph2.svg';
 import star1 from '../assets/star1.svg';
 import star2 from '../assets/star2.svg';
 import star3 from '../assets/star3.svg';
 import star4 from '../assets/star4.svg';
 import star5 from '../assets/star5.svg';
 import flexLine from '../assets/flexLine.svg';
-// import directMessage from '../assets/directMessage.svg';
 import editPencil from '../assets/editPencil.svg';
-// import palette from '../assets/palette.svg';
 import palette1 from '../assets/palette1.svg';
 import circleAnalytics from '../assets/circleAnalytics.svg';
 import roundShare from '../assets/roundShare.svg';
 import survey from '../assets/survey.svg';
-// import imacFront from '../assets/imacFront.svg';
-// import CarouselMain from '../components/common/CarouselMain';
 import CarouselDesOne from '../components/common/CarouselDesOne';
 import CarouselDesTwo from '../components/common/CarouselDesTwo';
-// import LottieData from '../assets/toggleSwitch.json';
 import macbookBackground from '../assets/macbookBackground.svg';
 import logo from '../assets/logo.svg';
 
@@ -131,8 +120,8 @@ function Start() {
             {/* centerText */}
             <div className="flex flex-row relative z-30  justify-center items-center w-[31.75rem] h-[4.625rem] mx-[26.88rem] ">
               <span className="text-6xl font-semibold text-black ">Create</span>
-              <div className="flex justify-center items-center h-screen">
-                <label htmlFor="toggle" className="flex items-center cursor-pointer mx-2 mt-2">
+              <div className="flex items-center justify-center h-screen">
+                <label htmlFor="toggle" className="flex items-center mx-2 mt-2 cursor-pointer">
                   <div className="relative">
                     <input type="checkbox" id="toggle" className="sr-only " onChange={toggleSwitch} />
                     <div className="block  w-16 h-10 rounded-full border-solid border-black border-[0.2rem] bg-[#F9F8FC]" />
@@ -158,7 +147,7 @@ function Start() {
               <img src={newIdea} alt="newIdea" className="w-[23.5rem] h-[20.25rem]" />
               <a
                 href="/signup"
-                className="relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-black bg-white transition duration-300 ease-out border-2 border-black border-solid rounded-full shadow-md group"
+                className="relative inline-flex items-center justify-center p-4 px-8 py-4 overflow-hidden font-medium text-black transition duration-300 ease-out bg-white border-2 border-black border-solid rounded-full shadow-md group"
               >
                 <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-black group-hover:translate-x-0 ease">
                   <svg

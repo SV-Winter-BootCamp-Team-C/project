@@ -93,9 +93,8 @@ function MyAnswer() {
               switch (question.type) {
                 case 'MULTIPLE_CHOICE':
                   return (
-                    <div className="mb-6">
+                    <div className="mb-6" key={question.questionId}>
                       <StaticMultipleChoice
-                        key={question.questionId}
                         index={index + 1}
                         question={question}
                         color={surveyData.color}
@@ -105,20 +104,14 @@ function MyAnswer() {
                   );
                 case 'SUBJECTIVE_QUESTION':
                   return (
-                    <div className="mb-6">
-                      <StaticSubjective
-                        key={question.questionId}
-                        index={index + 1}
-                        question={question}
-                        color={surveyData.color}
-                      />
+                    <div className="mb-6" key={question.questionId}>
+                      <StaticSubjective index={index + 1} question={question} color={surveyData.color} />
                     </div>
                   );
                 case 'CHECKBOX':
                   return (
-                    <div className="mb-6">
+                    <div className="mb-6" key={question.questionId}>
                       <StaticCheckBox
-                        key={question.questionId}
                         index={index + 1}
                         question={question}
                         color={surveyData.color}
@@ -128,13 +121,8 @@ function MyAnswer() {
                   );
                 case 'DROPDOWN':
                   return (
-                    <div className="mb-6">
-                      <StaticDropDown
-                        key={question.questionId}
-                        index={index + 1}
-                        question={question}
-                        color={surveyData.color}
-                      />
+                    <div className="mb-6" key={question.questionId}>
+                      <StaticDropDown index={index + 1} question={question} color={surveyData.color} />
                     </div>
                   );
                 default:

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
 import typeIcon from '../../assets/type.svg';
 import { QuestionData } from '../../types/questionData';
 
@@ -7,9 +8,10 @@ interface ResponseDropDownProps {
   color: string;
   index: number;
   onOptionSelect: (choiceId: number) => void;
+  isViewPage?: boolean;
 }
 
-function ResponseDropDown({ question, color, index, onOptionSelect }: ResponseDropDownProps) {
+function ResponseDropDown({ question, color, index, onOptionSelect, isViewPage }: ResponseDropDownProps) {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   const handleOptionSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,19 +49,36 @@ function ResponseDropDown({ question, color, index, onOptionSelect }: ResponseDr
       )}
 
       <div className="my-4">
-        <select
-          value={selectedOption ?? ''}
-          onChange={handleOptionSelect}
-          className="border border-gray-300 rounded-md cursor-pointer"
-          style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
-        >
-          <option value="">선택...</option>
-          {question.choices?.map((choice) => (
-            <option key={choice.choiceId} value={choice.choiceId}>
-              {choice.option}
-            </option>
-          ))}
-        </select>
+        {isViewPage ? (
+          <Tooltip title="이 페이지에서는 선택할 수 없습니다." arrow>
+            <select
+              className="border border-gray-300 rounded-md cursor-not-allowed focus:outline-none"
+              style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
+              disabled
+            >
+              <option value="">선택...</option>
+              {question.choices?.map((choice) => (
+                <option key={choice.choiceId} value={choice.choiceId}>
+                  {choice.option}
+                </option>
+              ))}
+            </select>
+          </Tooltip>
+        ) : (
+          <select
+            value={selectedOption ?? ''}
+            onChange={handleOptionSelect}
+            className="border border-gray-300 rounded-md cursor-pointer"
+            style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
+          >
+            <option value="">선택...</option>
+            {question.choices?.map((choice) => (
+              <option key={choice.choiceId} value={choice.choiceId}>
+                {choice.option}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import ResultTypeSwitch from '../components/common/ResultTypeSwitch';
 import Question from '../components/surveyResult/Question/Question';
 import Response from '../components/surveyResult/Response/Response';
-import { QuestionData, QuestionResultForm } from '../types/questionData';
+import { QuestionResultForm } from '../types/questionData';
 import { getAnswerResultAPI, getQuestionResultAPI } from '../api/getResult';
 import { AnswerData } from '../types/answerData';
 
@@ -36,15 +36,20 @@ function ResultPage() {
     <Scrollbars style={{ marginTop: 30, maxHeight: 830 }}>
       <div className="flex flex-col items-center justify-center py-5">
         <div className="pb-6">
-          <h1 className="text-black text-[2rem] font-semibold">{`[${questionData?.title}] 분석 결과`}</h1>
+          <h1 className="text-black text-[2rem] font-normal">{`[${questionData?.title}] 분석 결과`}</h1>
         </div>
 
-        <ResultTypeSwitch curretState={currentSwitch} onChange={handleToggle} />
+        <ResultTypeSwitch
+          switchType={['question', 'answer']}
+          currentState={currentSwitch}
+          labels={['질문별', '응답별']}
+          onChange={handleToggle}
+        />
         <div className="pt-10">
           {currentSwitch === 'question' ? (
-            <Question questions={questionData?.questions as QuestionData[]} />
+            <Question questions={questionData?.questions || []} />
           ) : (
-            <Response title={answerData?.title as string} list={answerData?.list || { head: [], rows: [] }} />
+            <Response list={answerData?.list || { head: [], rows: [] }} />
           )}
         </div>
       </div>

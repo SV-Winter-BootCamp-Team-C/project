@@ -96,11 +96,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
 
-  const {
-    mutate,
-    isSuccess: deleteSuccess,
-    isError: deleteError,
-  } = useMutation({
+  const { mutate, isError: deleteError } = useMutation({
     mutationFn: () => deleteSurveyAPI(surveyId, myId),
     onSuccess: () => {
       getClient.invalidateQueries({ queryKey: ['allSurveys'] });
@@ -141,7 +137,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
 
   const handleItemClick = (itemName: string, sId: number) => {
     if (itemName === '보기') {
-      navigate(`/responseform?id=${sId}`);
+      navigate(`/view?id=${sId}`);
     } else if (itemName === '편집') {
       if (isEditable()) {
         navigate(`/edit?id=${sId}`);
@@ -203,7 +199,6 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
           onClose={() => setIsShareModalVisible(false)}
         />
       )}
-      {deleteSuccess && <Alert type="success" message="삭제되었습니다." buttonText="확인" />}
       {deleteError && <Alert type="error" message={errorMessage} buttonText="확인" />}
       {showEditAlert && (
         <Alert

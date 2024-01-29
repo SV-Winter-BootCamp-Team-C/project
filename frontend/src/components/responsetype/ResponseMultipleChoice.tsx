@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
 import typeIcon from '../../assets/type.svg';
 import { QuestionData } from '../../types/questionData';
 import { getRoundedClass } from '../../utils/getRoundedClass';
@@ -9,9 +10,17 @@ interface ResponseMultipleChoiceProps {
   buttonStyle: 'angled' | 'smooth' | 'round';
   index: number;
   onOptionSelect: (choiceId: number) => void;
+  isViewPage?: boolean;
 }
 
-function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionSelect }: ResponseMultipleChoiceProps) {
+function ResponseMultipleChoice({
+  question,
+  color,
+  buttonStyle,
+  index,
+  onOptionSelect,
+  isViewPage,
+}: ResponseMultipleChoiceProps) {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   const handleOptionSelect = (choiceId: number) => {
@@ -48,20 +57,34 @@ function ResponseMultipleChoice({ question, color, buttonStyle, index, onOptionS
         />
       )}
 
-      <div className="flex flex-col my-4 space-y-2 choices-container ">
-        {question.choices?.map((choice) => (
-          <button
-            type="button"
-            key={choice.choiceId}
-            className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)}`}
-            style={{
-              backgroundColor: selectedOption === choice.choiceId ? `gray` : `${color}`,
-            }}
-            onClick={() => handleOptionSelect(choice.choiceId)}
-          >
-            {choice.option}
-          </button>
-        ))}
+      <div className="flex flex-col my-4 space-y-2 choices-container">
+        {question.choices?.map((choice) =>
+          isViewPage ? (
+            <Tooltip key={choice.choiceId} title="이 페이지에서는 선택할 수 없습니다." arrow>
+              <button
+                type="button"
+                className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)} cursor-not-allowed`}
+                style={{
+                  backgroundColor: `${color}`,
+                }}
+              >
+                {choice.option}
+              </button>
+            </Tooltip>
+          ) : (
+            <button
+              type="button"
+              key={choice.choiceId}
+              className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)}`}
+              style={{
+                backgroundColor: selectedOption === choice.choiceId ? `gray` : `${color}`,
+              }}
+              onClick={() => handleOptionSelect(choice.choiceId)}
+            >
+              {choice.option}
+            </button>
+          ),
+        )}
       </div>
     </div>
   );
