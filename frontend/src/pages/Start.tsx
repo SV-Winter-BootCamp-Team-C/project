@@ -287,12 +287,12 @@ function Start() {
         <div className="flex flex-row items-center mx-16 my-2">
           <div className="flex flex-col">
             <div className="w-[41.5rem] h-[6.5rem]">
-              <span className="font-bold leading-normal text-[2.25rem] text-white select-none">
+              <span className="font-bold leading-normal text-[2.3rem] text-white select-none">
                 Create your own design form for free. Share it with others, too!
               </span>
             </div>
             <div className="flex w-[46.5rem] h-[4.375rem] mt-2 text-start">
-              <span className="text-[1.5rem] leading-normal font-normal text-white select-none">
+              <span className="text-[1.2rem] leading-normal font-normal text-white select-none">
                 비즈니스를 위한 강력한 도구와 함께 대시보드 내부에서
                 <br />
                 완벽한 커스터마이징을 경험할 수 있는 FormFlex
