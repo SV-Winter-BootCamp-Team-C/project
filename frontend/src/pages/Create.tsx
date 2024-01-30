@@ -401,9 +401,13 @@ function Create() {
               <div className="flex w-[5.625rem] h-[2.0315rem] mb-[1.01rem]">
                 <span className="text-[2rem] font-semibold">버튼</span>
               </div>
-              <div className="flex flex-row gap-3">
+              <div className="flex flex-row gap-3 ">
                 {BUTTON_ITEMS.map((item) => (
-                  <div key={item.id} className="flex flex-col items-center" onClick={() => changeButtonStyle(item.id)}>
+                  <div
+                    key={item.id}
+                    className="flex flex-col items-center cursor-pointer"
+                    onClick={() => changeButtonStyle(item.id)}
+                  >
                     <div
                       className={`flex justify-center items-center w-[10.5rem] h-[5.5rem] rounded-[1.5rem] border-solid border-[0.188rem] ${
                         createSurvey.buttonStyle === item.id ? `border-purple` : 'border-white'
