@@ -1,9 +1,14 @@
+import { useEffect } from 'react';
 import SurveyForm from '../components/survey/SurveyForm';
 import usePaginationSurveyList from '../hooks/usePaginationSurveyList';
 
 function MyResponse() {
-  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm, handleSortChange } =
+  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm, handleSortChange, refetch } =
     usePaginationSurveyList('myResponse');
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <SurveyForm

@@ -35,7 +35,7 @@ const usePaginationSurveyList = (path: PathType) => {
 
   const queryFn = QUERY_FN_MAP[path];
 
-  const { data, isError, isPending } = useQuery<SurveyCoverType, AxiosError>({
+  const { data, isError, isPending, refetch } = useQuery<SurveyCoverType, AxiosError>({
     queryKey: [path, currentPage, userId, searchTerm, sort], // 검색어를 쿼리 키에 추가
     queryFn: () => queryFn({ userId: userId as number, currentPage, title: searchTerm, sort }), // API 호출 시 검색어 전달
     select: (responseData) => {
@@ -58,6 +58,7 @@ const usePaginationSurveyList = (path: PathType) => {
     setSearchTerm,
     // sort,
     handleSortChange,
+    refetch,
   };
 };
 
