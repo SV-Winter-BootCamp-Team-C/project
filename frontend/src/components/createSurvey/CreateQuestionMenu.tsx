@@ -84,7 +84,7 @@ function CreateQuestionMenu({ onSelect, isOpen, onClose }: CreateQuestionMenuPro
         initial={wrapperVariants.closed}
         variants={wrapperVariants}
         animate={isOpen ? 'open' : 'closed'}
-        className="absolute left-[20%] top-[8%] flex flex-col w-[10rem] h-[12.5rem] bg-white shadow-md rounded-md py-[0.625rem] z-20"
+        className="absolute -left-6 -top-6 flex flex-col w-[10rem] h-[12.5rem] bg-white shadow-md rounded-md py-[0.625rem] z-20"
       >
         {QUESTION_MENU_ITEMS.map((item, index) => (
           <motion.li
@@ -94,7 +94,7 @@ function CreateQuestionMenu({ onSelect, isOpen, onClose }: CreateQuestionMenuPro
             initial={itemVariants.closed}
             variants={itemVariants}
           >
-            <motion.div className="flex items-center h-6 gap-2 px-2 cursor-pointer">
+            <motion.div className="flex  items-center h-6 gap-2 px-2 cursor-pointer">
               <img src={item.icon} alt={item.name} className="min-w-[0.875rem] h-[0.875rem]" />
               <span className="text-base leading-4 text-black">{item.name}</span>
             </motion.div>
