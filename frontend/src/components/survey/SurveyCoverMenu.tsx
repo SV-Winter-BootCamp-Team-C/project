@@ -92,6 +92,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
   const myId = useAuthStore((state) => state.userId) ?? 0;
   const currentMenuItems = MENU_ITEMS.find((menu) => menu.path === location.pathname);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showEditAlert, setShowEditAlert] = useState<boolean>(false);
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
   const dropdownRef = useRef<HTMLUListElement>(null);
@@ -105,6 +106,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
       getClient.refetchQueries({ queryKey: ['myForm', myId] });
       getClient.invalidateQueries({ queryKey: ['myResponse', myId] });
       getClient.refetchQueries({ queryKey: ['myResponse', myId] });
+      setShowDeleteAlert(true);
     },
     onError: (error: AxiosError) => {
       const err = error as AxiosError<ApiResponseError>;
@@ -214,6 +216,14 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
           message="참여자가 있는 설문은 편집할 수 없습니다."
           buttonText="확인"
           buttonClick={() => setShowEditAlert(false)}
+        />
+      )}
+      {showDeleteAlert && (
+        <Alert
+          type="success"
+          message="삭제되었습니다."
+          buttonText="확인"
+          buttonClick={() => window.location.reload()}
         />
       )}
     </>

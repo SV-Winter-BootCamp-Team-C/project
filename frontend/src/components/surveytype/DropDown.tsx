@@ -164,7 +164,7 @@ function DropDown({ idx, data, handleImageUpload, updateQuestion, copyQuestion, 
         {data.choices.map((choice, choiceIndex) => (
           <div key={choiceIndex} className="flex items-center justify-center w-full">
             <div className="relative flex w-[20rem] h-10 border border-solid border-gray ">
-              <div className="flex items-center justify-center w-full ml-2">
+              <div className="flex items-center justify-center w-full ml-2 mr-10">
                 <input
                   type="text"
                   required

@@ -29,7 +29,9 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
         <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
       </div>
 
-      <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
+      <span className="max-w-[37.5rem] text-[1rem] my-2 text-base text-center text-black break-words">
+        {question.content}
+      </span>
 
       {question.imageUrl && (
         <img
@@ -40,11 +42,11 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
         />
       )}
 
-      <div className="mt-4">
+      <div className="flex flex-col my-4 space-y-2">
         {question.choices?.map((choice) => (
-          <div key={choice.choiceId} className="relative flex items-center justify-center w-full mb-2">
+          <div key={choice.choiceId} className="relative flex items-center justify-center w-[37.5rem]">
             <div
-              className={`flex justify-center items-center w-[25rem] h-10 ${getRoundedClass(buttonStyle)}`}
+              className={`flex justify-center items-center w-full h-full px-10 py-2 ${getRoundedClass(buttonStyle)}`}
               style={{
                 backgroundColor: (question.objContent ?? []).includes(choice.choiceId) ? 'gray' : `${color}`,
                 border: (question.objContent ?? []).includes(choice.choiceId) ? '0.125rem solid' : 'none',
@@ -52,7 +54,7 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
             >
               <label
                 htmlFor={`checkbox-${choice.choiceId}`}
-                className={`absolute top-[0.625rem] left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
+                className={`absolute top-40% left-[0.625rem] w-5 h-5 flex justify-center items-center rounded-md ${
                   (question.objContent ?? []).includes(choice.choiceId) ? 'bg-blue-500' : 'bg-white'
                 } `}
               >
@@ -66,7 +68,7 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
                   <img src={checkIcon} alt="Checked" className="w-4 h-4" />
                 )}
               </label>
-              <span className="w-60 text-[1rem] text-base text-center text-black">{choice.option}</span>
+              <span className="text-center text-base break-words">{choice.option}</span>
             </div>
           </div>
         ))}
