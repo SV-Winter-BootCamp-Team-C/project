@@ -90,6 +90,7 @@ services:
     volumes:
       - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./GeoLite2-City.mmdb:/etc/logstash/GeoLite2-City.mmdb
     ports:
       - 5044:5044
       - 50000:50000/tcp

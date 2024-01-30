@@ -20,7 +20,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       - TZ=Asia/Seoul
       - NODE_ENV=development
