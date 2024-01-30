@@ -1,12 +1,17 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import SurveyForm from '../components/survey/SurveyForm';
 import usePaginationSurveyList from '../hooks/usePaginationSurveyList';
 
 function AllForm() {
   const navigate = useNavigate();
 
-  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm, handleSortChange } =
+  const { data, currentPage, handlePageChange, searchTerm, setSearchTerm, handleSortChange, refetch } =
     usePaginationSurveyList('allForm');
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <SurveyForm
