@@ -46,7 +46,9 @@ function ResponseMultipleChoice({
         <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
       </div>
 
-      <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
+      <span className="max-w-[37.5rem] text-[1rem] my-2 text-base text-center text-black break-words">
+        {question.content}
+      </span>
 
       {question.imageUrl && (
         <img
@@ -63,25 +65,25 @@ function ResponseMultipleChoice({
             <Tooltip key={choice.choiceId} title="이 페이지에서는 선택할 수 없습니다." arrow>
               <button
                 type="button"
-                className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)} cursor-not-allowed`}
+                className={`w-[37.5rem] choice-item px-10 py-2 ${getRoundedClass(buttonStyle)} cursor-not-allowed`}
                 style={{
                   backgroundColor: `${color}`,
                 }}
               >
-                {choice.option}
+                <span className="text-base break-words">{choice.option}</span>
               </button>
             </Tooltip>
           ) : (
             <button
               type="button"
               key={choice.choiceId}
-              className={`w-[25rem] h-[2.5rem] choice-item p-2 ${getRoundedClass(buttonStyle)}`}
+              className={`w-[37.5rem] choice-item px-10 py-2 ${getRoundedClass(buttonStyle)}`}
               style={{
                 backgroundColor: selectedOption === choice.choiceId ? `gray` : `${color}`,
               }}
               onClick={() => handleOptionSelect(choice.choiceId)}
             >
-              {choice.option}
+              <span className="text-base break-words">{choice.option}</span>
             </button>
           ),
         )}

@@ -14,6 +14,7 @@ import { responseformAPI, responseSubmitAPI } from '../api/responseform';
 import { useAuthStore } from '../store/AuthStore';
 import Loading from '../components/common/Loading';
 import { formatDeadlineDate } from '../utils/formatDeadlineDate';
+import { useNavbarStore } from '../store/NavbarStore';
 
 function ResponseForm() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function ResponseForm() {
   const myId = useAuthStore((state) => state.userId);
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const activeItem = useNavbarStore((state) => state.activeItem);
   const [responseSubmit, setResponseSubmit] = useState<ResponseSubmit>({
     userId: 0,
     questions: [],
@@ -258,9 +260,9 @@ function ResponseForm() {
                 return null;
             }
           })}
-          <div className="flex items-center justify-center gap-3 mt-3 mb-9">
+          <div className="flex items-center justify-center font-npsFont gap-3 mt-3 mb-9">
             {!isViewPage && <TextButton text="제출하기" onClick={handleSubmit} />}
-            <TextButton text="나가기" onClick={() => navigate('/all')} />
+            <TextButton text="나가기" onClick={() => navigate(activeItem === 'all' ? '/all' : '/myform')} />
           </div>
         </div>
       </Scrollbars>

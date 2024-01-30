@@ -22,7 +22,8 @@ export default {
       fontFamily: {
         pretendardFont: ['Pretendard-Regular', 'Pretendard-Regular'],
         tMoney: ['TmoneyRoundWindExtraBold', 'TmoneyRoundWindExtraBold'],
-        npsFont: ['NPSfontBold', 'NPSfontBold'],
+        npsFontBold: ['NPSfontBold', 'NPSfontBold'],
+        npsFont: ['NPSfont', 'NPSfont'],
         omyuFont: ['omyu_pretty', 'omyu_pretty'],
         seolleimFont: ['seolleimcool-SemiBold', 'seolleimcool-SemiBold'],
       },

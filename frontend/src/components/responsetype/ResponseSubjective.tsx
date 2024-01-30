@@ -37,7 +37,9 @@ function ResponseSubjective({ question, color, index, onSubChange, isViewPage }:
         <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
       </div>
 
-      <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
+      <span className="max-w-[37.5rem] text-[1rem] my-2 text-base text-center text-black break-words">
+        {question.content}
+      </span>
 
       {question.imageUrl && (
         <img

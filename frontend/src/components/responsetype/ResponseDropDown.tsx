@@ -37,7 +37,9 @@ function ResponseDropDown({ question, color, index, onOptionSelect, isViewPage }
         <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
       </div>
 
-      <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
+      <span className="max-w-[37.5rem] text-[1rem] my-2 text-base text-center text-black break-words">
+        {question.content}
+      </span>
 
       {question.imageUrl && (
         <img
@@ -52,7 +54,7 @@ function ResponseDropDown({ question, color, index, onOptionSelect, isViewPage }
         {isViewPage ? (
           <Tooltip title="이 페이지에서는 선택할 수 없습니다." arrow>
             <select
-              className="border border-gray-300 rounded-md cursor-not-allowed focus:outline-none"
+              className="border border-gray-300 rounded-md cursor-not-allowed truncate focus:outline-none"
               style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
               disabled
             >
@@ -68,7 +70,7 @@ function ResponseDropDown({ question, color, index, onOptionSelect, isViewPage }
           <select
             value={selectedOption ?? ''}
             onChange={handleOptionSelect}
-            className="border border-gray-300 rounded-md cursor-pointer"
+            className="border border-gray-300 rounded-md truncate cursor-pointer"
             style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
           >
             <option value="">선택...</option>
