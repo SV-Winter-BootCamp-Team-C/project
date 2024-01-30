@@ -130,7 +130,7 @@ function MyAnswer() {
               }
             })}
 
-            <div className="flex items-center justify-center gap-3 mt-3 mb-9">
+            <div className="flex items-center justify-center font-npsFont gap-3 mt-3 mb-9">
               <TextButton text="나가기" onClick={() => navigate('/myresponses')} />
             </div>
           </div>

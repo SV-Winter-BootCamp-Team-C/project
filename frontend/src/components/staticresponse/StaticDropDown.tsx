@@ -26,7 +26,9 @@ function StaticDropDown({ question, color, index }: StaticDropDownProps) {
         <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
       </div>
 
-      <span className="max-w-[37.5rem] text-[1rem] mt-[0.5rem] mb-6 text-center text-black">{question.content}</span>
+      <span className="max-w-[37.5rem] text-[1rem] my-2 text-base text-center text-black break-words">
+        {question.content}
+      </span>
 
       {question.imageUrl && (
         <img
@@ -41,7 +43,7 @@ function StaticDropDown({ question, color, index }: StaticDropDownProps) {
         <select
           value={question.objContent && question.objContent.length > 0 ? question.objContent[0].toString() : ''}
           onChange={() => {}}
-          className="border border-gray-300 rounded-md"
+          className="border border-gray-300 truncate rounded-md"
           style={{ width: '20rem', height: '2rem', border: `0.0625rem solid ${color}` }}
           disabled // 드롭다운을 비활성화 (읽기 전용)
         >
