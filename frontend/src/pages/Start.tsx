@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import newIdea from '../assets/newIdea.png';
-import teamWork from '../assets/teamWork.png';
+import newIdea from '../assets/newIdea.svg';
+import teamWork from '../assets/teamWork.svg';
 import star1 from '../assets/star1.svg';
 import star2 from '../assets/star2.svg';
 import star3 from '../assets/star3.svg';
@@ -74,11 +74,6 @@ function Start() {
           <img src={flexLine} alt="flexLine2" className="w-full" />
         </div>
 
-        {/* Circular sector */}
-        {/* <div className="absolute z-10 w-full h-[18rem] top-[37.6rem]">
-          <img src={rectangle} alt="rectangle" className="w-full" />
-        </div> */}
-
         <div className="relative w-[85.5rem] h-[59.5rem] rounded-[1.25rem] bg-[#F9F8FC]">
           {/* star */}
           <div className="absolute z-20 w-4 h-4 top-[40.5rem] left-[4.44rem]">
@@ -105,10 +100,6 @@ function Start() {
             </div>
             <div
               className="flex cursor-pointer items-center justify-center flex-shrink-0  w-[6.5rem] h-[2.875rem] rounded-2xl border-2 border-solid border-black bg-white transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
-              // style={{
-              //   boxShadow:
-              //     '0px 0px 1px 0 rgba(0,0,0,0.3), 0px 1px 4px 0 rgba(0,0,0,0.05), 0px 1px 2px 0.5px rgba(0,0,0,0.1)',
-              // }}
               onClick={() => navigate('/login')}
             >
               <span className="text-base font-medium leading-4 text-center text-black">Login</span>
@@ -118,7 +109,7 @@ function Start() {
           {/* title */}
           <div className="flex relative z-10 flex-col mt-[4.12rem]">
             {/* centerText */}
-            <div className="flex flex-row relative z-30  justify-center items-center w-[31.75rem] h-[4.625rem] mx-[26.88rem] ">
+            <div className="flex flex-row relative z-30  justify-center items-center w-[31.75rem] h-[4.625rem] mx-[25.5rem] ">
               <span className="text-6xl font-semibold text-black ">Create</span>
               <div className="flex items-center justify-center h-screen">
                 <label htmlFor="toggle" className="flex items-center mx-2 mt-2 cursor-pointer">
@@ -131,13 +122,13 @@ function Start() {
                   </div>
                 </label>
               </div>
-              <span className="text-6xl font-semibold text-black">Share</span>
+              <span className="text-[3.65rem] font-semibold text-black">Share</span>
             </div>
             <div className="flex relative z-30 justify-center items-center w-[38rem] h-[5.125rem] mx-[23.75rem]">
-              <span className="text-6xl font-semibold text-black">Form, Analysis easily</span>
+              <span className="text-[3.65rem] font-semibold text-black">Form, Analysis easily</span>
             </div>
             <div className="flex relative z-30 justify-center items-center w-[41.75rem] h-6 mt-1 mx-[21.88rem]">
-              <span className="text-xl font-medium text-black">
+              <span className="text-[1.15rem] font-medium text-black">
                 There are forms you can decorate yourself and various analysis tools.
               </span>
             </div>
@@ -165,7 +156,7 @@ function Start() {
                 </span>
                 <span className="relative invisible">Get Started</span>
               </a>
-              <img src={teamWork} alt="teamWork" className="w-[23.5rem] h-[20.25rem]" />
+              <img src={teamWork} alt="teamWork" className="w-[23.5rem] h-[20.25rem] bg-[#918dCA]" />
             </div>
           </div>
           <div className="flex justify-center">
@@ -178,14 +169,6 @@ function Start() {
         </div>
       </div>
 
-      {/* Analysis */}
-      {/* <div className="flex justify-center bg-#f9f8fc">
-
-      </div> */}
-      {/* <div className="absolute z-20 left-1/2 transform -translate-x-1/2 top-[39.88rem] w-[74.25rem] h-[28.25rem] rounded-[1.875rem] bg-white border-solid border-[0.065rem] border-slate-950">
-        <div />
-      </div> */}
-
       <div className="flex w-[100%] h-[40rem] justify-center bg-[#F9F8FC]">
         <div className="flex flex-col justify-center items-center mt-[11.13rem] ">
           <div className="flex flex-col w-[36rem] h-[5.125rem] justify-center items-center mx-[27rem] mb-16">
@@ -196,22 +179,22 @@ function Start() {
           </div>
           <div className="flex flex-row w-[61rem] h-[13.375rem] justify-center gap-8">
             <div className="bg-white w-[13.75rem] h-[13.375rem] rounded-lg shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1.5rem] bg-[#d9d9d9]">
+              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1rem] bg-[#d9d9d9]">
                 <img src={editPencil} alt="editPencil" className="w-10 h-10 mx-5 my-5" />
               </div>
               <div className="flex w-[11rem] h-16 justify-center items-center">
-                <span className="text-[1.4rem] text-center font-semibold leading-normal select-none">
+                <span className="text-[1.3rem] text-center font-semibold leading-normal select-none">
                   Create
                   <br />a Survey Form
                 </span>
               </div>
             </div>
             <div className="bg-white w-[13.75rem] h-[13.375rem] rounded-lg shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1.5rem] bg-[#d9d9d9]">
+              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1rem] bg-[#d9d9d9]">
                 <img src={palette1} alt="palette1" className="w-10 h-10 mx-5 my-5" />
               </div>
               <div className="flex w-[10rem] h-16 justify-center items-center">
-                <span className="text-[1.4rem] text-center font-semibold leading-normal select-none">
+                <span className="text-[1.3rem] text-center font-semibold leading-normal select-none">
                   Survey Form
                   <br />
                   Style Settings
@@ -219,22 +202,22 @@ function Start() {
               </div>
             </div>
             <div className="bg-white w-[13.75rem] h-[13.375rem] rounded-lg shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1.5rem] bg-[#d9d9d9]">
+              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1rem] bg-[#d9d9d9]">
                 <img src={survey} alt="survey" className="w-10 h-10 mx-5 my-5" />
               </div>
               <div className="flex w-[12rem] h-16 justify-center items-center">
-                <span className="text-[1.4rem] text-center font-semibold leading-normal select-none">
+                <span className="text-[1.3rem] text-center font-semibold leading-normal select-none">
                   Responding to
                   <br />a different form
                 </span>
               </div>
             </div>
             <div className="bg-white w-[13.75rem] h-[13.375rem] rounded-lg shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1.5rem] bg-[#d9d9d9]">
+              <div className="flex w-20 h-20 justify-center items-center rounded-[1.25rem] mb-[1rem] bg-[#d9d9d9]">
                 <img src={roundShare} alt="roundShare" className="w-10 h-10 mx-5 my-5" />
               </div>
               <div className="flex w-[12rem] h-16 justify-center items-center">
-                <span className="text-[1.4rem] text-center font-semibold leading-normal select-none">
+                <span className="text-[1.3rem] text-center font-semibold leading-normal select-none">
                   Share
                   <br />a survey
                 </span>
