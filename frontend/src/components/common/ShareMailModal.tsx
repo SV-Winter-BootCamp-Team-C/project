@@ -97,7 +97,10 @@ function ShareMailModal({ surveyId, isVisible, onClose }: ShareMailModal) {
   );
 
   return (
-    <div className="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-20">
+    <div
+      className="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-20"
+      style={{ cursor: 'default' }}
+    >
       <div className="relative w-[30rem] h-64 flex flex-col items-center justify-start bg-white shadow-md rounded-[1.25rem]">
         <div className="absolute right-2 top-2">
           {isPending && <Loading />}

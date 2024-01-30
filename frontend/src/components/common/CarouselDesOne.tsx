@@ -2,6 +2,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styleSetting from '../../assets/styleSetting.gif';
+import surveyAnalysis from '../../assets/surveyAnalysis.gif';
 import shareMail from '../../assets/shareMail.gif';
 
 interface CustomSliderProps {
@@ -26,7 +27,7 @@ function CarouselDesOne({ setActiveIndex }: CustomSliderProps) {
         <img src={styleSetting} alt="styleSetting" className="w-fit h-fit" />
       </div>
       <div className="w-[12rem] h-[25rem] bg-red-500">
-        <h3>2</h3>
+        <img src={surveyAnalysis} alt="styleSetting" className="w-fit h-fit" />
       </div>
       <div className="w-[12rem] h-[25rem]">
         <img src={shareMail} alt="shareMail" className="w-fit h-fit " />

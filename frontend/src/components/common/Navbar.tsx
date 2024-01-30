@@ -93,10 +93,7 @@ function Navbar({ children }: NavbarProps) {
                         : {}
                     }
                   />
-                  <p
-                    className={`text-base font-semibold leading-4 ${isActive ? 'text-customPurple' : 'text-darkGray'}`}
-                    style={isActive ? { color: '#66629f' } : {}}
-                  >
+                  <p className={`text-base font-semibold leading-4 ${isActive ? 'text-darkPurple' : 'text-darkGray'}`}>
                     {item.text}
                   </p>
 
