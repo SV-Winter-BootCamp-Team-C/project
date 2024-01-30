@@ -61,6 +61,7 @@ function StaticCheckBox({ question, color, buttonStyle, index }: StaticCheckBoxP
                   id={`checkbox-${choice.choiceId}`}
                   className="absolute opacity-0"
                   checked={(question.objContent ?? []).includes(choice.choiceId)}
+                  readOnly
                 />
                 {(question.objContent ?? []).includes(choice.choiceId) && (
                   <img src={checkIcon} alt="Checked" className="w-4 h-4" />

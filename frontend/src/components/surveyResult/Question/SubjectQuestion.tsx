@@ -28,7 +28,7 @@ function SubjectQuestion({ index, question }: SubjectQuestionProps) {
           <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
         </div>
 
-        <div className="flex justify-center items-center w-[14.375rem] max-w-[50rem] h-8 ">
+        <div className="flex justify-center items-center w-[37.5rem] h-8 ">
           <p className="text-base text-black">{question.content}</p>
         </div>
 

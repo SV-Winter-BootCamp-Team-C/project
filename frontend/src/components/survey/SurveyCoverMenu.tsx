@@ -11,7 +11,6 @@ import menuDel from '../../assets/menuDel.svg';
 import { useAuthStore } from '../../store/AuthStore';
 import ShareMailModal from '../common/ShareMailModal';
 import { deleteSurveyAPI } from '../../api/deleteSurvey';
-import { getClient } from '../../queryClient';
 import Alert from '../common/Alert';
 import { ApiResponseError } from '../../types/apiResponseError';
 
@@ -99,12 +98,7 @@ function SurveyCoverMenu({ surveyId, open, attendCount, isDropdownOpen, setIsDro
   const { mutate, isError: deleteError } = useMutation({
     mutationFn: () => deleteSurveyAPI(surveyId, myId),
     onSuccess: () => {
-      getClient.invalidateQueries({ queryKey: ['allSurveys'] });
-      getClient.refetchQueries({ queryKey: ['allSurveys'] });
-      getClient.invalidateQueries({ queryKey: ['myForm', myId] });
-      getClient.refetchQueries({ queryKey: ['myForm', myId] });
-      getClient.invalidateQueries({ queryKey: ['myResponse', myId] });
-      getClient.refetchQueries({ queryKey: ['myResponse', myId] });
+      window.location.reload();
     },
     onError: (error: AxiosError) => {
       const err = error as AxiosError<ApiResponseError>;

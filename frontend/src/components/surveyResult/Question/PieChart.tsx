@@ -24,20 +24,26 @@ function PieChart({ index, question }: PieChartProps) {
   const chartOptions = {
     chart: {
       type: 'donut',
-      width: 300,
-      height: 180.7,
       background: 'transparent',
     },
     labels: question.choices?.map((choice) => choice.option),
     legend: {
       show: true,
-      position: 'right',
-      horizontalAlign: 'center',
+      position: 'left',
+      floating: true,
+      horizontalAlign: 'right',
       fontSize: '14px',
       fontWeight: 'medium',
       itemMargin: {
-        horizontal: 2,
-        vertical: 1,
+        vertical: 2,
+      },
+      offsetX: -30,
+      offsetY: 0,
+      formatter(val: string) {
+        if (val.length > 10) {
+          return `${val.slice(0, 10)}...`;
+        }
+        return val;
       },
     },
     dataLabels: {
@@ -50,16 +56,13 @@ function PieChart({ index, question }: PieChartProps) {
     },
     plotOptions: {
       pie: {
-        donut: {
-          size: '65%',
-        },
         stroke: {
           width: 0,
           curve: 'smooth',
         },
       },
     },
-    colors: ['#66629F', '#918DCA', '#BFBBFF', '#E5E4FF'],
+    colors: ['#66629F', '#918DCA', '#BFBBFF', '#c5c4eb'],
   };
 
   return (
@@ -81,7 +84,7 @@ function PieChart({ index, question }: PieChartProps) {
           <span className="text-[2rem] font-semibold text-center text-black -translate-y-4">Q{index}.</span>
         </div>
 
-        <div className="flex justify-center items-center w-[14.375rem] max-w-[50rem] h-8 ">
+        <div className="flex justify-center items-center w-[37.5rem] h-8 ">
           <p className="text-base text-black">{question.content}</p>
         </div>
 
@@ -97,15 +100,16 @@ function PieChart({ index, question }: PieChartProps) {
 
         <div className="py-6">
           {chartSeries && total > 0 && chartSeries.length > 0 ? (
-            <Chart
-              options={chartOptions as any}
-              series={chartSeries as number[]}
-              type="donut"
-              width={300}
-              height={180.7}
-              key={`chart-${index}`}
-              className="flex items-center justify-center w-[18.75rem] h-[180.7px]"
-            />
+            <div className="flex items-center justify-center min-w-[18.75rem] h-[180.7px]">
+              <Chart
+                key={`chart-${index}`}
+                options={chartOptions as any}
+                series={chartSeries as number[]}
+                type="donut"
+                width={500}
+                height={180.7}
+              />
+            </div>
           ) : (
             <p className="text-base text-gray">설문 결과가 없습니다.</p>
           )}
