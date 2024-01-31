@@ -2,7 +2,7 @@ const { Survey, Answer, Question } = require('../models');
 const { surveyTitleSearch } = require('./surveyTitleSearch');
 const Redis = require('ioredis');
 const redisClient = new Redis({
-  host: 'host.docker.internal',
+  host: '172.31.20.50',
   port: 6379,
 });
 
