@@ -19,7 +19,7 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     } = req.body;
 
     // surveyUrl을 미리 정의
-    const surveyUrl = `http://www.formflex.site/surveys/placeholder`;
+    const surveyUrl = `https://www.formflex.site/surveys/placeholder`;
 
     const survey = await Survey.create(
       {
@@ -38,7 +38,7 @@ const createSurveyWithQuestionsAndChoices = async (req, res) => {
     );
 
     const surveyId = survey.id;
-    const updatedSurveyUrl = `http://www.formflex.site/responseform?id=${surveyId}`;
+    const updatedSurveyUrl = `https://www.formflex.site/responseform?id=${surveyId}`;
 
     await Survey.update(
       { url: updatedSurveyUrl },
