@@ -10,28 +10,58 @@ const showAllSurveys = async (req, res) => {
   try {
     // Request로부터 Parameter 값들 가져오기
     const userId = req.params.id;
-    const pageLimit = req.query.limit;
+    const pageLimit = parseInt(req.query.limit);
     const page = req.query.page;
     const startIndex = (page - 1) * pageLimit;
     const title = req.query.title;
 
     if (!title) {
-      const cachedSurveys = await redisClient.get('cachedSurveys');
-      const cachedPages = await redisClient.get('cachedPages');
+      const cachedSurveysAttendCount = await redisClient.get('cachedSurveysAttendCount');
+      const cachedSurveysDeadline = await redisClient.get('cachedSurveysDeadline');
+      const cachedSurveysCreatedAt = await redisClient.get('cachedSurveysCreatedAt');
 
-      if (cachedSurveys) {
+      if (cachedSurveysAttendCount && 'attendCount' in req.query) {  
         const startTime = new Date();
 
-        const surveys = JSON.parse(cachedSurveys);
-        const pages = JSON.parse(cachedPages);
-        
+        const surveys = JSON.parse(cachedSurveysAttendCount);
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
+
         const endTime = new Date();
         const elapsedTime = endTime - startTime;
-        console.log(`Redis cache에 삽입된 후 코드 실행 시간: ${elapsedTime} 밀리초`);
+        console.log(`Redis cache에 삽입된 후 코드 실행 시간[참여자]: ${elapsedTime} 밀리초`);
 
         res.status(200).json({
-          surveys: surveys,
-          totalPages: pages,
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
+        });
+      } else if(cachedSurveysDeadline && 'deadline' in req.query){
+        const startTime = new Date();
+
+        const surveys = JSON.parse(cachedSurveysDeadline);
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
+
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime;
+        console.log(`Redis cache에 삽입된 후 코드 실행 시간[데드라인]: ${elapsedTime} 밀리초`);
+
+        res.status(200).json({
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
+        });
+      } else if (cachedSurveysCreatedAt && !('deadline' in req.query || 'attendCount' in req.query)){
+        const startTime = new Date();
+
+        const surveys = JSON.parse(cachedSurveysCreatedAt);
+        
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
+        console.log(pagedSurveys.length);
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime;
+        console.log(`Redis cache에 삽입된 후 코드 실행 시간[생성]: ${elapsedTime} 밀리초`);
+
+        res.status(200).json({
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
         });
       } else {
       // 전체 설문에 대해 attended_count 계산
@@ -93,19 +123,19 @@ const showAllSurveys = async (req, res) => {
       // 정렬
       if ('attendCount' in req.query) {
         preResult.sort((a, b) => b.attendCount - a.attendCount);
+        await redisClient.set('cachedSurveysAttendCount', JSON.stringify(preResult));
       } else if ('deadline' in req.query) {
         preResult.sort((a, b) => a.deadline - b.deadline);
+        await redisClient.set('cachedSurveysDeadline', JSON.stringify(preResult));
       } else {
         preResult.sort((a, b) => b.createdAt - a.createdAt);
+        await redisClient.set('cachedSurveysCreatedAt', JSON.stringify(preResult));
       }
 
       // 페이지에 해당하는 데이터 추출
       const pagedSurveys = preResult.slice(startIndex, startIndex + pageLimit);
 
       const endTime = new Date();
-      // 데이터를 JSON 형태로 변환하여 Redis에 캐시
-      await redisClient.set('cachedSurveys', JSON.stringify(pagedSurveys));
-      await redisClient.set('cachedPages', JSON.stringify(Math.ceil(preResult.length / pageLimit)));
 
       const elapsedTime = endTime - startTime;
       console.log(`Redis cache에 삽입되기 전 코드 실행 시간: ${elapsedTime} 밀리초`);
@@ -114,29 +144,55 @@ const showAllSurveys = async (req, res) => {
         surveys: pagedSurveys,
         totalPages: Math.ceil(preResult.length / pageLimit),
       });}
-    } else {
+    } else { // 여기서 부터 제목이 있을 때
 
-      const cachedSurveysTitle = await redisClient.get('cachedSurveysTitle');
-      const cachedPagesTitle = await redisClient.get('cachedPagesTitle');
-      
-      if (cachedSurveysTitle) {
-        // 캐시된 데이터가 있을 경우, JSON 형태로 변환하여 반환
+      const cachedSurveysAttendCountTitle = await redisClient.get('cachedSurveysAttendCountTitle');
+      const cachedSurveysDeadlineTitle = await redisClient.get('cachedSurveysDeadlineTitle');
+      const cachedSurveysCreatedAtTitle = await redisClient.get('cachedSurveysCreatedAtTitle');
+
+      if (cachedSurveysAttendCountTitle && 'attendCount' in req.query) {  
         const startTime = new Date();
 
-        const surveys = JSON.parse(cachedSurveysTitle);
-        const pages = JSON.parse(cachedPagesTitle);
+        const surveys = JSON.parse(cachedSurveysAttendCountTitle);
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
 
         const endTime = new Date();
         const elapsedTime = endTime - startTime;
         console.log(`Redis cache에 삽입된 후 코드 실행 시간: ${elapsedTime} 밀리초`);
-        
+
         res.status(200).json({
-          surveys: surveys,
-          totalPages: pages,
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
+        });
+      } else if(cachedSurveysDeadlineTitle && 'deadline' in req.query){
+        const startTime = new Date();
+
+        const surveys = JSON.parse(cachedSurveysDeadlineTitle);
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
+
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime;
+        console.log(`Redis cache에 삽입된 후 코드 실행 시간: ${elapsedTime} 밀리초`);
+
+        res.status(200).json({
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
+        });
+      } else if (cachedSurveysCreatedAtTitle && !('deadline' in req.query || 'attendCount' in req.query)){
+        const startTime = new Date();
+
+        const surveys = JSON.parse(cachedSurveysCreatedAtTitle);
+        const pagedSurveys = surveys.slice(startIndex, startIndex + pageLimit);
+
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime;
+        console.log(`Redis cache에 삽입된 후 코드 실행 시간: ${elapsedTime} 밀리초`);
+
+        res.status(200).json({
+          surveys: pagedSurveys,
+          totalPages: Math.ceil(surveys.length / pageLimit),
         });
       } else {
-
-       
         const startTime = new Date();
         const selectSurveys = await Survey.findAll({
           where: { open: true },
@@ -212,21 +268,21 @@ const showAllSurveys = async (req, res) => {
         // 정렬
         if ('attendCount' in req.query) {
           sortedList.sort((a, b) => b.attendCount - a.attendCount);
+          await redisClient.set('cachedSurveysAttendCountTitle', JSON.stringify(sortedList));
         } else if ('deadline' in req.query) {
           sortedList.sort((a, b) => a.deadline - b.deadline);
+          await redisClient.set('cachedSurveysDeadlineTitle', JSON.stringify(sortedList));
         } else {
           sortedList.sort((a, b) => b.createdAt - a.createdAt);
+          await redisClient.set('cachedSurveysCreatedAtTitle', JSON.stringify(sortedList));
         }
-  
+
         // 페이지에 해당하는 데이터 추출
         const startIndex = (page - 1) * pageLimit;
         const endIndex = startIndex + pageLimit;
         const pagedSortedList = sortedList.slice(startIndex, endIndex);
   
         const endTime = new Date();
-        
-        await redisClient.set('cachedSurveysTitle', JSON.stringify(pagedSortedList));
-        await redisClient.set('cachedPagesTitle', JSON.stringify(Math.ceil(Math.ceil(len / pageLimit))));
 
         const elapsedTime = endTime - startTime;
         console.log(`Redis cache에 삽입되기 전 코드 실행 시간: ${elapsedTime} 밀리초`);
@@ -246,4 +302,3 @@ const showAllSurveys = async (req, res) => {
 };
 
 module.exports = { showAllSurveys };
-
