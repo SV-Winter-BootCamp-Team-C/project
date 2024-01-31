@@ -133,6 +133,7 @@ services:
       - logstash
       - elasticsearch
       - kibana
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus
