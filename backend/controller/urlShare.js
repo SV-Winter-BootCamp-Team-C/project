@@ -41,7 +41,11 @@ const sendSurveyEmailWithSurveyId = async (surveyId, emails) => {
       throw new Error('설문조사를 찾을 수 없습니다');
     }
 
-    const originalImagePath = path.join(process.cwd(), 'image', 'logogo.png');
+    const originalImagePath = path.join(
+      process.cwd(),
+      'image',
+      'formflexlogo.png',
+    );
     const compressedFileName = `compressed-${path.basename(originalImagePath)}`;
     const compressedImagePath = path.join(
       process.cwd(),
@@ -74,26 +78,28 @@ const sendSurveyEmailWithSurveyId = async (surveyId, emails) => {
         subject: '설문조사 참여 요청',
         html: `
         <table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td style="padding: 20px; background: linear-gradient(to right, #918DCA, #99A8DB, #A3C9F0);">
+      <!-- Centering Table for Content -->
+      <table align="center" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
         <tr>
-          <td style="padding: 20px; background: linear-gradient(to right, #918DCA, #99A8DB, #A3C9F0);">
-            <table cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="background-color: #ffffff; padding: 20px; text-align: center;">
-                  <h1 style="color: #333333;">설문조사 참여 요청</h1>
-                  <img src="cid:compressedImage" alt="타이틀 이미지" loading="lazy" style="max-width: 50%; height: auto; display: block; margin: 0 auto;">
-      
-                  <p style="color: #555555; font-size: 16px;">
-                    귀하를 설문조사에 초대합니다. 아래 링크를 클릭하여 참여해 주세요.
-                  </p>
-                  <a href="${survey.url}" style="background-color: #918DCA; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px;">
-                    설문조사 참여하기
-                  </a>
-                </td>
-              </tr>
-            </table>
+          <td style="background-color: #ffffff; padding: 20px; text-align: center;">
+            <h1 style="color: #333333;">설문조사 참여 요청</h1>
+            <img src="cid:compressedImage" alt="타이틀 이미지" loading="lazy" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+    
+            <p style="color: #555555; font-size: 16px;">
+              귀하를 설문조사에 초대합니다. 아래 링크를 클릭하여 참여해 주세요.
+            </p>
+            <a href="${survey.url}" style="background-color: #918DCA; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px;">
+              설문조사 참여하기
+            </a>
           </td>
         </tr>
       </table>
+    </td>
+  </tr>
+</table>
+
       `,
         attachments: [
           {
