@@ -76,7 +76,7 @@ function MultipleChoice({
           <button type="button" className="items-center focus:outline-none">
             <img src={typeIcon} alt="Type" className="w-5 h-5" />
           </button>
-          <span className="ml-2 font-medium text-left text-darkGray">객관식</span>
+          <span className="ml-2 font-medium text-left text-darkGray">객관식(단일선택)</span>
         </div>
         <div className="flex mr-4">
           <button
